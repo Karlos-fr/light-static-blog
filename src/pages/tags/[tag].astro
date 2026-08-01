@@ -21,6 +21,7 @@ type Props = {
 
 const { tag } = Astro.props as Props;
 const posts = await getPublicPostsByTag(tag);
+const base = import.meta.env.BASE_URL;
 
 const shortDate = (value: Date) =>
   new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
@@ -35,12 +36,12 @@ const shortDate = (value: Date) =>
     <ul>
       {posts.map((post) => (
         <li>
-          <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
+          <h2><a href={`${base}blog/${post.slug}`}>{post.data.title}</a></h2>
           <p>{shortDate(post.data.pubDate)} — {post.data.description}</p>
         </li>
       ))}
     </ul>
   )}
 
-  <p><a href="/tags">← retour aux tags</a></p>
+  <p><a href={`${base}tags`}>← retour aux tags</a></p>
 </BaseLayout>

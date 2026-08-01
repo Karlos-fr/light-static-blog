@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getAllTags } from '../../lib/content';
 
 const tags = await getAllTags();
+const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Tags" description="Liste des tags du blog.">
@@ -14,11 +15,11 @@ const tags = await getAllTags();
     <ul>
       {tags.map((tag) => (
         <li>
-          <a href={`/tags/${tag}`}>{tag}</a>
+          <a href={`${base}tags/${tag}`}>{tag}</a>
         </li>
       ))}
     </ul>
   )}
 
-  <p><a href="/blog">← retour aux articles</a></p>
+  <p><a href={`${base}blog`}>← retour aux articles</a></p>
 </BaseLayout>

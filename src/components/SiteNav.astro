@@ -1,11 +1,15 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
 <header>
   <nav class="site-nav">
-    <a href="/" class="brand">Light Blog</a>
+    <a href={base} class="brand">Light Blog</a>
     <div class="links">
-      <a href="/">Accueil</a>
-      <a href="/blog">Blog</a>
-      <a href="/tags">Tags</a>
-      <a href="/about">À propos</a>
+      <a href={base}>Accueil</a>
+      <a href={`${base}blog`}>Blog</a>
+      <a href={`${base}tags`}>Tags</a>
+      <a href={`${base}about`}>À propos</a>
     </div>
   </nav>
 

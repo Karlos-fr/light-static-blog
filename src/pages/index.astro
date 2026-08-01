@@ -4,6 +4,7 @@ import { getPublicPosts, normalizeTag } from '../lib/content';
 
 const posts = await getPublicPosts();
 const latestPosts = posts.slice(0, 3);
+const base = import.meta.env.BASE_URL;
 
 const shortDate = (value: Date) =>
   new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
@@ -22,13 +23,13 @@ const shortDate = (value: Date) =>
         <ul>
           {latestPosts.map((post) => (
             <li>
-              <h3><a href={`/blog/${post.slug}`}>{post.data.title}</a></h3>
+              <h3><a href={`${base}blog/${post.slug}`}>{post.data.title}</a></h3>
               <p>{shortDate(post.data.pubDate)} — {post.data.description}</p>
               <p>
                 Tags :
                 {post.data.tags.map((tag, index) => (
                   <span>
-                    <a href={`/tags/${normalizeTag(tag)}`}>{tag}</a>
+                    <a href={`${base}tags/${normalizeTag(tag)}`}>{tag}</a>
                     {index < post.data.tags.length - 1 ? ', ' : ''}
                   </span>
                 ))}
@@ -40,4 +41,3 @@ const shortDate = (value: Date) =>
     }
   </section>
 </BaseLayout>
-

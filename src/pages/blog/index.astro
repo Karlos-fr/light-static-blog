@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPublicPosts, normalizeTag } from '../../lib/content';
 
 const posts = await getPublicPosts();
+const base = import.meta.env.BASE_URL;
 
 const shortDate = (value: Date) =>
   new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
@@ -17,13 +18,13 @@ const shortDate = (value: Date) =>
     <ul>
       {posts.map((post) => (
         <li>
-          <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
+          <h2><a href={`${base}blog/${post.slug}`}>{post.data.title}</a></h2>
           <p>{shortDate(post.data.pubDate)} — {post.data.description}</p>
           <p>
             Tags :
             {post.data.tags.map((tag, index) => (
               <span>
-                <a href={`/tags/${normalizeTag(tag)}`}>{tag}</a>
+                <a href={`${base}tags/${normalizeTag(tag)}`}>{tag}</a>
                 {index < post.data.tags.length - 1 ? ', ' : ''}
               </span>
             ))}
