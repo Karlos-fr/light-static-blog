@@ -21,7 +21,6 @@ export async function GET() {
   }
 
   const site = rawSite.replace(/\/$/, '');
-  );
 
   const items = posts
     .map((post) => {

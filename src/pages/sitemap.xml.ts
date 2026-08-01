@@ -22,7 +22,6 @@ export async function GET() {
   }
 
   const site = rawSite.replace(/\/$/, '');
-  );
 
   const urls = [
     `${site}/`,

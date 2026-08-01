@@ -26,6 +26,9 @@ jobs:
         run: npm ci
 
       - name: Build Astro site
+        env:
+          SITE: "https://karlos-fr.github.io/light-static-blog"
+          BASE_PATH: "/light-static-blog/"
         run: npm run build
 
       - name: Upload dist artifact
