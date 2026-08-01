@@ -36,7 +36,7 @@ export async function GET() {
       <description>${escapeXml(post.data.description)}</description>
     </item>`;
     })
-    .join('');
+    .join('\n');
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -51,7 +51,7 @@ export async function GET() {
 
   return new Response(feed.trim(), {
     headers: {
-      'content-type': 'application/xml; charset=utf-8',
+      'content-type': 'application/rss+xml; charset=utf-8',
     },
   });
 }
