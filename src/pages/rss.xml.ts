@@ -13,9 +13,14 @@ function escapeXml(value: string): string {
 
 export async function GET() {
   const posts = await getPublicPosts();
-  const site = (import.meta.env.SITE ?? 'https://karlos-fr.github.io/light-static-blog').replace(
-    /\/$/,
-    ''
+  const rawSite = import.meta.env.SITE?.trim();
+  if (!rawSite) {
+    throw new Error(
+      "La variable d'environnement SITE est obligatoire pour générer le flux RSS."
+    );
+  }
+
+  const site = rawSite.replace(/\/$/, '');
   );
 
   const items = posts
