@@ -14,7 +14,10 @@ function escapeXml(value: string): string {
 export async function GET() {
   const posts = await getPublicPosts();
   const tags = await getAllTags();
-  const site = import.meta.env.SITE ?? 'https://example.com';
+  const site = (import.meta.env.SITE ?? 'https://karlos-fr.github.io/light-static-blog').replace(
+    /\/$/,
+    ''
+  );
 
   const urls = [
     `${site}/`,
