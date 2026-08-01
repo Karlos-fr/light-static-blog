@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { title, description = '' } = Astro.props as Props;
+const site = import.meta.env.SITE?.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -17,6 +18,12 @@ const { title, description = '' } = Astro.props as Props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    {site ? (
+      <>
+        <link rel="alternate" type="application/rss+xml" title="Flux RSS" href={`${site}/rss.xml`} />
+        <link rel="sitemap" type="application/xml" title="Sitemap" href={`${site}/sitemap.xml`} />
+      </>
+    ) : null}
   </head>
   <body>
     <SiteNav />
