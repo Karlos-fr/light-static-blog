@@ -70,6 +70,12 @@ Le build doit être déposé tel quel dans le dossier `www/` de votre hébergeme
    - `rss.xml`
    - `sitemap.xml`
 
+Commande rapide (1 ligne) :
+
+```bash
+SITE=https://votredomaine.tld npm run build && rsync -av --delete dist/ user@host:/chemin/vers/www/
+```
+
 ### Note SEO (RSS/Sitemap)
 
 Les flux utilisent la variable d’environnement `SITE` si elle est définie.
