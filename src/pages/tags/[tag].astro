@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  getAllTags,
+  getPublicPostsByTag,
+  getDisplayTag,
+} from '../lib/content';
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+type Props = {
+  tag: string;
+};
+
+const { tag } = Astro.props as Props;
+const posts = await getPublicPostsByTag(tag);
+
+const shortDate = (value: Date) =>
+  new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
+---
+
+<BaseLayout title={`Tag: ${getDisplayTag(tag)} | Light Static Blog`} description={`Articles taggés ${getDisplayTag(tag)}.`}>
+  <h1>Tag : {getDisplayTag(tag)}</h1>
+
+  {posts.length === 0 ? (
+    <p>Aucun article pour ce tag.</p>
+  ) : (
+    <ul>
+      {posts.map((post) => (
+        <li>
+          <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
+          <p>{shortDate(post.data.pubDate)} — {post.data.description}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <p><a href="/tags">← retour aux tags</a></p>
+</BaseLayout>

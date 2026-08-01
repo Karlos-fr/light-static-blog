@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublicPosts, normalizeTag } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getPublicPosts();
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+type Props = {
+  post: Awaited<ReturnType<typeof getPublicPosts>>[number];
+};
+
+const { post } = Astro.props as Props;
+const { Content } = await post.render();
+
+const longDate = (value: Date) =>
+  new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
+---
+
+<BaseLayout title={`${post.data.title} | Light Static Blog`} description={post.data.description}>
+  <article>
+    <h1>{post.data.title}</h1>
+    <p>
+      Publié le {longDate(post.data.pubDate)}
+      {post.data.updatedDate ? ` (mis à jour le ${longDate(post.data.updatedDate)})` : ''}
+    </p>
+    <p>
+      Tags :
+      {post.data.tags.map((tag, index) => (
+        <span>
+          <a href={`/tags/${normalizeTag(tag)}`}>{tag}</a>
+          {index < post.data.tags.length - 1 ? ', ' : ''}
+        </span>
+      ))}
+    </p>
+
+    <Content />
+  </article>
+
+  <p><a href="/blog">← retour au blog</a></p>
+</BaseLayout>
+

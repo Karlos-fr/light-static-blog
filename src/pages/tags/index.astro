@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllTags } from '../lib/content';
+
+const tags = await getAllTags();
+---
+
+<BaseLayout title="Tags" description="Liste des tags du blog.">
+  <h1>Tags</h1>
+
+  {tags.length === 0 ? (
+    <p>Aucun tag pour le moment.</p>
+  ) : (
+    <ul>
+      {tags.map((tag) => (
+        <li>
+          <a href={`/tags/${tag}`}>{tag}</a>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <p><a href="/blog">← retour aux articles</a></p>
+</BaseLayout>
