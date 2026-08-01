@@ -11,7 +11,7 @@ Blog personnel minimaliste avec Astro, TypeScript et Markdown.
 
 ## Prérequis
 
-- Node.js 18+
+- Node.js 22 LTS (recommandé)
 - npm
 
 ## Installation
@@ -47,7 +47,29 @@ Exemple :
 SITE="https://karlos-fr.github.io/light-static-blog" BASE_PATH="/light-static-blog/" npm run build
 ```
 
-ou
+## Ajouter un article
+
+- Crée un fichier dans `src/content/blog/` (ex: `2026-08-01-mon-article.md`).
+- Utilise le frontmatter minimal ci-dessous (le slug vient du nom du fichier) :
+
+```md
+---
+title: "Mon titre"
+description: "Résumé court"
+pubDate: 2026-08-01
+updatedDate: 2026-08-01   # optionnel
+tags:
+  - javascript
+  - astro
+draft: false
+cover: "/images/couverture.webp" # optionnel
+---
+```
+
+Puis écris le contenu en Markdown.
+
+- `draft: false` publie l’article.
+- `draft: true` le garde en brouillon.
 
 ## Aperçu local du build
 
@@ -113,14 +135,14 @@ et déploie ensuite `dist/` automatiquement sur GitHub Pages.
 - GitHub Pages : possible pour des tests ou une diffusion secondaire.
 - Vercel : possible pour des tests/hosting alternatif.
 
-Ces options restent secondaires et ne changent pas l’architecture principale, qui reste **statique** (compatible OVH mutualisé).
+Ces options restent secondaires et ne changent pas l'architecture principale, qui reste **statique** (compatible OVH mutualisé).
 
 ## Contraintes respectées
 
 - Pas de backend
 - Pas de base de données
 - Pas de CMS
-- Pas d’API runtime
+- Pas d'API runtime
 - Aucune dépendance backend en production
 
 ## Commandes de résumé
