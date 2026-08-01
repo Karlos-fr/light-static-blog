@@ -36,6 +36,19 @@ npm run build
 
 Cette commande génère un site **100 % statique** dans le dossier `dist/`.
 
+Le build requiert deux variables d'environnement :
+
+- `SITE` : URL absolue du site (ex: `https://karlos-fr.github.io/light-static-blog` ou `https://votredomaine.tld`)
+- `BASE_PATH` : base d'URL d'hébergement (ex: `/light-static-blog/` pour GitHub Pages, `/` pour OVH)
+
+Exemple :
+
+```bash
+SITE="https://karlos-fr.github.io/light-static-blog" BASE_PATH="/light-static-blog/" npm run build
+```
+
+ou
+
 ## Aperçu local du build
 
 ```bash
@@ -51,7 +64,7 @@ Le build doit être déposé tel quel dans le dossier `www/` de votre hébergeme
 1. Construire le site
 
    ```bash
-   npm run build
+   SITE="https://votredomaine.tld" BASE_PATH="/" npm run build
    ```
 
 2. Envoyer le contenu de `dist/` dans `www/` (FTP, SFTP ou gestionnaire de fichiers).
@@ -73,18 +86,27 @@ Le build doit être déposé tel quel dans le dossier `www/` de votre hébergeme
 Commande rapide (1 ligne) :
 
 ```bash
-SITE=https://votredomaine.tld npm run build && rsync -av --delete dist/ user@host:/chemin/vers/www/
+SITE="https://votredomaine.tld" BASE_PATH="/" npm run build && rsync -av --delete dist/ user@host:/chemin/vers/www/
 ```
 
 ### Note SEO (RSS/Sitemap)
 
-Les flux utilisent la variable d’environnement `SITE` si elle est définie.
+Les flux RSS et sitemap utilisent la variable `SITE` pour générer des URL absolues.
 
-- OVH (exemple de build local ou CI) :
+Exemple de commande :
 
-  ```bash
-  SITE=https://votredomaine.tld npm run build
-  ```
+```bash
+SITE="https://votredomaine.tld" BASE_PATH="/" npm run build
+```
+
+## GitHub Pages (CI/CD)
+
+Le workflow GitHub Actions exécute le build avec :
+
+- `SITE=https://karlos-fr.github.io/light-static-blog`
+- `BASE_PATH=/light-static-blog/`
+
+et déploie ensuite `dist/` automatiquement sur GitHub Pages.
 
 ## Déploiements mentionnés en option (non bloquants)
 
