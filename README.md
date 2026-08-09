@@ -17,7 +17,9 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 .
 ├── public/                     # Fichiers statiques copiés tels quels
 │   ├── images/                 # Couvertures des articles
-│   └── robots.txt
+│   ├── robots.txt
+│   ├── rss.xsl                 # Présentation du flux RSS dans un navigateur
+│   └── sitemap.xsl             # Présentation du sitemap dans un navigateur
 ├── src/
 │   ├── components/             # Listes, tags, dates et couvertures
 │   ├── content/

@@ -1,5 +1,5 @@
 import { getPublicPosts } from '../lib/content';
-import { getAbsoluteUrl } from '../lib/urls';
+import { getAbsoluteUrl, getPath } from '../lib/urls';
 
 export const prerender = true;
 
@@ -33,6 +33,7 @@ export async function GET() {
     .join('\n');
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
+  <?xml-stylesheet type="text/xsl" href="${getPath('rss.xsl')}"?>
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
       <title>Light Static Blog</title>
