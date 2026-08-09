@@ -2,6 +2,8 @@
 <xsl:stylesheet
   version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:media="http://search.yahoo.com/mrss/"
+  exclude-result-prefixes="media"
 >
   <xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat" />
 
@@ -36,6 +38,13 @@
             <xsl:for-each select="item">
               <li class="post-card">
                 <article>
+                  <xsl:if test="media:content/@url">
+                    <img
+                      class="xml-feed-cover"
+                      src="{media:content/@url}"
+                      alt="{concat('Illustration de ', title)}"
+                    />
+                  </xsl:if>
                   <h2 class="post-title"><a href="{link}"><xsl:value-of select="title" /></a></h2>
                   <p class="post-meta"><time><xsl:value-of select="pubDate" /></time></p>
                   <p><xsl:value-of select="description" /></p>

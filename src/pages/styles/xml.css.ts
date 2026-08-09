@@ -49,6 +49,17 @@ const xmlStyles = `
   border-radius: var(--radius);
 }
 
+.xml-feed-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
 .xml-table-wrap {
   overflow-x: auto;
   margin-top: 1.5rem;

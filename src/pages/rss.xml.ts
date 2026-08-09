@@ -12,6 +12,26 @@ function escapeXml(value: string): string {
     .replace(/'/g, '&apos;');
 }
 
+function escapeCdata(value: string): string {
+  return value.replace(/]]>/g, ']]]]><![CDATA[>');
+}
+
+function getImageMimeType(path: string): string {
+  const extension = path.split(/[?#]/, 1)[0].split('.').pop()?.toLowerCase();
+
+  const mimeTypes: Record<string, string> = {
+    avif: 'image/avif',
+    gif: 'image/gif',
+    jpeg: 'image/jpeg',
+    jpg: 'image/jpeg',
+    png: 'image/png',
+    svg: 'image/svg+xml',
+    webp: 'image/webp',
+  };
+
+  return extension ? (mimeTypes[extension] ?? 'application/octet-stream') : 'application/octet-stream';
+}
+
 export async function GET() {
   const posts = await getPublicPosts();
   const siteUrl = getAbsoluteUrl();
@@ -20,6 +40,17 @@ export async function GET() {
     .map((post) => {
       const url = getAbsoluteUrl(post.slug);
       const pubDate = new Date(post.data.pubDate).toUTCString();
+      const imageUrl = post.data.cover
+        ? getAbsoluteUrl(post.data.cover)
+        : undefined;
+      const descriptionHtml = imageUrl
+        ? `<p><img src="${escapeXml(imageUrl)}" alt="Illustration de ${escapeXml(post.data.title)}" /></p><p>${escapeXml(post.data.description)}</p>`
+        : `<p>${escapeXml(post.data.description)}</p>`;
+      const media = imageUrl
+        ? `
+      <media:content url="${escapeXml(imageUrl)}" type="${getImageMimeType(post.data.cover!)}" medium="image" />
+      <media:thumbnail url="${escapeXml(imageUrl)}" />`
+        : '';
 
       return `
     <item>
@@ -27,14 +58,18 @@ export async function GET() {
       <link>${url}</link>
       <guid>${url}</guid>
       <pubDate>${pubDate}</pubDate>
-      <description>${escapeXml(post.data.description)}</description>
+      <description><![CDATA[${escapeCdata(descriptionHtml)}]]></description>
+      <content:encoded><![CDATA[${escapeCdata(descriptionHtml)}]]></content:encoded>${media}
     </item>`;
     })
     .join('\n');
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
   <?xml-stylesheet type="text/xsl" href="${getPath('rss.xsl')}"?>
-  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <rss version="2.0"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:media="http://search.yahoo.com/mrss/">
     <channel>
       <title>Light Static Blog</title>
       <link>${siteUrl}</link>

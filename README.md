@@ -137,6 +137,7 @@ Contenu de l'article en Markdown.
 - `draft: false` publie l'article.
 - `draft: true` l'exclut des pages, des tags, du RSS et du sitemap.
 - `cover` référence un fichier placé dans `public/` depuis la racine publique.
+- Lorsqu'elle existe, la couverture est aussi publiée dans le flux RSS via Media RSS et `content:encoded`.
 - Les slugs correspondant à une route réservée, comme `about`, `blog` ou `tags`, sont refusés au build.
 
 Le fichier `ARTICLE_TEMPLATE.md` peut servir de point de départ.
