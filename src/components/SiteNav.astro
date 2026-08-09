@@ -1,30 +1,34 @@
 ---
-const base = import.meta.env.BASE_URL;
+import { getPath } from '../lib/urls';
 ---
 
-<header>
+<header class="site-header">
   <nav class="site-nav">
-    <a href={base} class="brand">Light Blog</a>
+    <a href={getPath()} class="brand">Light Blog</a>
     <div class="links">
-      <a href={base}>Accueil</a>
-      <a href={`${base}blog`}>Blog</a>
-      <a href={`${base}tags`}>Tags</a>
-      <a href={`${base}about`}>À propos</a>
-      <a href={`${base}rss.xml`}>RSS</a>
-      <a href={`${base}sitemap.xml`}>Sitemap</a>
+      <a href={getPath()}>Accueil</a>
+      <a href={getPath('blog')}>Blog</a>
+      <a href={getPath('tags')}>Tags</a>
+      <a href={getPath('about')}>À propos</a>
+      <a href={getPath('rss.xml')}>RSS</a>
+      <a href={getPath('sitemap.xml')}>Sitemap</a>
     </div>
   </nav>
 
   <style>
     .site-nav {
+      width: min(100% - 2rem, var(--max-width));
+      margin: 0 auto;
       display: flex;
       gap: 0.75rem;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem;
+      padding: 1rem 0;
+    }
+
+    .site-header {
       border-bottom: 1px solid var(--border);
       background: var(--surface);
-      box-shadow: var(--shadow);
     }
 
     .brand {
@@ -54,6 +58,7 @@ const base = import.meta.env.BASE_URL;
 
     @media (max-width: 640px) {
       .site-nav {
+        width: min(100% - 1.25rem, var(--max-width));
         flex-direction: column;
         align-items: flex-start;
         gap: 0.6rem;
@@ -61,6 +66,7 @@ const base = import.meta.env.BASE_URL;
 
       .links {
         width: 100%;
+        gap: 0.75rem 1rem;
       }
     }
   </style>

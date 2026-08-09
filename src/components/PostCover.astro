@@ -1,0 +1,45 @@
+---
+import { getPath } from '../lib/urls';
+
+interface Props {
+  cover: string;
+  title: string;
+  href?: string;
+}
+
+const { cover, title, href } = Astro.props as Props;
+const src = getPath(cover);
+const alt = `Couverture de l’article « ${title} »`;
+---
+
+{href ? (
+  <div class="post-cover-wrapper">
+    <a class="cover-link" href={href} aria-label={`Lire ${title}`}>
+      <img class="post-cover" src={src} alt={alt} loading="lazy" />
+    </a>
+  </div>
+) : (
+  <div class="post-cover-wrapper">
+    <img class="post-cover" src={src} alt={alt} />
+  </div>
+)}
+
+<style>
+  .post-cover-wrapper {
+    margin-block-end: 1rem;
+  }
+
+  .cover-link {
+    display: block;
+  }
+
+  .post-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+</style>

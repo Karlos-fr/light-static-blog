@@ -1,13 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPublicPosts, normalizeTag } from '../lib/content';
+import PostList from '../components/PostList.astro';
+import { getPublicPosts } from '../lib/content';
 
 const posts = await getPublicPosts();
 const latestPosts = posts.slice(0, 3);
-const base = import.meta.env.BASE_URL;
 
-const shortDate = (value: Date) =>
-  new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
 ---
 
 <BaseLayout title="Accueil - Light Static Blog" description="Blog personnel sur le code, les jeux rétro et le bricolage technique">
@@ -16,28 +14,10 @@ const shortDate = (value: Date) =>
 
   <section>
     <h2>Derniers articles</h2>
-    {
-      latestPosts.length === 0 ? (
-        <p>Aucun article publié pour le moment.</p>
-      ) : (
-        <ul>
-          {latestPosts.map((post) => (
-            <li>
-              <h3><a href={`${base}blog/${post.slug}`}>{post.data.title}</a></h3>
-              <p>{shortDate(post.data.pubDate)} — {post.data.description}</p>
-              <p>
-                Tags :
-                {post.data.tags.map((tag, index) => (
-                  <span>
-                    <a href={`${base}tags/${normalizeTag(tag)}`}>{tag}</a>
-                    {index < post.data.tags.length - 1 ? ', ' : ''}
-                  </span>
-                ))}
-              </p>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    <PostList
+      posts={latestPosts}
+      emptyMessage="Aucun article publié pour le moment."
+      headingLevel="h3"
+    />
   </section>
 </BaseLayout>

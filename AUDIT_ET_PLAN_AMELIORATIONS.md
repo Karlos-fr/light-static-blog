@@ -17,7 +17,7 @@ Les principales ameliorations recommandees concernent la robustesse de build, la
 - Markdown via les collections Astro dans `src/content/blog`.
 - CSS global maison dans `src/styles/global.css`.
 - Build statique Astro vers `dist/`.
-- CI GitHub Actions avec Node.js 22, `npm ci`, build et deploiement GitHub Pages sur la branche par defaut.
+- CI GitHub Actions avec Node.js 24 LTS, `npm ci`, validation et deploiement GitHub Pages sur la branche par defaut.
 - Aucune dependance runtime dans `dependencies`.
 
 ## 3. Architecture observee
@@ -43,12 +43,11 @@ L'architecture est adaptee au perimetre actuel. Elle reste assez plate, ce qui e
 - Generation des pages tags via `getStaticPaths()`.
 - RSS et sitemap generes sans dependance supplementaire.
 - README utile pour installation, build et deploiement OVH.
-- CI presente et alignee sur Node 22.
+- CI presente et alignee sur Node 24 LTS.
 
 ## 5. Risques et limites
 
-- Le build local a echoue avec Node `v24.18.1` sur une erreur WebAssembly : `Out of memory: Cannot allocate Wasm memory for new instance`. La CI utilise Node 22, mais le repo ne fournit pas de `.nvmrc` ou `.node-version`.
-- `README.md` recommande Node 22, mais le projet ne verrouille pas cette version cote developpeur.
+- Le build local avait echoue avec Node `v24.18.1` sur une erreur WebAssembly : `Out of memory: Cannot allocate Wasm memory for new instance`. La phase 1 requalifie Node 24 LTS avec les versions actuelles des dependances et verrouille cette version cote developpeur et CI.
 - `astro check` n'est pas disponible sans installer `@astrojs/check`; il n'existe pas de script `check`.
 - Les URLs absolues RSS/sitemap sont construites manuellement a plusieurs endroits. Cela peut devenir fragile avec `SITE` + `BASE_PATH`, surtout entre OVH (`/`) et GitHub Pages (`/light-static-blog/`).
 - Les listes d'articles et les tags sont rendus avec de la duplication dans plusieurs pages.
@@ -65,107 +64,107 @@ L'architecture est adaptee au perimetre actuel. Elle reste assez plate, ce qui e
 
 Objectif : rendre le projet reproductible et verifier rapidement qu'une modification ne casse pas le site.
 
-- [ ] Ajouter un fichier `.nvmrc` avec `22`.
-- [ ] Ajouter un fichier `.node-version` avec `22` si l'environnement local l'utilise.
-- [ ] Ajouter `@astrojs/check` en dependance de developpement.
-- [ ] Ajouter un script `check` dans `package.json` : `astro check`.
-- [ ] Ajouter un script `validate` : `npm run check && npm run build`.
-- [ ] Documenter dans le README que Node 22 est la version de reference.
-- [ ] Lancer `SITE="https://example.com" BASE_PATH="/" npm run validate`.
+- [x] Ajouter un fichier `.nvmrc` avec `24`.
+- [x] Ajouter un fichier `.node-version` avec `24` si l'environnement local l'utilise.
+- [x] Ajouter `@astrojs/check` en dependance de developpement.
+- [x] Ajouter un script `check` dans `package.json` : `astro check`.
+- [x] Ajouter un script `validate` : `npm run check && npm run build`.
+- [x] Documenter dans le README que Node 24 LTS est la version de reference.
+- [x] Lancer `SITE="https://example.com" BASE_PATH="/" npm run validate`.
 
 Critere de sortie :
 
-- [ ] `npm run validate` passe avec Node 22.
-- [ ] Le build genere bien `dist/`.
+- [x] `npm run validate` passe avec Node 24 LTS.
+- [x] Le build genere bien `dist/`.
 
 ### Phase 2 - Centraliser la construction des URLs
 
 Objectif : eviter les erreurs entre OVH, GitHub Pages, RSS, sitemap et liens internes.
 
-- [ ] Creer un helper `src/lib/urls.ts`.
-- [ ] Ajouter une fonction pour construire les chemins internes depuis `import.meta.env.BASE_URL`.
-- [ ] Ajouter une fonction pour construire les URLs absolues depuis `SITE` et `BASE_URL`.
-- [ ] Remplacer les concatenations manuelles dans `SiteNav.astro`.
-- [ ] Remplacer les concatenations manuelles dans les pages `index`, `blog`, `tags` et `article`.
-- [ ] Remplacer les concatenations manuelles dans `rss.xml.ts`.
-- [ ] Remplacer les concatenations manuelles dans `sitemap.xml.ts`.
-- [ ] Tester les deux cas :
-  - [ ] `SITE="https://example.com" BASE_PATH="/"`
-  - [ ] `SITE="https://example.com" BASE_PATH="/light-static-blog/"`
+- [x] Creer un helper `src/lib/urls.ts`.
+- [x] Ajouter une fonction pour construire les chemins internes depuis `import.meta.env.BASE_URL`.
+- [x] Ajouter une fonction pour construire les URLs absolues depuis `SITE` et `BASE_URL`.
+- [x] Remplacer les concatenations manuelles dans `SiteNav.astro`.
+- [x] Remplacer les concatenations manuelles dans les pages `index`, `blog`, `tags` et `article`.
+- [x] Remplacer les concatenations manuelles dans `rss.xml.ts`.
+- [x] Remplacer les concatenations manuelles dans `sitemap.xml.ts`.
+- [x] Tester les deux cas :
+  - [x] `SITE="https://example.com" BASE_PATH="/"`
+  - [x] `SITE="https://example.com" BASE_PATH="/light-static-blog/"`
 
 Critere de sortie :
 
-- [ ] Les liens internes, RSS et sitemap sont corrects pour une base racine et une base non racine.
+- [x] Les liens internes, RSS et sitemap sont corrects pour une base racine et une base non racine.
 
 ### Phase 3 - Factoriser les composants de contenu
 
 Objectif : reduire la duplication sans complexifier l'architecture.
 
-- [ ] Creer `src/components/PostList.astro` pour afficher une liste d'articles.
-- [ ] Creer `src/components/PostMeta.astro` pour les dates et la description courte.
-- [ ] Creer `src/components/TagList.astro` pour l'affichage des tags cliquables.
-- [ ] Utiliser ces composants dans `src/pages/index.astro`.
-- [ ] Utiliser ces composants dans `src/pages/blog/index.astro`.
-- [ ] Utiliser ces composants dans `src/pages/blog/[slug].astro`.
-- [ ] Utiliser ces composants dans `src/pages/tags/[tag].astro`.
+- [x] Creer `src/components/PostList.astro` pour afficher une liste d'articles.
+- [x] Creer `src/components/PostMeta.astro` pour les dates et la description courte.
+- [x] Creer `src/components/TagList.astro` pour l'affichage des tags cliquables.
+- [x] Utiliser ces composants dans `src/pages/index.astro`.
+- [x] Utiliser ces composants dans `src/pages/blog/index.astro`.
+- [x] Utiliser ces composants dans `src/pages/blog/[slug].astro`.
+- [x] Utiliser ces composants dans `src/pages/tags/[tag].astro`.
 
 Critere de sortie :
 
-- [ ] Le rendu ne change pas fonctionnellement.
-- [ ] La logique de date et de tags n'est plus dupliquee dans chaque page.
+- [x] Le rendu ne change pas fonctionnellement.
+- [x] La logique de date et de tags n'est plus dupliquee dans chaque page.
 
 ### Phase 4 - Clarifier le modele de contenu
 
 Objectif : eviter les contenus invalides ou ambigus.
 
-- [ ] Modifier le schema `cover` pour refuser une chaine vide.
-- [ ] Corriger l'article qui contient `cover: ""`.
-- [ ] Decider si `cover` reste dans le MVP :
-  - [ ] soit l'utiliser dans les listes et pages articles,
-  - [ ] soit le retirer du schema et du template pour rester minimaliste.
-- [ ] Ajouter une validation de tags non vides.
-- [ ] Aligner `src/content/TAGGING.md` avec le comportement reel de normalisation.
-- [ ] Ajouter un exemple d'article brouillon dans la documentation, sans le publier.
+- [x] Modifier le schema `cover` pour refuser une chaine vide.
+- [x] Corriger l'article qui contient `cover: ""`.
+- [x] Decider si `cover` reste dans le MVP :
+  - [x] choix retenu : l'utiliser dans les listes et pages articles,
+  - [ ] option ecartee : le retirer du schema et du template pour rester minimaliste.
+- [x] Ajouter une validation de tags non vides.
+- [x] Aligner `src/content/TAGGING.md` avec le comportement reel de normalisation.
+- [x] Ajouter un exemple d'article brouillon dans la documentation, sans le publier.
 
 Critere de sortie :
 
-- [ ] Un article avec tag vide ou `cover: ""` echoue clairement a la validation.
-- [ ] La documentation correspond au comportement du code.
+- [x] Un article avec tag vide ou `cover: ""` echoue clairement a la validation.
+- [x] La documentation correspond au comportement du code.
 
 ### Phase 5 - Renforcer le SEO statique minimal
 
 Objectif : ameliorer l'indexation sans ajouter de dependance lourde.
 
-- [ ] Ajouter une URL canonique dans `BaseLayout.astro`.
-- [ ] Ajouter les metas Open Graph de base.
-- [ ] Ajouter `og:type` avec `website` par defaut et `article` pour les articles.
-- [ ] Ajouter `og:url`.
-- [ ] Ajouter `og:title` et `og:description`.
-- [ ] Ajouter `lastmod` dans le sitemap pour les articles, depuis `updatedDate` ou `pubDate`.
-- [ ] Ajouter `public/robots.txt`.
-- [ ] Verifier que `rss.xml` et `sitemap.xml` referencent les memes URLs absolues.
+- [x] Ajouter une URL canonique dans `BaseLayout.astro`.
+- [x] Ajouter les metas Open Graph de base.
+- [x] Ajouter `og:type` avec `website` par defaut et `article` pour les articles.
+- [x] Ajouter `og:url`.
+- [x] Ajouter `og:title` et `og:description`.
+- [x] Ajouter `lastmod` dans le sitemap pour les articles, depuis `updatedDate` ou `pubDate`.
+- [x] Ajouter `public/robots.txt`.
+- [x] Verifier que `rss.xml` et `sitemap.xml` referencent les memes URLs absolues.
 
 Critere de sortie :
 
-- [ ] Les pages principales ont une canonical et des metas sociales coherentes.
-- [ ] Le sitemap contient les pages et articles avec `lastmod` quand disponible.
+- [x] Les pages principales ont une canonical et des metas sociales coherentes.
+- [x] Le sitemap contient les pages et articles avec `lastmod` quand disponible.
 
 ### Phase 6 - Ameliorer la lisibilite et l'interface
 
 Objectif : garder un design sobre, plus robuste sur mobile et plus agreable en lecture longue.
 
-- [ ] Ajouter des classes structurelles pour les listes d'articles.
-- [ ] Ajouter un style dedie aux tags.
-- [ ] Ajouter un style dedie aux dates/metadonnees.
-- [ ] Ajouter un style dedie au contenu Markdown d'article.
-- [ ] Verifier les espacements sur mobile.
-- [ ] Verifier le contraste clair/sombre.
-- [ ] Remplacer les decorations de fond trop presentes si elles nuisent a la sobriete du blog.
+- [x] Ajouter des classes structurelles pour les listes d'articles.
+- [x] Ajouter un style dedie aux tags.
+- [x] Ajouter un style dedie aux dates/metadonnees.
+- [x] Ajouter un style dedie au contenu Markdown d'article.
+- [x] Verifier les espacements sur mobile.
+- [x] Verifier le contraste clair/sombre.
+- [x] Remplacer les decorations de fond trop presentes si elles nuisent a la sobriete du blog.
 
 Critere de sortie :
 
-- [ ] Les pages restent sobres.
-- [ ] Les articles longs, listes et tags sont plus faciles a scanner.
+- [x] Les pages restent sobres.
+- [x] Les articles longs, listes et tags sont plus faciles a scanner.
 
 ### Phase 7 - Documenter le flux de publication
 

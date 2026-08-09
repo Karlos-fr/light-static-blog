@@ -1,0 +1,36 @@
+---
+interface Props {
+  pubDate: Date;
+  updatedDate?: Date;
+  description?: string;
+  variant?: 'summary' | 'article';
+}
+
+const {
+  pubDate,
+  updatedDate,
+  description = '',
+  variant = 'summary',
+} = Astro.props as Props;
+
+const formatDate = (value: Date) =>
+  new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
+const dateTime = (value: Date) => value.toISOString().slice(0, 10);
+---
+
+<p class:list={['post-meta', { 'post-meta--article': variant === 'article' }]}>
+  {variant === 'article' ? (
+    <>
+      <span>Publié le <time datetime={dateTime(pubDate)}>{formatDate(pubDate)}</time></span>
+      {updatedDate ? (
+        <span>Mis à jour le <time datetime={dateTime(updatedDate)}>{formatDate(updatedDate)}</time></span>
+      ) : null}
+    </>
+  ) : (
+    <>
+      <time datetime={dateTime(pubDate)}>{formatDate(pubDate)}</time>
+      <span class="post-meta-separator" aria-hidden="true">—</span>
+      <span>{description}</span>
+    </>
+  )}
+</p>

@@ -1,6 +1,12 @@
 import { getAllTags, getPublicPosts } from '../lib/content';
+import { getAbsoluteUrl } from '../lib/urls';
 
 export const prerender = true;
+
+type SitemapEntry = {
+  loc: string;
+  lastmod?: Date;
+};
 
 function escapeXml(value: string): string {
   return value
@@ -14,41 +20,38 @@ function escapeXml(value: string): string {
 export async function GET() {
   const posts = await getPublicPosts();
   const tags = await getAllTags();
-  const rawSite = import.meta.env.SITE?.trim();
-  if (!rawSite) {
-    throw new Error(
-      "La variable d'environnement SITE est obligatoire pour générer le sitemap."
-    );
-  }
 
-  const site = rawSite.replace(/\/$/, '');
-
-  const urls = [
-    `${site}/`,
-    `${site}/blog`,
-    `${site}/about`,
-    `${site}/tags`,
+  const entries: SitemapEntry[] = [
+    { loc: getAbsoluteUrl() },
+    { loc: getAbsoluteUrl('blog') },
+    { loc: getAbsoluteUrl('about') },
+    { loc: getAbsoluteUrl('tags') },
   ];
 
   posts.forEach((post) => {
-    urls.push(`${site}/blog/${post.slug}`);
+    entries.push({
+      loc: getAbsoluteUrl('blog', post.slug),
+      lastmod: post.data.updatedDate ?? post.data.pubDate,
+    });
   });
 
   tags.forEach((tag) => {
-    urls.push(`${site}/tags/${tag}`);
+    entries.push({ loc: getAbsoluteUrl('tags', tag) });
   });
 
-  const entries = urls
+  const urls = entries
     .map(
-      (url) => `<url>
-  <loc>${escapeXml(url)}</loc>
+      ({ loc, lastmod }) => `<url>
+  <loc>${escapeXml(loc)}</loc>${
+    lastmod ? `\n  <lastmod>${lastmod.toISOString().slice(0, 10)}</lastmod>` : ''
+  }
 </url>`
     )
     .join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${entries}
+  ${urls}
 </urlset>`;
 
   return new Response(xml.trim(), {

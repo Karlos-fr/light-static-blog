@@ -5,7 +5,7 @@ pubDate: 2026-02-12
 updatedDate: 2026-02-20
 tags: ["retro", "gamedev", "javascript"]
 draft: false
-cover: ""
+cover: "/images/retro-rpg-cover.svg"
 ---
 
 Récupérer un vieux gameplay et lui donner une seconde vie peut sembler énorme, jusqu’à ce qu’on découpe le travail.

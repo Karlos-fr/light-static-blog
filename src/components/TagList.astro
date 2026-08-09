@@ -1,0 +1,21 @@
+---
+import { normalizeTag } from '../lib/content';
+import { getPath } from '../lib/urls';
+
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props as Props;
+---
+
+<div class="tag-list" aria-label="Tags de l’article">
+  <span class="tag-list-label">Tags</span>
+  <ul>
+    {tags.map((tag) => (
+      <li>
+        <a class="tag-chip" href={getPath('tags', normalizeTag(tag))}>{tag}</a>
+      </li>
+    ))}
+  </ul>
+</div>

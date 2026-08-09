@@ -34,4 +34,6 @@ Rappels :
 - `draft: false` → article publié.
 - `draft: true` → brouillon.
 - `updatedDate` et `cover` sont optionnels.
+- Une couverture doit référencer un fichier de `public/` avec un chemin comme `/images/couverture.webp` ; ne pas utiliser de chaîne vide.
+- Chaque article doit contenir au moins un tag non vide.
 - Le slug est le nom du fichier (sans `.md`).

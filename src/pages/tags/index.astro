@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getAllTags } from '../../lib/content';
+import { getPath } from '../../lib/urls';
 
 const tags = await getAllTags();
-const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Tags" description="Liste des tags du blog.">
@@ -12,14 +12,14 @@ const base = import.meta.env.BASE_URL;
   {tags.length === 0 ? (
     <p>Aucun tag pour le moment.</p>
   ) : (
-    <ul>
+    <ul class="tag-index">
       {tags.map((tag) => (
         <li>
-          <a href={`${base}tags/${tag}`}>{tag}</a>
+          <a class="tag-chip" href={getPath('tags', tag)}>{tag}</a>
         </li>
       ))}
     </ul>
   )}
 
-  <p><a href={`${base}blog`}>← retour aux articles</a></p>
+  <p class="back-link"><a href={getPath('blog')}>← retour aux articles</a></p>
 </BaseLayout>

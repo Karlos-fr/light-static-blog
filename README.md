@@ -11,8 +11,10 @@ Blog personnel minimaliste avec Astro, TypeScript et Markdown.
 
 ## Prérequis
 
-- Node.js 22 LTS (recommandé)
+- Node.js 24 LTS (version de référence du projet)
 - npm
+
+Les fichiers `.nvmrc` et `.node-version` permettent aux gestionnaires de versions compatibles de sélectionner automatiquement Node.js 24. Avec `nvm`, exécutez `nvm use` avant d'installer les dépendances.
 
 ## Installation
 
@@ -35,6 +37,12 @@ npm run build
 ```
 
 Cette commande génère un site **100 % statique** dans le dossier `dist/`.
+
+Pour vérifier les types et lancer le build en une seule commande :
+
+```bash
+npm run validate
+```
 
 Le build requiert deux variables d'environnement :
 
@@ -70,6 +78,22 @@ Puis écris le contenu en Markdown.
 
 - `draft: false` publie l’article.
 - `draft: true` le garde en brouillon.
+- `cover` référence une image placée dans `public/` depuis la racine publique ; une valeur vide est invalide.
+
+Exemple de brouillon conservé dans `src/content/blog/` mais absent du site généré :
+
+```md
+---
+title: "Article en préparation"
+description: "Notes encore en cours de rédaction."
+pubDate: 2026-08-09
+tags:
+  - brouillon
+draft: true
+---
+
+Contenu non publié.
+```
 
 ## Aperçu local du build
 

@@ -1,4 +1,5 @@
 import { getPublicPosts } from '../lib/content';
+import { getAbsoluteUrl } from '../lib/urls';
 
 export const prerender = true;
 
@@ -13,18 +14,11 @@ function escapeXml(value: string): string {
 
 export async function GET() {
   const posts = await getPublicPosts();
-  const rawSite = import.meta.env.SITE?.trim();
-  if (!rawSite) {
-    throw new Error(
-      "La variable d'environnement SITE est obligatoire pour générer le flux RSS."
-    );
-  }
-
-  const site = rawSite.replace(/\/$/, '');
+  const siteUrl = getAbsoluteUrl();
 
   const items = posts
     .map((post) => {
-      const url = `${site}/blog/${post.slug}`;
+      const url = getAbsoluteUrl('blog', post.slug);
       const pubDate = new Date(post.data.pubDate).toUTCString();
 
       return `
@@ -42,9 +36,9 @@ export async function GET() {
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
       <title>Light Static Blog</title>
-      <link>${site}</link>
+      <link>${siteUrl}</link>
       <description>Blog personnel: geekeries, projets Codex, portages de jeux et bricolages techniques.</description>
-      <atom:link href="${site}/rss.xml" rel="self" type="application/rss+xml" />
+      <atom:link href="${getAbsoluteUrl('rss.xml')}" rel="self" type="application/rss+xml" />
       ${items}
     </channel>
   </rss>`;

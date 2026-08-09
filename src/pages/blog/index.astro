@@ -1,36 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPublicPosts, normalizeTag } from '../../lib/content';
+import PostList from '../../components/PostList.astro';
+import { getPublicPosts } from '../../lib/content';
 
 const posts = await getPublicPosts();
-const base = import.meta.env.BASE_URL;
 
-const shortDate = (value: Date) =>
-  new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
 ---
 
 <BaseLayout title="Blog" description="Liste complète des articles.">
   <h1>Blog</h1>
 
-  {posts.length === 0 ? (
-    <p>Aucun article publié.</p>
-  ) : (
-    <ul>
-      {posts.map((post) => (
-        <li>
-          <h2><a href={`${base}blog/${post.slug}`}>{post.data.title}</a></h2>
-          <p>{shortDate(post.data.pubDate)} — {post.data.description}</p>
-          <p>
-            Tags :
-            {post.data.tags.map((tag, index) => (
-              <span>
-                <a href={`${base}tags/${normalizeTag(tag)}`}>{tag}</a>
-                {index < post.data.tags.length - 1 ? ', ' : ''}
-              </span>
-            ))}
-          </p>
-        </li>
-      ))}
-    </ul>
-  )}
+  <PostList posts={posts} emptyMessage="Aucun article publié." />
 </BaseLayout>

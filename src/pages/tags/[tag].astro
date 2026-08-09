@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
 import {
   getAllTags,
   getPublicPostsByTag,
   getDisplayTag,
 } from '../../lib/content';
+import { getPath } from '../../lib/urls';
 
 export async function getStaticPaths() {
   const tags = await getAllTags();
@@ -21,27 +23,17 @@ type Props = {
 
 const { tag } = Astro.props as Props;
 const posts = await getPublicPostsByTag(tag);
-const base = import.meta.env.BASE_URL;
 
-const shortDate = (value: Date) =>
-  new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
 ---
 
 <BaseLayout title={`Tag: ${getDisplayTag(tag)} | Light Static Blog`} description={`Articles taggés ${getDisplayTag(tag)}.`}>
   <h1>Tag : {getDisplayTag(tag)}</h1>
 
-  {posts.length === 0 ? (
-    <p>Aucun article pour ce tag.</p>
-  ) : (
-    <ul>
-      {posts.map((post) => (
-        <li>
-          <h2><a href={`${base}blog/${post.slug}`}>{post.data.title}</a></h2>
-          <p>{shortDate(post.data.pubDate)} — {post.data.description}</p>
-        </li>
-      ))}
-    </ul>
-  )}
+  <PostList
+    posts={posts}
+    emptyMessage="Aucun article pour ce tag."
+    showTags={false}
+  />
 
-  <p><a href={`${base}tags`}>← retour aux tags</a></p>
+  <p class="back-link"><a href={getPath('tags')}>← retour aux tags</a></p>
 </BaseLayout>
