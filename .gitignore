@@ -13,3 +13,6 @@ pnpm-debug.log*
 
 # Notes de déploiement locales
 DEPLOIEMENT_OVH_LOCAL.md
+deploy-ovh.ps1
+
+TODO.md
