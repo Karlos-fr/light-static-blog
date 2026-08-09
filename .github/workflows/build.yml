@@ -29,6 +29,7 @@ jobs:
         env:
           SITE: "https://karlos-fr.github.io/light-static-blog"
           BASE_PATH: "/light-static-blog/"
+          AUTHOR_NAME: ${{ vars.AUTHOR_NAME }}
         run: npm run validate
 
       - name: Upload dist artifact

@@ -7,10 +7,19 @@ interface Props {
   title: string;
   description?: string;
   type?: 'website' | 'article';
+  structuredData?: Record<string, unknown>;
 }
 
-const { title, description = '', type = 'website' } = Astro.props as Props;
+const {
+  title,
+  description = '',
+  type = 'website',
+  structuredData,
+} = Astro.props as Props;
 const canonicalUrl = getCanonicalUrl(Astro.url.pathname);
+const serializedStructuredData = structuredData
+  ? JSON.stringify(structuredData).replace(/</g, '\\u003c')
+  : undefined;
 ---
 
 <!doctype html>
@@ -25,6 +34,9 @@ const canonicalUrl = getCanonicalUrl(Astro.url.pathname);
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl} />
+    {serializedStructuredData ? (
+      <script type="application/ld+json" set:html={serializedStructuredData} is:inline />
+    ) : null}
     <link rel="alternate" type="application/rss+xml" title="Flux RSS" href={getAbsoluteUrl('rss.xml')} />
     <link rel="sitemap" type="application/xml" title="Sitemap" href={getAbsoluteUrl('sitemap.xml')} />
   </head>

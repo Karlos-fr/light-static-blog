@@ -20,6 +20,12 @@ if (!rawSite) {
 
 const site = rawSite.endsWith('/') ? rawSite.slice(0, -1) : rawSite;
 
+if (!process.env.AUTHOR_NAME?.trim()) {
+  throw new Error(
+    "La variable d'environnement AUTHOR_NAME est obligatoire. Exemple: AUTHOR_NAME='Nom de l auteur'."
+  );
+}
+
 export default defineConfig({
   base: normalizeBase(process.env.BASE_PATH),
   site,

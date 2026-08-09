@@ -35,7 +35,8 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 │   │   ├── about.astro
 │   │   ├── index.astro         # Accueil et liste complète des articles
 │   │   ├── rss.xml.ts
-│   │   └── sitemap.xml.ts
+│   │   ├── sitemap.xml.ts
+│   │   └── styles/xml.css.ts   # Thème partagé par les vues RSS et sitemap
 │   └── styles/
 │       └── global.css          # Design clair/sombre et responsive
 ├── astro.config.mjs            # Build statique et chemin public
@@ -64,7 +65,7 @@ npm install
 ## Développement
 
 ```bash
-SITE="http://localhost:4321" BASE_PATH="/" npm run dev
+SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Nom de l'auteur" npm run dev
 ```
 
 Le site est alors disponible sur `http://localhost:4321`.
@@ -74,24 +75,28 @@ Sous PowerShell :
 ```powershell
 $env:SITE="http://localhost:4321"
 $env:BASE_PATH="/"
+$env:AUTHOR_NAME="Nom de l'auteur"
 npm run dev
 ```
 
 ## Configuration des URL
 
-Deux variables d'environnement sont obligatoires :
+Trois variables d'environnement sont obligatoires :
 
 - `SITE` : origine publique du site, sans chemin final, par exemple `https://example.com` ;
 - `BASE_PATH` : chemin public terminé par `/`, par exemple `/` ou `/blog/`.
+- `AUTHOR_NAME` : nom de l'auteur commun à tous les articles.
 
-Ces valeurs alimentent les liens internes, les URL canonical, les métadonnées sociales, le flux RSS et le sitemap.
+Ces valeurs alimentent les liens internes, les URL canonical, les métadonnées sociales, les données structurées JSON-LD, le flux RSS et le sitemap.
+
+La page d'accueil expose un objet JSON-LD `WebSite`. Chaque article expose un objet `BlogPosting` reprenant son titre, sa description, ses dates, ses tags, son éventuelle couverture et l'auteur défini par `AUTHOR_NAME`.
 
 ## Build de production
 
 Exemple pour un site publié sous `https://example.com/blog/` :
 
 ```bash
-SITE="https://example.com" BASE_PATH="/blog/" npm run validate
+SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" npm run validate
 ```
 
 Sous PowerShell :
@@ -99,6 +104,7 @@ Sous PowerShell :
 ```powershell
 $env:SITE="https://example.com"
 $env:BASE_PATH="/blog/"
+$env:AUTHOR_NAME="Nom de l'auteur"
 npm run validate
 ```
 
@@ -141,7 +147,7 @@ Le fichier `ARTICLE_TEMPLATE.md` peut servir de point de départ.
 2. Conserver `draft: true` pendant la rédaction.
 3. Placer l'éventuelle couverture dans `public/images/`.
 4. Relire l'article puis passer `draft` à `false`.
-5. Exécuter `npm run validate` avec les valeurs de production de `SITE` et `BASE_PATH`.
+5. Exécuter `npm run validate` avec les valeurs de production de `SITE`, `BASE_PATH` et `AUTHOR_NAME`.
 6. Vérifier éventuellement le résultat avec `npm run preview`.
 7. Déployer le contenu du dossier `dist/` sur l'hébergement statique.
 
@@ -157,7 +163,7 @@ Le fichier `ARTICLE_TEMPLATE.md` peut servir de point de départ.
 
 ## Aperçu local du build
 
-Après avoir défini `SITE` et `BASE_PATH` :
+Après avoir défini `SITE`, `BASE_PATH` et `AUTHOR_NAME` :
 
 ```bash
 npm run preview
@@ -167,7 +173,7 @@ npm run preview
 
 Le projet est compatible avec tout hébergement capable de servir des fichiers statiques.
 
-1. Définir `SITE` et `BASE_PATH` avec les valeurs de la cible.
+1. Définir `SITE`, `BASE_PATH` et `AUTHOR_NAME` avec les valeurs de la cible.
 2. Exécuter `npm run validate`.
 3. Envoyer le **contenu** de `dist/`, et non le dossier lui-même, vers la racine publique choisie.
 4. Vérifier l'accueil, un article, `rss.xml` et `sitemap.xml`.
@@ -186,7 +192,7 @@ Le dossier `dist/` est un artefact généré, ignoré par Git et destiné à êt
 
 ```bash
 npm install
-SITE="http://localhost:4321" BASE_PATH="/" npm run dev
-SITE="https://example.com" BASE_PATH="/blog/" npm run validate
-SITE="https://example.com" BASE_PATH="/blog/" npm run preview
+SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Nom de l'auteur" npm run dev
+SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" npm run validate
+SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" npm run preview
 ```

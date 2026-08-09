@@ -2,12 +2,35 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostList from '../components/PostList.astro';
 import { getPublicPosts } from '../lib/content';
+import { getAuthorName } from '../lib/site';
+import { getAbsoluteUrl } from '../lib/urls';
 
 const posts = await getPublicPosts();
+const description = 'Blog personnel sur le code, les jeux rétro et le bricolage technique';
+const siteUrl = getAbsoluteUrl();
+const author = {
+  '@type': 'Person',
+  '@id': `${siteUrl}#author`,
+  name: getAuthorName(),
+};
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteUrl}#website`,
+  url: siteUrl,
+  name: 'Light Static Blog',
+  description,
+  inLanguage: 'fr',
+  author,
+};
 
 ---
 
-<BaseLayout title="Accueil - Light Static Blog" description="Blog personnel sur le code, les jeux rétro et le bricolage technique">
+<BaseLayout
+  title="Accueil - Light Static Blog"
+  description={description}
+  structuredData={structuredData}
+>
   <h1>Bienvenue</h1>
   <p>Un blog personnel simple, orienté projet, notes techniques et petites expérimentations.</p>
 
