@@ -4,7 +4,6 @@ import PostList from '../components/PostList.astro';
 import { getPublicPosts } from '../lib/content';
 
 const posts = await getPublicPosts();
-const latestPosts = posts.slice(0, 3);
 
 ---
 
@@ -13,9 +12,9 @@ const latestPosts = posts.slice(0, 3);
   <p>Un blog personnel simple, orienté projet, notes techniques et petites expérimentations.</p>
 
   <section>
-    <h2>Derniers articles</h2>
+    <h2>Articles</h2>
     <PostList
-      posts={latestPosts}
+      posts={posts}
       emptyMessage="Aucun article publié pour le moment."
       headingLevel="h3"
     />

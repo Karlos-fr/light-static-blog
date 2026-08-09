@@ -2,6 +2,24 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type BlogEntry = CollectionEntry<'blog'>;
 
+const RESERVED_POST_SLUGS = new Set([
+  'about',
+  'blog',
+  'tags',
+  'rss.xml',
+  'sitemap.xml',
+]);
+
+function assertAvailablePostSlugs(posts: BlogEntry[]): void {
+  const reservedSlug = posts.find((post) => RESERVED_POST_SLUGS.has(post.slug));
+
+  if (reservedSlug) {
+    throw new Error(
+      `Le slug d'article "${reservedSlug.slug}" est réservé par une route du site.`
+    );
+  }
+}
+
 export function normalizeTag(tag: string): string {
   return tag
     .trim()
@@ -20,10 +38,13 @@ export function getDisplayTag(tag: string): string {
 
 export async function getPublicPosts(): Promise<BlogEntry[]> {
   const posts = await getCollection('blog');
+  const publicPosts = posts.filter((post) => !post.data.draft);
 
-  return posts
-    .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  assertAvailablePostSlugs(publicPosts);
+
+  return publicPosts.sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
 }
 
 export async function getAllTags(): Promise<string[]> {

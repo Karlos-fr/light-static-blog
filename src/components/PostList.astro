@@ -31,11 +31,11 @@ const Heading = headingLevel;
           <PostCover
             cover={post.data.cover}
             title={post.data.title}
-            href={getPath('blog', post.slug)}
+            href={getPath(post.slug)}
           />
         ) : null}
         <Heading class="post-title">
-          <a href={getPath('blog', post.slug)}>{post.data.title}</a>
+          <a href={getPath(post.slug)}>{post.data.title}</a>
         </Heading>
         <PostMeta pubDate={post.data.pubDate} description={post.data.description} />
         {showTags ? <TagList tags={post.data.tags} /> : null}

@@ -23,14 +23,13 @@ export async function GET() {
 
   const entries: SitemapEntry[] = [
     { loc: getAbsoluteUrl() },
-    { loc: getAbsoluteUrl('blog') },
     { loc: getAbsoluteUrl('about') },
     { loc: getAbsoluteUrl('tags') },
   ];
 
   posts.forEach((post) => {
     entries.push({
-      loc: getAbsoluteUrl('blog', post.slug),
+      loc: getAbsoluteUrl(post.slug),
       lastmod: post.data.updatedDate ?? post.data.pubDate,
     });
   });

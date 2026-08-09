@@ -18,7 +18,7 @@ export async function GET() {
 
   const items = posts
     .map((post) => {
-      const url = getAbsoluteUrl('blog', post.slug);
+      const url = getAbsoluteUrl(post.slug);
       const pubDate = new Date(post.data.pubDate).toUTCString();
 
       return `

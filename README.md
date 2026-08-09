@@ -7,14 +7,51 @@ Blog personnel minimaliste avec Astro, TypeScript et Markdown.
 - Astro
 - TypeScript
 - Markdown pour les articles
-- CSS simple (pas de framework frontend lourd)
+- CSS simple, sans framework frontend lourd
+
+## Architecture et arborescence
+
+Le projet est entièrement statique : Astro transforme les pages et les articles Markdown en fichiers HTML dans `dist/`. Aucun serveur Node, backend, CMS ou base de données n'est nécessaire en production.
+
+```text
+.
+├── public/                     # Fichiers statiques copiés tels quels
+│   ├── images/                 # Couvertures des articles
+│   └── robots.txt
+├── src/
+│   ├── components/             # Listes, tags, dates et couvertures
+│   ├── content/
+│   │   ├── blog/               # Articles Markdown ; le nom devient le slug
+│   │   ├── config.ts           # Schéma et validation du frontmatter
+│   │   └── TAGGING.md          # Convention de tags
+│   ├── layouts/
+│   │   └── BaseLayout.astro    # Structure HTML, navigation et SEO
+│   ├── lib/                    # Chargement du contenu et construction des URL
+│   ├── pages/
+│   │   ├── [slug].astro        # Pages des articles
+│   │   ├── tags/               # Index et pages de tags
+│   │   ├── about.astro
+│   │   ├── index.astro         # Accueil et liste complète des articles
+│   │   ├── rss.xml.ts
+│   │   └── sitemap.xml.ts
+│   └── styles/
+│       └── global.css          # Design clair/sombre et responsive
+├── astro.config.mjs            # Build statique et chemin public
+├── ARTICLE_TEMPLATE.md         # Modèle pour rédiger un article
+├── package.json                # Scripts et dépendances
+└── README.md
+```
+
+Les articles sont chargés depuis la collection `blog`, triés par date décroissante et filtrés afin d'exclure `draft: true`. Les composants partagés centralisent l'affichage des listes, dates, couvertures et tags.
+
+Le chemin d'hébergement est défini uniquement par `BASE_PATH`. Par exemple, avec `BASE_PATH=/blog/`, l'accueil est publié sous `/blog/` et chaque article sous `/blog/<slug>/`.
 
 ## Prérequis
 
-- Node.js 24 LTS (version de référence du projet)
+- Node.js 24 LTS
 - npm
 
-Les fichiers `.nvmrc` et `.node-version` permettent aux gestionnaires de versions compatibles de sélectionner automatiquement Node.js 24. Avec `nvm`, exécutez `nvm use` avant d'installer les dépendances.
+Les fichiers `.nvmrc` et `.node-version` permettent aux gestionnaires compatibles de sélectionner automatiquement la bonne version de Node.js.
 
 ## Installation
 
@@ -25,155 +62,129 @@ npm install
 ## Développement
 
 ```bash
+SITE="http://localhost:4321" BASE_PATH="/" npm run dev
+```
+
+Le site est alors disponible sur `http://localhost:4321`.
+
+Sous PowerShell :
+
+```powershell
+$env:SITE="http://localhost:4321"
+$env:BASE_PATH="/"
 npm run dev
 ```
 
-Le site est disponible en local sur `http://localhost:4321`.
+## Configuration des URL
+
+Deux variables d'environnement sont obligatoires :
+
+- `SITE` : origine publique du site, sans chemin final, par exemple `https://example.com` ;
+- `BASE_PATH` : chemin public terminé par `/`, par exemple `/` ou `/blog/`.
+
+Ces valeurs alimentent les liens internes, les URL canonical, les métadonnées sociales, le flux RSS et le sitemap.
 
 ## Build de production
+
+Exemple pour un site publié sous `https://example.com/blog/` :
+
+```bash
+SITE="https://example.com" BASE_PATH="/blog/" npm run validate
+```
+
+Sous PowerShell :
+
+```powershell
+$env:SITE="https://example.com"
+$env:BASE_PATH="/blog/"
+npm run validate
+```
+
+La commande `validate` vérifie les types puis génère le site statique dans `dist/`. Pour lancer uniquement la génération :
 
 ```bash
 npm run build
 ```
 
-Cette commande génère un site **100 % statique** dans le dossier `dist/`.
-
-Pour vérifier les types et lancer le build en une seule commande :
-
-```bash
-npm run validate
-```
-
-Le build requiert deux variables d'environnement :
-
-- `SITE` : URL absolue du site (ex: `https://karlos-fr.github.io/light-static-blog` ou `https://votredomaine.tld`)
-- `BASE_PATH` : base d'URL d'hébergement (ex: `/light-static-blog/` pour GitHub Pages, `/` pour OVH)
-
-Exemple :
-
-```bash
-SITE="https://karlos-fr.github.io/light-static-blog" BASE_PATH="/light-static-blog/" npm run build
-```
-
 ## Ajouter un article
 
-- Crée un fichier dans `src/content/blog/` (ex: `2026-08-01-mon-article.md`).
-- Utilise le frontmatter minimal ci-dessous (le slug vient du nom du fichier) :
+Créer un fichier dans `src/content/blog/`, par exemple `mon-article.md`. Le nom du fichier devient le slug public.
 
 ```md
 ---
 title: "Mon titre"
 description: "Résumé court"
 pubDate: 2026-08-01
-updatedDate: 2026-08-01   # optionnel
+updatedDate: 2026-08-02 # optionnel
 tags:
   - javascript
   - astro
 draft: false
 cover: "/images/couverture.webp" # optionnel
 ---
+
+Contenu de l'article en Markdown.
 ```
 
-Puis écris le contenu en Markdown.
+- `draft: false` publie l'article.
+- `draft: true` l'exclut des pages, des tags, du RSS et du sitemap.
+- `cover` référence un fichier placé dans `public/` depuis la racine publique.
+- Les slugs correspondant à une route réservée, comme `about`, `blog` ou `tags`, sont refusés au build.
 
-- `draft: false` publie l’article.
-- `draft: true` le garde en brouillon.
-- `cover` référence une image placée dans `public/` depuis la racine publique ; une valeur vide est invalide.
+Le fichier `ARTICLE_TEMPLATE.md` peut servir de point de départ.
 
-Exemple de brouillon conservé dans `src/content/blog/` mais absent du site généré :
+## Publier un article
 
-```md
----
-title: "Article en préparation"
-description: "Notes encore en cours de rédaction."
-pubDate: 2026-08-09
-tags:
-  - brouillon
-draft: true
----
+1. Créer l'article dans `src/content/blog/`.
+2. Conserver `draft: true` pendant la rédaction.
+3. Placer l'éventuelle couverture dans `public/images/`.
+4. Relire l'article puis passer `draft` à `false`.
+5. Exécuter `npm run validate` avec les valeurs de production de `SITE` et `BASE_PATH`.
+6. Vérifier éventuellement le résultat avec `npm run preview`.
+7. Déployer le contenu du dossier `dist/` sur l'hébergement statique.
 
-Contenu non publié.
-```
+### Checklist avant publication
+
+- [ ] Le titre et la description correspondent au contenu.
+- [ ] `pubDate` est correcte.
+- [ ] `updatedDate` n'est renseignée qu'en cas de mise à jour.
+- [ ] Les tags sont cohérents avec `src/content/TAGGING.md`.
+- [ ] La couverture éventuelle existe dans `public/`.
+- [ ] `draft: false` est défini.
+- [ ] `npm run validate` passe sans erreur.
 
 ## Aperçu local du build
+
+Après avoir défini `SITE` et `BASE_PATH` :
 
 ```bash
 npm run preview
 ```
 
-## Déploiement principal : OVH mutualisé
+## Déploiement
 
-Le build doit être déposé tel quel dans le dossier `www/` de votre hébergement.
+Le projet est compatible avec tout hébergement capable de servir des fichiers statiques.
 
-### Étapes
+1. Définir `SITE` et `BASE_PATH` avec les valeurs de la cible.
+2. Exécuter `npm run validate`.
+3. Envoyer le **contenu** de `dist/`, et non le dossier lui-même, vers la racine publique choisie.
+4. Vérifier l'accueil, un article, `rss.xml` et `sitemap.xml`.
 
-1. Construire le site
+Le dossier `dist/` est un artefact généré, ignoré par Git et destiné à être reconstruit avant chaque déploiement.
 
-   ```bash
-   SITE="https://votredomaine.tld" BASE_PATH="/" npm run build
-   ```
-
-2. Envoyer le contenu de `dist/` dans `www/` (FTP, SFTP ou gestionnaire de fichiers).
-
-   Exemple (SFTP/SSH) :
-
-   ```bash
-   rsync -av --delete dist/ user@host:/chemin/vers/www/
-   ```
-
-3. Vérifier la présence des fichiers à la racine de `www/` :
-
-   - `index.html`
-   - `blog/`
-   - `tags/`
-   - `rss.xml`
-   - `sitemap.xml`
-
-Commande rapide (1 ligne) :
-
-```bash
-SITE="https://votredomaine.tld" BASE_PATH="/" npm run build && rsync -av --delete dist/ user@host:/chemin/vers/www/
-```
-
-### Note SEO (RSS/Sitemap)
-
-Les flux RSS et sitemap utilisent la variable `SITE` pour générer des URL absolues.
-
-Exemple de commande :
-
-```bash
-SITE="https://votredomaine.tld" BASE_PATH="/" npm run build
-```
-
-## GitHub Pages (CI/CD)
-
-Le workflow GitHub Actions exécute le build avec :
-
-- `SITE=https://karlos-fr.github.io/light-static-blog`
-- `BASE_PATH=/light-static-blog/`
-
-et déploie ensuite `dist/` automatiquement sur GitHub Pages.
-
-## Déploiements mentionnés en option (non bloquants)
-
-- GitHub Pages : possible pour des tests ou une diffusion secondaire.
-- Vercel : possible pour des tests/hosting alternatif.
-
-Ces options restent secondaires et ne changent pas l'architecture principale, qui reste **statique** (compatible OVH mutualisé).
-
-## Contraintes respectées
+## Contraintes
 
 - Pas de backend
 - Pas de base de données
 - Pas de CMS
-- Pas d'API runtime
-- Aucune dépendance backend en production
+- Pas d'API à l'exécution
+- Aucun JavaScript client nécessaire au fonctionnement du site
 
-## Commandes de résumé
+## Commandes utiles
 
 ```bash
 npm install
-npm run dev
-npm run build
-npm run preview
+SITE="http://localhost:4321" BASE_PATH="/" npm run dev
+SITE="https://example.com" BASE_PATH="/blog/" npm run validate
+SITE="https://example.com" BASE_PATH="/blog/" npm run preview
 ```

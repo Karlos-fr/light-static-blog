@@ -1,10 +1,10 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCover from '../../components/PostCover.astro';
-import PostMeta from '../../components/PostMeta.astro';
-import TagList from '../../components/TagList.astro';
-import { getPublicPosts } from '../../lib/content';
-import { getPath } from '../../lib/urls';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCover from '../components/PostCover.astro';
+import PostMeta from '../components/PostMeta.astro';
+import TagList from '../components/TagList.astro';
+import { getPublicPosts } from '../lib/content';
+import { getPath } from '../lib/urls';
 
 export async function getStaticPaths() {
   const posts = await getPublicPosts();
@@ -21,7 +21,6 @@ type Props = {
 
 const { post } = Astro.props as Props;
 const { Content } = await post.render();
-
 ---
 
 <BaseLayout
@@ -44,5 +43,5 @@ const { Content } = await post.render();
     <Content />
   </article>
 
-  <p class="back-link"><a href={getPath('blog')}>← retour au blog</a></p>
+  <p class="back-link"><a href={getPath()}>← retour au blog</a></p>
 </BaseLayout>
