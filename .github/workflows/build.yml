@@ -29,7 +29,7 @@ jobs:
         env:
           SITE: "https://karlos-fr.github.io/light-static-blog"
           BASE_PATH: "/light-static-blog/"
-          AUTHOR_NAME: ${{ vars.AUTHOR_NAME }}
+          AUTHOR_NAME: ${{ vars.AUTHOR_NAME || 'Author name' }}
           SITE_THEME: "default"
         run: npm run validate
 
