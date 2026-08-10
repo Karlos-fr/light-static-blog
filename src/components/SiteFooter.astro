@@ -5,7 +5,12 @@ import { getPath } from '../lib/urls';
 <footer class="site-footer">
   <nav aria-label="Liens complémentaires">
     <ul>
-      <li><a href={getPath('rss.xml')}>RSS</a></li>
+      <li>
+        <a class="rss-link" href={getPath('rss.xml')}>
+          <span class="rss-icon" aria-hidden="true"></span>
+          RSS
+        </a>
+      </li>
       <li class="footer-separator" aria-hidden="true">/</li>
       <li><a href={getPath('sitemap.xml')}>Plan du site</a></li>
     </ul>

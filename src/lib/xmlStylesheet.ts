@@ -68,7 +68,7 @@ export function getXmlStylesheetHeader({
 export function getXmlStylesheetFooter(siteUrl: string): string {
   return `<footer class="site-footer">
           <nav aria-label="Liens complémentaires"><ul>
-            <li><a href="{concat(${siteUrl}, 'rss.xml')}">RSS</a></li>
+            <li><a class="rss-link" href="{concat(${siteUrl}, 'rss.xml')}"><span class="rss-icon" aria-hidden="true"></span>RSS</a></li>
             <li class="footer-separator" aria-hidden="true">/</li>
             <li><a href="{concat(${siteUrl}, 'sitemap.xml')}">Plan du site</a></li>
           </ul></nav>

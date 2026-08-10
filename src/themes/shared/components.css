@@ -140,6 +140,20 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-weight: 700;
 }
 
+.rss-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rss-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  color: var(--color-rss, #f26522);
+}
+
 .post-list {
   display: grid;
   gap: 1.25rem;
