@@ -1,5 +1,7 @@
 ---
 import { getPath } from '../lib/urls';
+
+const projectUrl = 'https://github.com/Karlos-fr/light-static-blog';
 ---
 
 <footer class="site-footer">
@@ -12,7 +14,25 @@ import { getPath } from '../lib/urls';
         </a>
       </li>
       <li class="footer-separator" aria-hidden="true">/</li>
-      <li><a href={getPath('sitemap.xml')}>Plan du site</a></li>
+      <li>
+        <a class="sitemap-link" href={getPath('sitemap.xml')}>
+          <span class="sitemap-icon" aria-hidden="true"></span>
+          Plan du site
+        </a>
+      </li>
+      <li class="footer-separator" aria-hidden="true">/</li>
+      <li>
+        <a class="powered-link" href={projectUrl}>
+          <img
+            class="powered-icon"
+            src={getPath('images/light-static-blog-icon.png')}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+          />
+          Propulsé par light-static-blog
+        </a>
+      </li>
     </ul>
   </nav>
 </footer>

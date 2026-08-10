@@ -159,7 +159,7 @@ Pour ajouter un thème :
 
 1. Créer `src/themes/<identifiant>/theme.css`.
 2. Définir tous les tokens sémantiques utilisés par les composants, dont les palettes claire et sombre via `data-color-mode` et le repli `prefers-color-scheme`.
-3. Définir les ressources visuelles propres au thème, par exemple `--color-rss` et `--icon-rss` pour l'icône RSS.
+3. Définir les ressources visuelles propres au thème, par exemple `--color-rss`, `--icon-rss`, `--color-sitemap`, `--icon-sitemap` et la taille `--powered-icon-size` du lien de projet.
 4. Lancer `npm run validate` avec `SITE_THEME=<identifiant>` et tester les deux modes, le responsive, RSS et sitemap.
 
 Les thèmes sont découverts automatiquement depuis `src/themes/<identifiant>/theme.css`. Une valeur `SITE_THEME` inconnue fait échouer le build avec la liste des thèmes disponibles. Aucun framework frontend ni police distante n'est nécessaire.

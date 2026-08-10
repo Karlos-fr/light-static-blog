@@ -125,6 +125,8 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 
 .site-footer ul {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 0.75rem 1.25rem;
   margin: 0;
   padding: 0;
@@ -140,18 +142,36 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-weight: 700;
 }
 
-.rss-link {
+.rss-link,
+.sitemap-link,
+.powered-link {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 }
 
-.rss-icon {
+.rss-icon,
+.sitemap-icon {
   display: inline-block;
   flex: 0 0 auto;
   width: 1em;
   height: 1em;
+}
+
+.rss-icon {
   color: var(--color-rss, #f26522);
+}
+
+.sitemap-icon {
+  color: var(--color-sitemap, var(--color-accent));
+}
+
+.powered-icon {
+  flex: 0 0 auto;
+  width: var(--powered-icon-size, 1.15em);
+  height: var(--powered-icon-size, 1.15em);
+  border-radius: var(--powered-icon-radius, 0.25rem);
+  object-fit: cover;
 }
 
 .post-list {
