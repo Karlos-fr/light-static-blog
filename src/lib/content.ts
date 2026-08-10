@@ -1,5 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+import { TAG_ACCENTS, tagAccents, type TagAccent } from '../config/tags';
+
 export type BlogEntry = CollectionEntry<'blog'>;
 
 const RESERVED_POST_SLUGS = new Set([
@@ -48,22 +50,11 @@ export async function getPublicPosts(): Promise<BlogEntry[]> {
   );
 }
 
-const TAG_ACCENTS = ['primary', 'violet', 'blue', 'orange'] as const;
-
-export function getTagAccent(tag: string): (typeof TAG_ACCENTS)[number] {
+export function getTagAccent(tag: string): TagAccent {
   const normalizedTag = normalizeTag(tag);
-  const accentGroups: Record<(typeof TAG_ACCENTS)[number], string[]> = {
-    primary: ['test', 'rss'],
-    violet: ['retro', 'gamedev', 'jeu', 'jeux'],
-    blue: ['bricolage', 'outils', 'shell', 'sysadmin'],
-    orange: ['dev', 'javascript', 'methodologie', 'productivite'],
-  };
 
-  const semanticAccent = TAG_ACCENTS.find((accent) =>
-    accentGroups[accent].some((keyword) => normalizedTag.includes(keyword))
-  );
-  if (semanticAccent) {
-    return semanticAccent;
+  if (tagAccents[normalizedTag]) {
+    return tagAccents[normalizedTag];
   }
 
   const score = normalizedTag
