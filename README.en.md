@@ -28,9 +28,7 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 ├── public/                     # Static files copied as-is
 │   ├── images/                 # Article covers
 │   ├── robots.txt
-│   ├── scripts/                # Minimal light/dark switch, dependency-free
-│   ├── rss.xsl                 # RSS feed presentation in a browser
-│   └── sitemap.xsl             # Sitemap presentation in a browser
+│   └── scripts/                # Minimal light/dark switch, dependency-free
 ├── src/
 │   ├── components/             # Shared structure, lists and pagination
 │   ├── config/site.ts          # Identity, active theme and page size
@@ -48,7 +46,9 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 │   │   ├── index.astro         # First article page
 │   │   ├── page/[page].astro   # Following static pages
 │   │   ├── rss.xml.ts
+│   │   ├── rss.xsl.ts          # RSS feed presentation in a browser
 │   │   ├── sitemap.xml.ts
+│   │   ├── sitemap.xsl.ts      # Sitemap presentation in a browser
 │   │   └── styles/theme.css.ts # Stable stylesheet composed at build time
 │   └── themes/
 │       ├── registry.ts         # Theme registry and validation
@@ -64,6 +64,8 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 Articles are loaded from the `blog` collection, sorted by descending date and filtered to exclude `draft: true`. They are split into pages of six posts. Astro components carry the semantic structure; themes contain only tokens and visual rules.
 
 The hosting path is defined only by `BASE_PATH`. For example, with `BASE_PATH=/blog/`, the homepage is published under `/blog/` and each article under `/blog/<slug>/`.
+
+The `robots.txt` file is copied into `dist/` like the other static files. Search engines, however, look for it at the host root, for example `https://example.com/robots.txt`. If the blog is deployed under a subpath such as `/blog/`, also upload `dist/robots.txt` to the host's public root and reference the full sitemap there, for example `Sitemap: https://example.com/blog/sitemap.xml`.
 
 ## Requirements
 
@@ -214,7 +216,8 @@ The project is compatible with any hosting able to serve static files.
 1. Define `SITE`, `BASE_PATH`, `AUTHOR_NAME` and optionally `SITE_THEME` with the target values.
 2. Run `npm run validate`.
 3. Upload the **contents** of `dist/`, not the folder itself, to the chosen public root.
-4. Check the homepage, one article, `rss.xml` and `sitemap.xml`.
+4. If `BASE_PATH` is not `/`, also copy `dist/robots.txt` to the host root so it is served from `/robots.txt`, with a `Sitemap:` line pointing to the absolute sitemap URL.
+5. Check the homepage, one article, `rss.xml`, `sitemap.xml` and `robots.txt`.
 
 The `dist/` folder is a generated artifact, ignored by Git and intended to be rebuilt before each deployment.
 
