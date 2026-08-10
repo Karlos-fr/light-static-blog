@@ -55,6 +55,8 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 │       ├── shared/             # Fondations et contrats communs
 │       ├── default/theme.css   # Thème public par défaut
 │       └── <identifiant>/      # Éventuels thèmes supplémentaires
+│           ├── theme.css
+│           └── assets/         # Polices, images et icônes propres au thème
 ├── astro.config.mjs            # Build statique et chemin public
 ├── ARTICLE_TEMPLATE.md         # Modèle pour rédiger un article
 ├── package.json                # Scripts et dépendances
@@ -177,9 +179,10 @@ Pour ajouter un thème :
 1. Créer `src/themes/<identifiant>/theme.css`.
 2. Définir tous les tokens sémantiques utilisés par les composants, dont les palettes claire et sombre via `data-color-mode` et le repli `prefers-color-scheme`.
 3. Définir les ressources visuelles propres au thème, par exemple `--color-rss`, `--icon-rss`, `--color-sitemap`, `--icon-sitemap` et la taille `--powered-icon-size` du lien de projet.
-4. Lancer `npm run validate` avec `SITE_THEME=<identifiant>` et tester les deux modes, le responsive, RSS et sitemap.
+4. Placer les fichiers propres au thème dans `src/themes/<identifiant>/assets/` si nécessaire. Dans `theme.css`, les référencer avec `__THEME_ASSETS__/`, par exemple `url('__THEME_ASSETS__/fonts/ma-police.woff2')`.
+5. Lancer `npm run validate` avec `SITE_THEME=<identifiant>` et tester les deux modes, le responsive, RSS et sitemap.
 
-Les thèmes sont découverts automatiquement depuis `src/themes/<identifiant>/theme.css`. Une valeur `SITE_THEME` inconnue fait échouer le build avec la liste des thèmes disponibles. Aucun framework frontend ni police distante n'est nécessaire.
+Les thèmes sont découverts automatiquement depuis `src/themes/<identifiant>/theme.css`. Les assets du thème actif sont publiés sous `/theme-assets/<identifiant>/...`, avec le bon préfixe `BASE_PATH`. Une valeur `SITE_THEME` inconnue fait échouer le build avec la liste des thèmes disponibles. Aucun framework frontend ni police distante n'est nécessaire.
 
 ## Publier un article
 
