@@ -345,6 +345,54 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   border-top: 1px solid var(--color-border);
 }
 
+.article-navigation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-block-start: 2.5rem;
+  padding-block-start: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.article-navigation-link {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.article-navigation-link--older {
+  text-align: right;
+}
+
+.article-navigation-label {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.article-navigation-title {
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+.article-navigation-link:hover,
+.article-navigation-link:focus-visible {
+  border-color: var(--color-accent);
+  text-decoration: none;
+}
+
+.article-navigation-link:hover .article-navigation-title,
+.article-navigation-link:focus-visible .article-navigation-title {
+  color: var(--color-accent);
+}
+
 .pagination {
   margin-block-start: 2rem;
 }
@@ -447,6 +495,14 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 
   .post-card {
     padding: 1rem;
+  }
+
+  .article-navigation {
+    grid-template-columns: 1fr;
+  }
+
+  .article-navigation-link--older {
+    text-align: left;
   }
 
   .site-footer {

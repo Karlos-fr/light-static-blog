@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleNavigation from '../components/ArticleNavigation.astro';
 import PostCover from '../components/PostCover.astro';
 import PostMeta from '../components/PostMeta.astro';
 import TagList from '../components/TagList.astro';
@@ -11,17 +12,23 @@ import { getAbsoluteUrl, getPath } from '../lib/urls';
 export async function getStaticPaths() {
   const posts = await getPublicPosts();
 
-  return posts.map((post) => ({
+  return posts.map((post, index) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: {
+      post,
+      newerPost: posts[index - 1],
+      olderPost: posts[index + 1],
+    },
   }));
 }
 
 type Props = {
   post: Awaited<ReturnType<typeof getPublicPosts>>[number];
+  newerPost?: Awaited<ReturnType<typeof getPublicPosts>>[number];
+  olderPost?: Awaited<ReturnType<typeof getPublicPosts>>[number];
 };
 
-const { post } = Astro.props as Props;
+const { post, newerPost, olderPost } = Astro.props as Props;
 const { Content } = await post.render();
 const siteUrl = getAbsoluteUrl();
 const articleUrl = getAbsoluteUrl(post.slug);
@@ -59,6 +66,8 @@ const structuredData = {
   description={post.data.description}
   type="article"
   structuredData={structuredData}
+  previousUrl={newerPost ? getAbsoluteUrl(newerPost.slug) : undefined}
+  nextUrl={olderPost ? getAbsoluteUrl(olderPost.slug) : undefined}
 >
   <article class="article-content">
     <h1>{post.data.title}</h1>
@@ -74,6 +83,8 @@ const structuredData = {
 
     <Content />
   </article>
+
+  <ArticleNavigation newerPost={newerPost} olderPost={olderPost} />
 
   <p class="back-link"><a href={getPath()}>← retour au blog</a></p>
 </BaseLayout>

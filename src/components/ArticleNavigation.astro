@@ -1,0 +1,31 @@
+---
+import type { BlogEntry } from '../lib/content';
+import { getPath } from '../lib/urls';
+
+interface Props {
+  newerPost?: BlogEntry;
+  olderPost?: BlogEntry;
+}
+
+const { newerPost, olderPost } = Astro.props as Props;
+---
+
+{newerPost || olderPost ? (
+  <nav class="article-navigation" aria-label="Navigation entre articles">
+    {newerPost ? (
+      <a class="article-navigation-link article-navigation-link--newer" href={getPath(newerPost.slug)} rel="prev">
+        <span class="article-navigation-label">Article plus récent</span>
+        <span class="article-navigation-title">← {newerPost.data.title}</span>
+      </a>
+    ) : (
+      <span></span>
+    )}
+
+    {olderPost ? (
+      <a class="article-navigation-link article-navigation-link--older" href={getPath(olderPost.slug)} rel="next">
+        <span class="article-navigation-label">Article plus ancien</span>
+        <span class="article-navigation-title">{olderPost.data.title} →</span>
+      </a>
+    ) : null}
+  </nav>
+) : null}
