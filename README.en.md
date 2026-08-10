@@ -34,6 +34,7 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 │   ├── config/site.ts          # Identity, active theme and page size
 │   ├── content/
 │   │   ├── blog/               # Markdown articles; the filename becomes the slug
+│   │   ├── pages/              # Markdown editorial pages, including About
 │   │   ├── config.ts           # Frontmatter schema and validation
 │   │   └── TAGGING.md          # Tagging convention
 │   ├── layouts/
@@ -169,6 +170,21 @@ Article content in Markdown.
 - Slugs matching a reserved route, such as `about`, `blog` or `tags`, are rejected at build time.
 
 The `ARTICLE_TEMPLATE.md` file can be used as a starting point.
+
+## Edit the About Page
+
+The editorial content of the About page is stored in `src/content/pages/about.md`.
+
+```md
+---
+title: "À propos"
+description: "Short presentation of the blog project."
+---
+
+Page content in Markdown.
+```
+
+The `src/pages/about.astro` route loads this file, applies the shared layout and uses its frontmatter for the SEO title and description.
 
 ## Themes and Light/Dark Mode
 

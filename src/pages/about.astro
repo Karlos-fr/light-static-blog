@@ -1,17 +1,22 @@
 ---
+import { getEntry } from 'astro:content';
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../config/site';
+
+const about = await getEntry('pages', 'about');
+
+if (!about) {
+  throw new Error('La page de contenu "about" est introuvable dans src/content/pages/about.md.');
+}
+
+const { Content } = await about.render();
 ---
 
-<BaseLayout title={`À propos | ${siteConfig.name}`} description={siteConfig.description}>
-  <h1>À propos</h1>
-  <p>
-    C'est un blog personnel pensé pour partager des idées, des notes techniques,
-    des portages de jeux rétro et des bricolages utiles, sans surcouches inutiles.
-  </p>
-  <p>
-    L'objectif est simple : publier vite, lire bien, garder une base propre et
-    toujours statique.
-  </p>
+<BaseLayout title={`${about.data.title} | ${siteConfig.name}`} description={about.data.description}>
+  <article class="article-content">
+    <h1>{about.data.title}</h1>
+    <Content />
+  </article>
 </BaseLayout>
 
