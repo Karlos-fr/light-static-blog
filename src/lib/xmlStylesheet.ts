@@ -55,7 +55,7 @@ export function getXmlStylesheetHeader({
               </ul>
               <span class="terminal-prompt" aria-hidden="true">&gt;_</span>
               <button class="color-mode-switch" type="button" role="switch" aria-checked="false" aria-label="Activer le mode sombre" title="Activer le mode sombre" data-color-mode-switch="">
-                <svg class="color-mode-icon" viewBox="0 0 24 24" aria-hidden="true" data-color-mode-icon="">
+                <svg class="color-mode-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" data-color-mode-icon="">
                   <circle class="color-mode-icon-sun" cx="12" cy="12" r="3.5" />
                   <path class="color-mode-icon-sun" d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" />
                   <path class="color-mode-icon-moon" d="M19.2 15.1A8 8 0 0 1 8.9 4.8a8 8 0 1 0 10.3 10.3Z" />
