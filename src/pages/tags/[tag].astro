@@ -27,7 +27,7 @@ const posts = await getPublicPostsByTag(tag);
 
 ---
 
-<BaseLayout title={`Tag : ${getDisplayTag(tag)} | ${siteConfig.name}`} description={`Articles taggés ${getDisplayTag(tag)}.`}>
+<BaseLayout title={`Articles sur ${getDisplayTag(tag)} | ${siteConfig.name}`} description={`Articles taggés ${getDisplayTag(tag)}.`}>
   <h1>Tag : {getDisplayTag(tag)}</h1>
 
   <PostList

@@ -98,14 +98,19 @@ npm run dev
 
 ## URL Configuration
 
-Three environment variables are required and one is optional:
+Three environment variables are required and several are optional:
 
 - `SITE`: public site origin, without a final path, for example `https://example.com`;
 - `BASE_PATH`: public path ending with `/`, for example `/` or `/blog/`.
 - `AUTHOR_NAME`: author name shared by all articles.
 - `SITE_THEME`: identifier of the theme being built; `default` is used by default.
+- `SITE_NAME`: name displayed in navigation and page titles; `Light Static Blog` is used by default.
+- `SITE_HOME_TITLE`: homepage H1 title; `Blog personnel` is used by default.
+- `SITE_HOME_META_TITLE`: homepage `<title>` tag; by default it is derived from `SITE_HOME_TITLE` and `SITE_NAME`.
+- `SITE_TAGLINE`: short tagline displayed under the site name.
+- `SITE_DESCRIPTION`: SEO description used by the homepage, metadata, RSS and sitemap.
 
-These values feed internal links, canonical URLs, social metadata, JSON-LD structured data, the RSS feed and the sitemap.
+These values feed internal links, canonical URLs, titles, social metadata, JSON-LD structured data, the RSS feed and the sitemap.
 
 The homepage exposes a `WebSite` JSON-LD object. Each article exposes a `BlogPosting` object containing its title, description, dates, tags, optional cover and the author defined by `AUTHOR_NAME`.
 

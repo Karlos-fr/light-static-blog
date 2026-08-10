@@ -142,6 +142,16 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-weight: 700;
 }
 
+.home-intro {
+  margin-block-end: 2rem;
+}
+
+.home-intro p {
+  max-width: 48rem;
+  margin-block: 0;
+  font-size: 1.05rem;
+}
+
 .rss-link,
 .sitemap-link,
 .powered-link {
