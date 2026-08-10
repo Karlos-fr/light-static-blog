@@ -4,6 +4,7 @@ description: "Un article de démonstration pour présenter les principaux élém
 pubDate: 2026-03-04
 tags: ["demo", "latin", "markdown"]
 draft: false
+cover: "/images/carpe-diem-cover.png"
 ---
 
 `Carpe diem` signifie souvent « cueille le jour ». Dans ce billet de démonstration, la formule sert surtout de prétexte pour montrer plusieurs blocs Markdown courants.

@@ -4,6 +4,7 @@ description: "Un article de démonstration avec listes, emphase et extrait TypeS
 pubDate: 2026-02-01
 tags: ["demo", "methodologie", "latin"]
 draft: false
+cover: "/images/festina-lente-cover.png"
 ---
 
 `Festina lente` veut dire « hâte-toi lentement ». C’est une belle devise pour les projets techniques : progresser régulièrement, mais sans transformer chaque décision en course de vitesse.

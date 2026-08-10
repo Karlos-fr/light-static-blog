@@ -1,22 +1,20 @@
 ---
 title: "Ad astra per aspera : viser haut avec méthode"
-description: "Un article de démonstration avec image, citation, tableau et bloc de configuration autour de la locution Ad astra per aspera."
+description: "Un article de démonstration avec couverture, citation, tableau et bloc de configuration autour de la locution Ad astra per aspera."
 pubDate: 2026-02-12
 updatedDate: 2026-02-20
 tags: ["demo", "projet", "latin"]
 draft: false
-cover: "/images/retro-rpg-cover.png"
+cover: "/images/ad-astra-per-aspera-cover.png"
 ---
 
 `Ad astra per aspera` peut se traduire par « vers les étoiles à travers les difficultés ». Pour une démo de blog, c’est parfait : un peu d’élan, un peu d’obstacle, et une structure Markdown complète.
-
-![Illustration de démonstration avec une ambiance rétro](/images/retro-rpg-cover.png)
 
 ## Objectif de la page
 
 Cette page montre comment mélanger plusieurs formats sans perdre la lisibilité :
 
-- une image dans le corps de l’article ;
+- une couverture d’article ;
 - des listes simples ;
 - un tableau de synthèse ;
 - un bloc de configuration.
@@ -37,7 +35,7 @@ Cette page montre comment mélanger plusieurs formats sans perdre la lisibilité
 
 | Partie | Exemple présent |
 | --- | --- |
-| Image | Oui |
+| Couverture | Oui |
 | Citation | Oui |
 | Code | Oui |
 | Tableau | Oui |
