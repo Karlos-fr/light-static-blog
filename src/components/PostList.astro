@@ -39,9 +39,19 @@ const Heading = headingLevel;
           />
         ) : null}
         <div class="post-card-content">
-          {primaryTag ? (
-            <a class="post-category" href={getPath('tags', normalizeTag(primaryTag))}>{primaryTag}</a>
-          ) : null}
+          <ul class="post-card-tags" aria-label="Tags de l’article">
+            {post.data.tags.map((tag) => (
+              <li>
+                <a
+                  class="post-category"
+                  data-accent={getTagAccent(tag)}
+                  href={getPath('tags', normalizeTag(tag))}
+                >
+                  {tag}
+                </a>
+              </li>
+            ))}
+          </ul>
           <Heading class="post-title">
             <a href={getPath(post.slug)}>{post.data.title}</a>
           </Heading>
