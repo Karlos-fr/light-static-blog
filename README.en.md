@@ -31,6 +31,7 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 ├── src/
 │   ├── components/             # Shared structure, lists and pagination
 │   ├── config/site.ts          # Identity, active theme and page size
+│   ├── config/tags.ts          # Optional mapping of tags to visual accents
 │   ├── content/
 │   │   ├── blog/               # Markdown articles; the filename becomes the slug
 │   │   ├── pages/              # Markdown editorial pages, including About
@@ -169,6 +170,20 @@ Article content in Markdown.
 - Slugs matching a reserved route, such as `about`, `blog` or `tags`, are rejected at build time.
 
 The `ARTICLE_TEMPLATE.md` file can be used as a starting point.
+
+## Configure Tag Colors
+
+The mapping between a tag and its visual accent is defined in `src/config/tags.ts`.
+
+```ts
+export const tagAccents = {
+  javascript: 'orange',
+  retro: 'violet',
+  shell: 'blue',
+};
+```
+
+Available accents are `primary`, `violet`, `blue` and `orange`. If a tag is not listed, the site automatically assigns it a stable accent.
 
 ## Edit the About Page
 
