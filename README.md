@@ -27,7 +27,6 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 .
 ├── public/                     # Fichiers statiques copiés tels quels
 │   ├── images/                 # Couvertures des articles
-│   ├── robots.txt
 │   └── scripts/                # Switch clair/sombre minimal, sans dépendance
 ├── src/
 │   ├── components/             # Structure partagée, listes et pagination
@@ -46,6 +45,7 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 │   │   ├── about.astro
 │   │   ├── index.astro         # Première page des articles
 │   │   ├── page/[page].astro   # Pages statiques suivantes
+│   │   ├── robots.txt.ts       # robots.txt généré avec l'URL du sitemap
 │   │   ├── rss.xml.ts
 │   │   ├── rss.xsl.ts          # Présentation du flux RSS dans un navigateur
 │   │   ├── sitemap.xml.ts
@@ -68,7 +68,7 @@ Les articles sont chargés depuis la collection `blog`, triés par date décrois
 
 Le chemin d'hébergement est défini uniquement par `BASE_PATH`. Par exemple, avec `BASE_PATH=/blog/`, l'accueil est publié sous `/blog/` et chaque article sous `/blog/<slug>/`.
 
-Le fichier `robots.txt` est copié dans `dist/` comme les autres fichiers statiques. Les moteurs de recherche le consultent toutefois à la racine de l'hôte, par exemple `https://example.com/robots.txt`. Si le blog est déployé dans un sous-chemin comme `/blog/`, il faut donc aussi déposer `dist/robots.txt` à la racine publique de l'hôte et y référencer le sitemap complet, par exemple `Sitemap: https://example.com/blog/sitemap.xml`.
+Le fichier `robots.txt` est généré au build avec une ligne `Sitemap:` calculée depuis `SITE` et `BASE_PATH`. Les moteurs de recherche le consultent toutefois à la racine de l'hôte, par exemple `https://example.com/robots.txt`. Si le blog est déployé dans un sous-chemin comme `/blog/`, il faut donc aussi déposer le `dist/robots.txt` généré à la racine publique de l'hôte.
 
 ## Prérequis
 
@@ -235,7 +235,7 @@ Le projet est compatible avec tout hébergement capable de servir des fichiers s
 1. Définir `SITE`, `BASE_PATH`, `AUTHOR_NAME` et éventuellement `SITE_THEME` avec les valeurs de la cible.
 2. Exécuter `npm run validate`.
 3. Envoyer le **contenu** de `dist/`, et non le dossier lui-même, vers la racine publique choisie.
-4. Si `BASE_PATH` n'est pas `/`, copier aussi `dist/robots.txt` à la racine de l'hôte afin qu'il soit servi depuis `/robots.txt`, avec une ligne `Sitemap:` pointant vers l'URL absolue du sitemap.
+4. Si `BASE_PATH` n'est pas `/`, copier aussi le `dist/robots.txt` généré à la racine de l'hôte afin qu'il soit servi depuis `/robots.txt`.
 5. Vérifier l'accueil, un article, `rss.xml`, `sitemap.xml` et `robots.txt`.
 
 Le dossier `dist/` est un artefact généré, ignoré par Git et destiné à être reconstruit avant chaque déploiement.
