@@ -34,12 +34,6 @@ const postHeadingLevel = currentPage === 1 ? 'h3' : 'h2';
   previousUrl={previousUrl}
   nextUrl={nextUrl}
 >
-  {currentPage === 1 ? (
-    <header class="home-intro">
-      <h1>{siteConfig.homeTitle}</h1>
-      <p>{siteConfig.description}</p>
-    </header>
-  ) : null}
   <Heading class="article-index-title">Articles{currentPage > 1 ? ` — Page ${currentPage}` : ''}</Heading>
   <PostList
     posts={posts}

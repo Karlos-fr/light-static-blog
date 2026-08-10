@@ -19,6 +19,12 @@
   min-width: 0;
 }
 
+.brand-heading {
+  margin: 0;
+  font: inherit;
+  line-height: inherit;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -140,16 +146,6 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 .site-footer .footer-separator {
   color: var(--color-text-muted);
   font-weight: 700;
-}
-
-.home-intro {
-  margin-block-end: 2rem;
-}
-
-.home-intro p {
-  max-width: 48rem;
-  margin-block: 0;
-  font-size: 1.05rem;
 }
 
 .rss-link,

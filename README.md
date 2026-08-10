@@ -110,9 +110,8 @@ Trois variables d'environnement sont obligatoires et plusieurs sont optionnelles
 - `AUTHOR_NAME` : nom de l'auteur commun à tous les articles.
 - `SITE_THEME` : identifiant du thème construit ; `default` est utilisé par défaut.
 - `SITE_NAME` : nom affiché dans la navigation et les titres de pages ; `Light Static Blog` est utilisé par défaut.
-- `SITE_HOME_TITLE` : titre H1 de la page d'accueil ; `Blog personnel` est utilisé par défaut.
-- `SITE_HOME_META_TITLE` : balise `<title>` de la page d'accueil ; elle est dérivée de `SITE_HOME_TITLE` et `SITE_NAME` par défaut.
-- `SITE_TAGLINE` : signature courte affichée sous le nom du site.
+- `SITE_HOME_META_TITLE` : balise `<title>` de la page d'accueil ; elle est dérivée de `SITE_NAME` par défaut.
+- `SITE_TAGLINE` : signature courte affichée sous le nom du site ; définir une chaîne vide permet de la masquer.
 - `SITE_DESCRIPTION` : description SEO utilisée par la home, les métadonnées, le RSS et le sitemap.
 
 Ces valeurs alimentent les liens internes, les URL canonical, les titres, les métadonnées sociales, les données structurées JSON-LD, le flux RSS et le sitemap.

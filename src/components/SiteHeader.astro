@@ -7,6 +7,7 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const homePath = getPath().replace(/\/+$/, '') || '/';
 const tagsPath = getPath('tags').replace(/\/+$/, '');
 const aboutPath = getPath('about').replace(/\/+$/, '');
+const isHome = currentPath === homePath;
 const isArticles = currentPath === homePath
   || (!currentPath.startsWith(tagsPath) && currentPath !== aboutPath);
 ---
@@ -14,8 +15,14 @@ const isArticles = currentPath === homePath
 <header class="site-header">
   <nav class="site-nav" aria-label="Navigation principale">
     <div class="site-identity">
-      <a href={getPath()} class="brand">{siteConfig.name}</a>
-      <p class="site-tagline">{siteConfig.tagline}</p>
+      {isHome ? (
+        <h1 class="brand-heading">
+          <a href={getPath()} class="brand" aria-current="page">{siteConfig.name}</a>
+        </h1>
+      ) : (
+        <a href={getPath()} class="brand">{siteConfig.name}</a>
+      )}
+      {siteConfig.tagline ? <p class="site-tagline">{siteConfig.tagline}</p> : null}
     </div>
     <div class="site-nav-actions">
       <ul class="site-links">

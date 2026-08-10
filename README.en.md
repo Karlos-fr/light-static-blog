@@ -110,9 +110,8 @@ Three environment variables are required and several are optional:
 - `AUTHOR_NAME`: author name shared by all articles.
 - `SITE_THEME`: identifier of the theme being built; `default` is used by default.
 - `SITE_NAME`: name displayed in navigation and page titles; `Light Static Blog` is used by default.
-- `SITE_HOME_TITLE`: homepage H1 title; `Blog personnel` is used by default.
-- `SITE_HOME_META_TITLE`: homepage `<title>` tag; by default it is derived from `SITE_HOME_TITLE` and `SITE_NAME`.
-- `SITE_TAGLINE`: short tagline displayed under the site name.
+- `SITE_HOME_META_TITLE`: homepage `<title>` tag; by default it is derived from `SITE_NAME`.
+- `SITE_TAGLINE`: short tagline displayed under the site name; set an empty string to hide it.
 - `SITE_DESCRIPTION`: SEO description used by the homepage, metadata, RSS and sitemap.
 
 These values feed internal links, canonical URLs, titles, social metadata, JSON-LD structured data, the RSS feed and the sitemap.

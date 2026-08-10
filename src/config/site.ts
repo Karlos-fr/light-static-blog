@@ -1,17 +1,26 @@
 import { resolveTheme } from '../themes/registry';
 
-function getOptionalEnv(name: string, fallback: string): string {
-  return import.meta.env[name]?.trim() || fallback;
+function getOptionalEnv(
+  name: string,
+  fallback: string,
+  options: { allowEmpty?: boolean } = {}
+): string {
+  const value = import.meta.env[name];
+  if (typeof value !== 'string') {
+    return fallback;
+  }
+
+  const trimmedValue = value.trim();
+
+  return trimmedValue || (options.allowEmpty ? '' : fallback);
 }
 
 const siteName = getOptionalEnv('SITE_NAME', 'Light Static Blog');
-const homeTitle = getOptionalEnv('SITE_HOME_TITLE', 'Blog personnel');
 
 export const siteConfig = {
   name: siteName,
-  homeTitle,
-  homeMetaTitle: getOptionalEnv('SITE_HOME_META_TITLE', `${homeTitle} | ${siteName}`),
-  tagline: getOptionalEnv('SITE_TAGLINE', '// Développement. Notes. Projets.'),
+  homeMetaTitle: getOptionalEnv('SITE_HOME_META_TITLE', `${siteName} | Blog personnel`),
+  tagline: getOptionalEnv('SITE_TAGLINE', '// Développement. Notes. Projets.', { allowEmpty: true }),
   description: getOptionalEnv(
     'SITE_DESCRIPTION',
     'Blog personnel statique consacré au développement, aux notes techniques et aux projets personnels.'
