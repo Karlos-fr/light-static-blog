@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCover from '../components/PostCover.astro';
 import PostMeta from '../components/PostMeta.astro';
 import TagList from '../components/TagList.astro';
+import { siteConfig } from '../config/site';
 import { getPublicPosts } from '../lib/content';
 import { getAuthorName } from '../lib/site';
 import { getAbsoluteUrl, getPath } from '../lib/urls';
@@ -54,7 +55,7 @@ const structuredData = {
 ---
 
 <BaseLayout
-  title={`${post.data.title} | Light Static Blog`}
+  title={`${post.data.title} | ${siteConfig.name}`}
   description={post.data.description}
   type="article"
   structuredData={structuredData}

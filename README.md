@@ -18,34 +18,40 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 ├── public/                     # Fichiers statiques copiés tels quels
 │   ├── images/                 # Couvertures des articles
 │   ├── robots.txt
+│   ├── scripts/                # Switch clair/sombre minimal, sans dépendance
 │   ├── rss.xsl                 # Présentation du flux RSS dans un navigateur
 │   └── sitemap.xsl             # Présentation du sitemap dans un navigateur
 ├── src/
-│   ├── components/             # Listes, tags, dates et couvertures
+│   ├── components/             # Structure partagée, listes et pagination
+│   ├── config/site.ts          # Identité, thème actif et taille des pages
 │   ├── content/
 │   │   ├── blog/               # Articles Markdown ; le nom devient le slug
 │   │   ├── config.ts           # Schéma et validation du frontmatter
 │   │   └── TAGGING.md          # Convention de tags
 │   ├── layouts/
-│   │   └── BaseLayout.astro    # Structure HTML, navigation et SEO
-│   ├── lib/                    # Chargement du contenu et construction des URL
+│   │   └── BaseLayout.astro    # Structure HTML commune et SEO
+│   ├── lib/                    # Contenu, URL et pagination
 │   ├── pages/
 │   │   ├── [slug].astro        # Pages des articles
 │   │   ├── tags/               # Index et pages de tags
 │   │   ├── about.astro
-│   │   ├── index.astro         # Accueil et liste complète des articles
+│   │   ├── index.astro         # Première page des articles
+│   │   ├── page/[page].astro   # Pages statiques suivantes
 │   │   ├── rss.xml.ts
 │   │   ├── sitemap.xml.ts
-│   │   └── styles/xml.css.ts   # Thème partagé par les vues RSS et sitemap
-│   └── styles/
-│       └── global.css          # Design clair/sombre et responsive
+│   │   └── styles/theme.css.ts # Feuille stable composée au build
+│   └── themes/
+│       ├── registry.ts         # Registre et validation des thèmes
+│       ├── shared/             # Fondations et contrats communs
+│       ├── default/theme.css   # Thème public par défaut
+│       └── <identifiant>/      # Éventuels thèmes supplémentaires
 ├── astro.config.mjs            # Build statique et chemin public
 ├── ARTICLE_TEMPLATE.md         # Modèle pour rédiger un article
 ├── package.json                # Scripts et dépendances
 └── README.md
 ```
 
-Les articles sont chargés depuis la collection `blog`, triés par date décroissante et filtrés afin d'exclure `draft: true`. Les composants partagés centralisent l'affichage des listes, dates, couvertures et tags.
+Les articles sont chargés depuis la collection `blog`, triés par date décroissante et filtrés afin d'exclure `draft: true`. Ils sont répartis par pages de six publications. Les composants Astro portent la structure sémantique ; les thèmes ne contiennent que les tokens et règles visuelles.
 
 Le chemin d'hébergement est défini uniquement par `BASE_PATH`. Par exemple, avec `BASE_PATH=/blog/`, l'accueil est publié sous `/blog/` et chaque article sous `/blog/<slug>/`.
 
@@ -65,7 +71,7 @@ npm install
 ## Développement
 
 ```bash
-SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Nom de l'auteur" npm run dev
+SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Nom de l'auteur" SITE_THEME="default" npm run dev
 ```
 
 Le site est alors disponible sur `http://localhost:4321`.
@@ -76,16 +82,18 @@ Sous PowerShell :
 $env:SITE="http://localhost:4321"
 $env:BASE_PATH="/"
 $env:AUTHOR_NAME="Nom de l'auteur"
+$env:SITE_THEME="default"
 npm run dev
 ```
 
 ## Configuration des URL
 
-Trois variables d'environnement sont obligatoires :
+Trois variables d'environnement sont obligatoires et une est optionnelle :
 
 - `SITE` : origine publique du site, sans chemin final, par exemple `https://example.com` ;
 - `BASE_PATH` : chemin public terminé par `/`, par exemple `/` ou `/blog/`.
 - `AUTHOR_NAME` : nom de l'auteur commun à tous les articles.
+- `SITE_THEME` : identifiant du thème construit ; `default` est utilisé par défaut.
 
 Ces valeurs alimentent les liens internes, les URL canonical, les métadonnées sociales, les données structurées JSON-LD, le flux RSS et le sitemap.
 
@@ -96,7 +104,7 @@ La page d'accueil expose un objet JSON-LD `WebSite`. Chaque article expose un ob
 Exemple pour un site publié sous `https://example.com/blog/` :
 
 ```bash
-SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" npm run validate
+SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" SITE_THEME="default" npm run validate
 ```
 
 Sous PowerShell :
@@ -105,6 +113,7 @@ Sous PowerShell :
 $env:SITE="https://example.com"
 $env:BASE_PATH="/blog/"
 $env:AUTHOR_NAME="Nom de l'auteur"
+$env:SITE_THEME="default"
 npm run validate
 ```
 
@@ -142,6 +151,19 @@ Contenu de l'article en Markdown.
 
 Le fichier `ARTICLE_TEMPLATE.md` peut servir de point de départ.
 
+## Thèmes et mode clair/sombre
+
+Le thème est choisi au build avec `SITE_THEME`. Le navigateur peut seulement basculer sa palette claire ou sombre. Sans choix enregistré, le site suit `prefers-color-scheme` ; le switch mémorise ensuite le choix dans `localStorage`. Les pages HTML, le RSS et le sitemap chargent tous `styles/theme.css` et les deux mêmes scripts statiques.
+
+Pour ajouter un thème :
+
+1. Créer `src/themes/<identifiant>/theme.css`.
+2. Définir tous les tokens sémantiques utilisés par les composants, dont les palettes claire et sombre via `data-color-mode` et le repli `prefers-color-scheme`.
+3. Importer le fichier et déclarer l'identifiant dans `src/themes/registry.ts`.
+4. Lancer `npm run validate` avec `SITE_THEME=<identifiant>` et tester les deux modes, le responsive, RSS et sitemap.
+
+Une valeur `SITE_THEME` inconnue fait échouer le build avec la liste des thèmes disponibles. Aucun framework frontend ni police distante n'est nécessaire.
+
 ## Publier un article
 
 1. Créer l'article dans `src/content/blog/`.
@@ -174,7 +196,7 @@ npm run preview
 
 Le projet est compatible avec tout hébergement capable de servir des fichiers statiques.
 
-1. Définir `SITE`, `BASE_PATH` et `AUTHOR_NAME` avec les valeurs de la cible.
+1. Définir `SITE`, `BASE_PATH`, `AUTHOR_NAME` et éventuellement `SITE_THEME` avec les valeurs de la cible.
 2. Exécuter `npm run validate`.
 3. Envoyer le **contenu** de `dist/`, et non le dossier lui-même, vers la racine publique choisie.
 4. Vérifier l'accueil, un article, `rss.xml` et `sitemap.xml`.
@@ -187,13 +209,13 @@ Le dossier `dist/` est un artefact généré, ignoré par Git et destiné à êt
 - Pas de base de données
 - Pas de CMS
 - Pas d'API à l'exécution
-- Aucun JavaScript client nécessaire au fonctionnement du site
+- JavaScript client limité au switch clair/sombre ; le contenu reste utilisable sans JavaScript
 
 ## Commandes utiles
 
 ```bash
 npm install
-SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Nom de l'auteur" npm run dev
-SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" npm run validate
-SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" npm run preview
+SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Nom de l'auteur" SITE_THEME="default" npm run dev
+SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" SITE_THEME="default" npm run validate
+SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Nom de l'auteur" SITE_THEME="default" npm run preview
 ```

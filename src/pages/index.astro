@@ -1,12 +1,13 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PostList from '../components/PostList.astro';
+import ArticleIndex from '../components/ArticleIndex.astro';
+import { siteConfig } from '../config/site';
 import { getPublicPosts } from '../lib/content';
+import { paginateItems } from '../lib/pagination';
 import { getAuthorName } from '../lib/site';
 import { getAbsoluteUrl } from '../lib/urls';
 
 const posts = await getPublicPosts();
-const description = 'Blog personnel sur le code, les jeux rétro et le bricolage technique';
+const page = paginateItems(posts, 1, siteConfig.postsPerPage);
 const siteUrl = getAbsoluteUrl();
 const author = {
   '@type': 'Person',
@@ -18,28 +19,16 @@ const structuredData = {
   '@type': 'WebSite',
   '@id': `${siteUrl}#website`,
   url: siteUrl,
-  name: 'Light Static Blog',
-  description,
+  name: siteConfig.name,
+  description: siteConfig.description,
   inLanguage: 'fr',
   author,
 };
-
 ---
 
-<BaseLayout
-  title="Accueil - Light Static Blog"
-  description={description}
+<ArticleIndex
+  posts={page.items}
+  currentPage={page.currentPage}
+  totalPages={page.totalPages}
   structuredData={structuredData}
->
-  <h1>Bienvenue</h1>
-  <p>Un blog personnel simple, orienté projet, notes techniques et petites expérimentations.</p>
-
-  <section>
-    <h2>Articles</h2>
-    <PostList
-      posts={posts}
-      emptyMessage="Aucun article publié pour le moment."
-      headingLevel="h3"
-    />
-  </section>
-</BaseLayout>
+/>

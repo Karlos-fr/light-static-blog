@@ -1,0 +1,17 @@
+---
+import { getPath } from '../lib/urls';
+
+interface Props { currentPage: number; totalPages: number; }
+const { currentPage, totalPages } = Astro.props as Props;
+const pagePath = (page: number) => page === 1 ? getPath() : getPath('page', String(page));
+---
+
+{totalPages > 1 ? (
+  <nav class="pagination" aria-label="Pagination des articles">
+    <ul class="pagination-list">
+      <li>{currentPage > 1 ? <a href={pagePath(currentPage - 1)} rel="prev">← Précédente</a> : null}</li>
+      <li class="pagination-current" aria-current="page">Page {currentPage} sur {totalPages}</li>
+      <li>{currentPage < totalPages ? <a href={pagePath(currentPage + 1)} rel="next">Suivante →</a> : null}</li>
+    </ul>
+  </nav>
+) : null}

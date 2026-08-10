@@ -1,4 +1,6 @@
+import { siteConfig } from '../config/site';
 import { getAllTags, getPublicPosts } from '../lib/content';
+import { getPageCount } from '../lib/pagination';
 import { getAbsoluteUrl, getPath } from '../lib/urls';
 
 export const prerender = true;
@@ -26,6 +28,11 @@ export async function GET() {
     { loc: getAbsoluteUrl('about') },
     { loc: getAbsoluteUrl('tags') },
   ];
+
+  const totalPages = getPageCount(posts.length, siteConfig.postsPerPage);
+  for (let page = 2; page <= totalPages; page += 1) {
+    entries.push({ loc: getAbsoluteUrl('page', String(page)) });
+  }
 
   posts.forEach((post) => {
     entries.push({

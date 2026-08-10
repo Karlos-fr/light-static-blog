@@ -1,22 +1,20 @@
 ---
 import type { BlogEntry } from '../lib/content';
+import { getTagAccent, normalizeTag } from '../lib/content';
 import { getPath } from '../lib/urls';
 import PostCover from './PostCover.astro';
 import PostMeta from './PostMeta.astro';
-import TagList from './TagList.astro';
 
 interface Props {
   posts: BlogEntry[];
   emptyMessage: string;
   headingLevel?: 'h2' | 'h3';
-  showTags?: boolean;
 }
 
 const {
   posts,
   emptyMessage,
   headingLevel = 'h2',
-  showTags = true,
 } = Astro.props as Props;
 const Heading = headingLevel;
 ---
@@ -25,8 +23,14 @@ const Heading = headingLevel;
   <p>{emptyMessage}</p>
 ) : (
   <ul class="post-list">
-    {posts.map((post) => (
-      <li class="post-card">
+    {posts.map((post) => {
+      const primaryTag = post.data.tags[0];
+      return (
+      <li
+        class="post-card"
+        data-has-cover={post.data.cover ? 'true' : 'false'}
+        data-accent={primaryTag ? getTagAccent(primaryTag) : 'primary'}
+      >
         {post.data.cover ? (
           <PostCover
             cover={post.data.cover}
@@ -34,12 +38,24 @@ const Heading = headingLevel;
             href={getPath(post.slug)}
           />
         ) : null}
-        <Heading class="post-title">
-          <a href={getPath(post.slug)}>{post.data.title}</a>
-        </Heading>
-        <PostMeta pubDate={post.data.pubDate} description={post.data.description} />
-        {showTags ? <TagList tags={post.data.tags} /> : null}
+        <div class="post-card-content">
+          {primaryTag ? (
+            <a class="post-category" href={getPath('tags', normalizeTag(primaryTag))}>{primaryTag}</a>
+          ) : null}
+          <Heading class="post-title">
+            <a href={getPath(post.slug)}>{post.data.title}</a>
+          </Heading>
+          <p class="post-description">{post.data.description}</p>
+          <div class="post-card-footer">
+            <PostMeta pubDate={post.data.pubDate} />
+            <span class="post-card-footer-separator" aria-hidden="true">•</span>
+            <a class="read-more" href={getPath(post.slug)} aria-label={`Lire la suite de « ${post.data.title} »`}>
+              Lire la suite →
+            </a>
+          </div>
+        </div>
       </li>
-    ))}
+      );
+    })}
   </ul>
 )}

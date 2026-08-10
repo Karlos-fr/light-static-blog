@@ -358,49 +358,59 @@ La page d'accueil affichera donc tous les articles disponibles au travers de la 
 
 ### Phase 1 — Fondations du système de thèmes
 
-1. Créer la configuration du site et le registre de thèmes.
-2. Découper les styles actuels en fondations, structure et thème par défaut.
-3. Générer la feuille stable `styles/theme.css`.
-4. Faire charger cette feuille par les pages HTML, RSS et sitemap.
-5. Valider que le thème actuel n'a pas régressé.
+**Statut : terminée.**
+
+- [x] Créer la configuration du site et le registre de thèmes.
+- [x] Découper les styles actuels en fondations, structure et thème par défaut.
+- [x] Générer la feuille stable `styles/theme.css`.
+- [x] Faire charger cette feuille par les pages HTML, RSS et sitemap.
+- [x] Valider que le thème actuel n'a pas régressé.
 
 ### Phase 2 — Structure commune
 
-1. Extraire `SiteHeader` et créer `SiteFooter`.
-2. Ajouter les classes et attributs sémantiques nécessaires aux thèmes.
-3. Ajouter l'état de navigation actif.
-4. Centraliser le nom du site, la signature et la taille de page.
-5. Créer le switch clair/sombre et ses deux scripts sans dépendance.
-6. Ajouter la persistance, la préférence système et la prévention du flash initial.
+**Statut : terminée.**
+
+- [x] Extraire `SiteHeader` et créer `SiteFooter`.
+- [x] Ajouter les classes et attributs sémantiques nécessaires aux thèmes.
+- [x] Ajouter l'état de navigation actif.
+- [x] Centraliser le nom du site, la signature et la taille de page.
+- [x] Créer le switch clair/sombre et ses deux scripts sans dépendance.
+- [x] Ajouter la persistance, la préférence système et la prévention du flash initial.
 
 ### Phase 3 — Thème terminal rétro
 
-1. Définir les tokens clairs et sombres du thème.
-2. Construire le fond CRT discret.
-3. Styliser en-tête, navigation et pied de page.
-4. Transformer la liste d'articles en lignes inspirées de la maquette.
-5. Adapter les articles, tags, pagination, code, RSS et sitemap.
-6. Vérifier les articles avec et sans couverture, sans créer d'image.
-7. Vérifier le switch et ses états visuels dans les deux palettes.
+**Statut : terminée.**
+
+- [x] Définir les tokens clairs et sombres du thème.
+- [x] Construire le fond CRT discret.
+- [x] Styliser en-tête, navigation et pied de page.
+- [x] Transformer la liste d'articles en lignes inspirées de la maquette.
+- [x] Adapter les articles, tags, pagination, code, RSS et sitemap.
+- [x] Vérifier les articles avec et sans couverture, sans créer d'image.
+- [x] Vérifier le switch et ses états visuels dans les deux palettes.
 
 ### Phase 4 — Pagination
 
-1. Ajouter l'utilitaire de pagination.
-2. Générer la première page et les routes `/page/n/`.
-3. Ajouter les contrôles accessibles.
-4. Étendre le sitemap et les métadonnées.
-5. Tester les cas 0, 1, 6, 7 et plusieurs dizaines d'articles avec des données temporaires non conservées.
+**Statut : terminée.**
+
+- [x] Ajouter l'utilitaire de pagination.
+- [x] Générer la première page et les routes `/page/n/`.
+- [x] Ajouter les contrôles accessibles.
+- [x] Étendre le sitemap et les métadonnées.
+- [x] Tester les cas 0, 1, 6, 7 et plusieurs dizaines d'articles avec des données temporaires non conservées.
 
 ### Phase 5 — Validation et documentation
 
-1. Tester les thèmes `default` et `terminal` avec `BASE_PATH=/` et `/blog/`.
-2. Vérifier le HTML, le JSON-LD, RSS, sitemap et canonical.
-3. Contrôler desktop, tablette et mobile.
-4. Mesurer les contrastes des deux modes et vérifier le clavier.
-5. Vérifier le fonctionnement sans JavaScript, avec préférence système et avec choix mémorisé.
-6. Mesurer le JavaScript du switch et confirmer l'absence de framework ou d'hydratation.
-7. Documenter la création d'un thème et de ses deux palettes dans le README.
-8. Mettre à jour le script local de déploiement pour fixer `SITE_THEME=terminal` et contrôler la feuille générée.
+**Statut : terminée.**
+
+- [x] Tester les thèmes `default` et `terminal` avec `BASE_PATH=/` et `/blog/`.
+- [x] Vérifier le HTML, le JSON-LD, RSS, sitemap et canonical.
+- [x] Contrôler desktop, tablette et mobile.
+- [x] Mesurer les contrastes des deux modes et vérifier le clavier.
+- [x] Vérifier le fonctionnement sans JavaScript, avec préférence système et avec choix mémorisé.
+- [x] Mesurer le JavaScript du switch et confirmer l'absence de framework ou d'hydratation.
+- [x] Documenter la création d'un thème et de ses deux palettes dans le README.
+- [x] Mettre à jour le script local de déploiement pour fixer `SITE_THEME=terminal` et contrôler la feuille générée.
 
 ## 10. Critères d'acceptation
 

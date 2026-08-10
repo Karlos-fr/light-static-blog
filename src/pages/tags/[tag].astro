@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
+import { siteConfig } from '../../config/site';
 import {
   getAllTags,
   getPublicPostsByTag,
@@ -26,13 +27,12 @@ const posts = await getPublicPostsByTag(tag);
 
 ---
 
-<BaseLayout title={`Tag: ${getDisplayTag(tag)} | Light Static Blog`} description={`Articles taggés ${getDisplayTag(tag)}.`}>
+<BaseLayout title={`Tag : ${getDisplayTag(tag)} | ${siteConfig.name}`} description={`Articles taggés ${getDisplayTag(tag)}.`}>
   <h1>Tag : {getDisplayTag(tag)}</h1>
 
   <PostList
     posts={posts}
     emptyMessage="Aucun article pour ce tag."
-    showTags={false}
   />
 
   <p class="back-link"><a href={getPath('tags')}>← retour aux tags</a></p>

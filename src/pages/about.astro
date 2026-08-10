@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
 ---
 
-<BaseLayout title="À propos | Light Static Blog" description="Présentation courte du projet de blog.">
+<BaseLayout title={`À propos | ${siteConfig.name}`} description="Présentation courte du projet de blog.">
   <h1>À propos</h1>
   <p>
     C'est un blog personnel pensé pour partager des idées, des notes techniques,

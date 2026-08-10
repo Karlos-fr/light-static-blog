@@ -5,6 +5,7 @@ export type BlogEntry = CollectionEntry<'blog'>;
 const RESERVED_POST_SLUGS = new Set([
   'about',
   'blog',
+  'page',
   'tags',
   'rss.xml',
   'sitemap.xml',
@@ -45,6 +46,31 @@ export async function getPublicPosts(): Promise<BlogEntry[]> {
   return publicPosts.sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
+}
+
+const TAG_ACCENTS = ['primary', 'violet', 'blue', 'orange'] as const;
+
+export function getTagAccent(tag: string): (typeof TAG_ACCENTS)[number] {
+  const normalizedTag = normalizeTag(tag);
+  const accentGroups: Record<(typeof TAG_ACCENTS)[number], string[]> = {
+    primary: ['test', 'rss'],
+    violet: ['retro', 'gamedev', 'jeu', 'jeux'],
+    blue: ['bricolage', 'outils', 'shell', 'sysadmin'],
+    orange: ['dev', 'javascript', 'methodologie', 'productivite'],
+  };
+
+  const semanticAccent = TAG_ACCENTS.find((accent) =>
+    accentGroups[accent].some((keyword) => normalizedTag.includes(keyword))
+  );
+  if (semanticAccent) {
+    return semanticAccent;
+  }
+
+  const score = normalizedTag
+    .split('')
+    .reduce((total, character, index) => total + character.charCodeAt(0) * (index + 3), 0);
+
+  return TAG_ACCENTS[score % TAG_ACCENTS.length];
 }
 
 export async function getAllTags(): Promise<string[]> {

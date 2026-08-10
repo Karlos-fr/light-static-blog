@@ -1,5 +1,5 @@
 ---
-import { normalizeTag } from '../lib/content';
+import { getTagAccent, normalizeTag } from '../lib/content';
 import { getPath } from '../lib/urls';
 
 interface Props {
@@ -14,7 +14,7 @@ const { tags } = Astro.props as Props;
   <ul>
     {tags.map((tag) => (
       <li>
-        <a class="tag-chip" href={getPath('tags', normalizeTag(tag))}>{tag}</a>
+        <a class="tag-chip" data-accent={getTagAccent(tag)} href={getPath('tags', normalizeTag(tag))}>{tag}</a>
       </li>
     ))}
   </ul>

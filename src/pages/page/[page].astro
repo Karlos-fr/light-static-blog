@@ -1,0 +1,21 @@
+---
+import ArticleIndex from '../../components/ArticleIndex.astro';
+import { siteConfig } from '../../config/site';
+import { getPublicPosts } from '../../lib/content';
+import { getPageCount, paginateItems } from '../../lib/pagination';
+
+export async function getStaticPaths() {
+  const posts = await getPublicPosts();
+  const totalPages = getPageCount(posts.length, siteConfig.postsPerPage);
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
+    params: { page: String(index + 2) },
+    props: { posts, currentPage: index + 2 },
+  }));
+}
+
+interface Props { posts: Awaited<ReturnType<typeof getPublicPosts>>; currentPage: number; }
+const { posts, currentPage } = Astro.props as Props;
+const page = paginateItems(posts, currentPage, siteConfig.postsPerPage);
+---
+
+<ArticleIndex posts={page.items} currentPage={page.currentPage} totalPages={page.totalPages} />

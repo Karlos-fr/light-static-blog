@@ -1,4 +1,5 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { siteConfig } from '../config/site';
 import { getPublicPosts } from '../lib/content';
 import { getAbsoluteUrl, getCanonicalUrl, getPath } from '../lib/urls';
 
@@ -139,9 +140,9 @@ export async function GET() {
     xmlns:content="http://purl.org/rss/1.0/modules/content/"
     xmlns:media="http://search.yahoo.com/mrss/">
     <channel>
-      <title>Light Static Blog</title>
+      <title>${escapeXml(siteConfig.name)}</title>
       <link>${siteUrl}</link>
-      <description>Blog personnel: geekeries, projets Codex, portages de jeux et bricolages techniques.</description>
+      <description>${escapeXml(siteConfig.description)}</description>
       <atom:link href="${getAbsoluteUrl('rss.xml')}" rel="self" type="application/rss+xml" />
       ${items.join('\n')}
     </channel>

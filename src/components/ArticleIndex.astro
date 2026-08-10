@@ -1,0 +1,25 @@
+---
+import { siteConfig } from '../config/site';
+import type { BlogEntry } from '../lib/content';
+import { getPath } from '../lib/urls';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Pagination from './Pagination.astro';
+import PostList from './PostList.astro';
+
+interface Props {
+  posts: BlogEntry[];
+  currentPage: number;
+  totalPages: number;
+  structuredData?: Record<string, unknown>;
+}
+const { posts, currentPage, totalPages, structuredData } = Astro.props as Props;
+const title = currentPage === 1 ? `Accueil - ${siteConfig.name}` : `Articles - Page ${currentPage} | ${siteConfig.name}`;
+const previousUrl = currentPage > 1 ? (currentPage === 2 ? getPath() : getPath('page', String(currentPage - 1))) : undefined;
+const nextUrl = currentPage < totalPages ? getPath('page', String(currentPage + 1)) : undefined;
+---
+
+<BaseLayout title={title} description={siteConfig.description} structuredData={structuredData} previousUrl={previousUrl} nextUrl={nextUrl}>
+  <h1 class="article-index-title">Articles{currentPage > 1 ? ` — Page ${currentPage}` : ''}</h1>
+  <PostList posts={posts} emptyMessage="Aucun article publié pour le moment." headingLevel="h2" />
+  <Pagination currentPage={currentPage} totalPages={totalPages} />
+</BaseLayout>

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAllTags } from '../../lib/content';
+import { getAllTags, getTagAccent } from '../../lib/content';
 import { getPath } from '../../lib/urls';
 
 const tags = await getAllTags();
@@ -15,7 +15,7 @@ const tags = await getAllTags();
     <ul class="tag-index">
       {tags.map((tag) => (
         <li>
-          <a class="tag-chip" href={getPath('tags', tag)}>{tag}</a>
+          <a class="tag-chip" data-accent={getTagAccent(tag)} href={getPath('tags', tag)}>{tag}</a>
         </li>
       ))}
     </ul>
