@@ -50,7 +50,6 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 │   │   ├── rss.xml.ts
 │   │   ├── rss.xsl.ts          # RSS feed presentation in a browser
 │   │   ├── sitemap.xml.ts
-│   │   ├── sitemap.xsl.ts      # Sitemap presentation in a browser
 │   │   └── styles/theme.css.ts # Stable stylesheet composed at build time
 │   └── themes/
 │       ├── registry.ts         # Theme registry and validation
@@ -202,15 +201,15 @@ The `src/pages/about.astro` route loads this file, applies the shared layout and
 
 ## Themes and Light/Dark Mode
 
-The theme is selected at build time with `SITE_THEME`. The browser can only switch its light or dark palette. Without a saved choice, the site follows `prefers-color-scheme`; the switch then stores the choice in `localStorage`. HTML pages, RSS and sitemap all load `styles/theme.css` and the same two static scripts.
+The theme is selected at build time with `SITE_THEME`. The browser can only switch its light or dark palette. Without a saved choice, the site follows `prefers-color-scheme`; the switch then stores the choice in `localStorage`. HTML pages and the browser-rendered RSS feed load `styles/theme.css` and the same two static scripts.
 
 To add a theme:
 
 1. Create `src/themes/<identifier>/theme.css`.
 2. Define all semantic tokens used by the components, including light and dark palettes via `data-color-mode` and the `prefers-color-scheme` fallback.
-3. Define the theme's own visual resources, for example `--color-rss`, `--icon-rss`, `--color-sitemap`, `--icon-sitemap` and the `--powered-icon-size` size of the project link.
+3. Define the theme's own visual resources, for example `--color-rss`, `--icon-rss` and the `--powered-icon-size` size of the project link.
 4. Place theme-specific files in `src/themes/<identifier>/assets/` when needed. In `theme.css`, reference them with `__THEME_ASSETS__/`, for example `url('__THEME_ASSETS__/fonts/my-font.woff2')`.
-5. Run `npm run validate` with `SITE_THEME=<identifier>` and test both modes, responsive layout, RSS and sitemap.
+5. Run `npm run validate` with `SITE_THEME=<identifier>` and test both modes, responsive layout, RSS and the XML sitemap.
 
 Themes are automatically discovered from `src/themes/<identifier>/theme.css`. Assets for the active theme are published under `/theme-assets/<identifier>/...`, with the correct `BASE_PATH` prefix. An unknown `SITE_THEME` value makes the build fail with the list of available themes. No frontend framework or remote font is required.
 

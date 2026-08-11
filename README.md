@@ -50,7 +50,6 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 │   │   ├── rss.xml.ts
 │   │   ├── rss.xsl.ts          # Présentation du flux RSS dans un navigateur
 │   │   ├── sitemap.xml.ts
-│   │   ├── sitemap.xsl.ts      # Présentation du sitemap dans un navigateur
 │   │   └── styles/theme.css.ts # Feuille stable composée au build
 │   └── themes/
 │       ├── registry.ts         # Registre et validation des thèmes
@@ -202,15 +201,15 @@ La route `src/pages/about.astro` charge ce fichier, applique le layout commun et
 
 ## Thèmes et mode clair/sombre
 
-Le thème est choisi au build avec `SITE_THEME`. Le navigateur peut seulement basculer sa palette claire ou sombre. Sans choix enregistré, le site suit `prefers-color-scheme` ; le switch mémorise ensuite le choix dans `localStorage`. Les pages HTML, le RSS et le sitemap chargent tous `styles/theme.css` et les deux mêmes scripts statiques.
+Le thème est choisi au build avec `SITE_THEME`. Le navigateur peut seulement basculer sa palette claire ou sombre. Sans choix enregistré, le site suit `prefers-color-scheme` ; le switch mémorise ensuite le choix dans `localStorage`. Les pages HTML et le rendu navigateur du RSS chargent `styles/theme.css` et les deux mêmes scripts statiques.
 
 Pour ajouter un thème :
 
 1. Créer `src/themes/<identifiant>/theme.css`.
 2. Définir tous les tokens sémantiques utilisés par les composants, dont les palettes claire et sombre via `data-color-mode` et le repli `prefers-color-scheme`.
-3. Définir les ressources visuelles propres au thème, par exemple `--color-rss`, `--icon-rss`, `--color-sitemap`, `--icon-sitemap` et la taille `--powered-icon-size` du lien de projet.
+3. Définir les ressources visuelles propres au thème, par exemple `--color-rss`, `--icon-rss` et la taille `--powered-icon-size` du lien de projet.
 4. Placer les fichiers propres au thème dans `src/themes/<identifiant>/assets/` si nécessaire. Dans `theme.css`, les référencer avec `__THEME_ASSETS__/`, par exemple `url('__THEME_ASSETS__/fonts/ma-police.woff2')`.
-5. Lancer `npm run validate` avec `SITE_THEME=<identifiant>` et tester les deux modes, le responsive, RSS et sitemap.
+5. Lancer `npm run validate` avec `SITE_THEME=<identifiant>` et tester les deux modes, le responsive, RSS et le sitemap XML.
 
 Les thèmes sont découverts automatiquement depuis `src/themes/<identifiant>/theme.css`. Les assets du thème actif sont publiés sous `/theme-assets/<identifiant>/...`, avec le bon préfixe `BASE_PATH`. Une valeur `SITE_THEME` inconnue fait échouer le build avec la liste des thèmes disponibles. Aucun framework frontend ni police distante n'est nécessaire.
 

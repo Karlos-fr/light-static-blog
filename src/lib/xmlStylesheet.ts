@@ -72,8 +72,6 @@ export function getXmlStylesheetFooter(siteUrl: string): string {
           <nav aria-label="Liens complémentaires"><ul>
             <li><a class="rss-link" href="{concat(${siteUrl}, 'rss.xml')}"><span class="rss-icon" aria-hidden="true"></span>RSS</a></li>
             <li class="footer-separator" aria-hidden="true">/</li>
-            <li><a class="sitemap-link" href="{concat(${siteUrl}, 'sitemap.xml')}"><span class="sitemap-icon" aria-hidden="true"></span>Plan du site</a></li>
-            <li class="footer-separator" aria-hidden="true">/</li>
             <li><a class="powered-link" href="${projectUrl}" target="_blank" rel="noopener noreferrer"><img class="powered-icon" src="${getPath('images/light-static-blog-icon.png')}" alt="" aria-hidden="true" loading="lazy" />Propulsé par Light Static Blog</a></li>
           </ul></nav>
         </footer>`;

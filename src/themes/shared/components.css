@@ -149,15 +149,13 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 }
 
 .rss-link,
-.sitemap-link,
 .powered-link {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 }
 
-.rss-icon,
-.sitemap-icon {
+.rss-icon {
   display: inline-block;
   flex: 0 0 auto;
   width: 1em;
@@ -166,10 +164,6 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 
 .rss-icon {
   color: var(--color-rss, #f26522);
-}
-
-.sitemap-icon {
-  color: var(--color-sitemap, var(--color-accent));
 }
 
 .powered-icon {
