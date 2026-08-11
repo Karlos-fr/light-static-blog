@@ -43,7 +43,8 @@
 }
 
 .site-nav-actions,
-.site-links {
+.site-links,
+.site-utility-actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -52,6 +53,11 @@
 .site-nav-actions {
   gap: 1rem;
   justify-content: flex-end;
+}
+
+.site-utility-actions {
+  flex: 0 0 auto;
+  gap: 0.65rem;
 }
 
 .site-links {
@@ -140,6 +146,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 }
 
 .site-footer li {
+  min-width: 0;
   margin: 0;
 }
 
@@ -153,6 +160,12 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.powered-link {
+  flex-wrap: wrap;
 }
 
 .rss-icon {
@@ -369,8 +382,23 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 
 @media (max-width: 760px) {
   .tag-cloud {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+    gap: 0.55rem;
+  }
+
+  .tag-cloud li {
+    grid-column: auto;
+    grid-row: auto;
+    max-width: 100%;
+  }
+
+  .tag-cloud-link {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -485,10 +513,15 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.5rem;
+    justify-content: flex-start;
   }
 
   .site-links {
     gap: 0.5rem 1rem;
+  }
+
+  .site-utility-actions {
+    margin-inline-start: 0;
   }
 
   .post-card {

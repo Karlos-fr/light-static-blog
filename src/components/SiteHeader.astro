@@ -30,8 +30,10 @@ const isArticles = currentPath === homePath
         <li><a href={getPagePath('tags')} aria-current={currentPath.startsWith(tagsPath) ? 'page' : undefined}>Tags</a></li>
         <li><a href={getPagePath('about')} aria-current={currentPath === aboutPath ? 'page' : undefined}>À propos</a></li>
       </ul>
-      <span class="terminal-prompt" aria-hidden="true">&gt;_</span>
-      <ColorModeSwitch />
+      <div class="site-utility-actions">
+        <span class="terminal-prompt" aria-hidden="true">&gt;_</span>
+        <ColorModeSwitch />
+      </div>
     </div>
   </nav>
 </header>
