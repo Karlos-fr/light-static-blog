@@ -1,21 +1,34 @@
+/* ==========================================================================
+   Layout de lecture partagé
+   --------------------------------------------------------------------------
+   Rendu commun des pages et des articles après transformation Markdown par
+   Astro : largeur de lecture, typographie d'article, tableaux, images, code et
+   zoom. Les thèmes gardent la main via les variables CSS.
+   ========================================================================== */
+
+/* Conteneur principal : largeur globale et respiration verticale. */
 .site-main {
   width: min(100% - 2rem, var(--content-width));
   margin: 0 auto;
   padding-block: var(--space-page) calc(var(--space-page) * 2);
 }
 
+/* Les articles utilisent une largeur de lecture dédiée, souvent plus étroite. */
 .site-main--article {
   max-width: var(--reading-width);
 }
 
+/* Base typographique du contenu Markdown rendu par Astro. */
 .article-content {
   font-size: 1.05rem;
 }
 
+/* Rythme vertical commun des blocs Markdown principaux. */
 .article-content > :where(p, ul, ol, pre, blockquote, table, details, figure) {
   margin-block: 1.15rem;
 }
 
+/* Hiérarchie de titres dans les articles, indépendante du header de page. */
 .article-content :where(h1, h2, h3, h4, h5, h6) {
   color: var(--color-text);
   line-height: 1.2;
@@ -57,6 +70,7 @@
   color: var(--color-accent-hover);
 }
 
+/* Liens externes : petit indicateur visuel sans modifier le Markdown source. */
 .article-content a.external-link::after {
   content: '↗';
   display: inline-block;
@@ -67,6 +81,7 @@
   transform: translateY(-0.08em);
 }
 
+/* Liens GitHub : icône dédiée et suppression de l'indicateur externe générique. */
 .article-content a.github-link::before {
   content: '';
   display: inline-block;
@@ -83,6 +98,7 @@
   content: none;
 }
 
+/* Listes, citations, séparateurs et code inline : couverture Markdown de base. */
 .article-content :where(ul, ol) {
   padding-inline-start: 1.5rem;
 }
@@ -121,6 +137,7 @@
   font-size: 0.9em;
 }
 
+/* Figures générées automatiquement autour des images seules, avec légende issue du alt. */
 .article-figure {
   display: grid;
   justify-items: center;
@@ -136,6 +153,7 @@
   text-align: center;
 }
 
+/* Images d'article : dimensions conservées, centrage, lazy-loading côté HTML. */
 .article-content img,
 .article-image {
   display: block;
@@ -151,6 +169,7 @@
   margin: 0;
 }
 
+/* Variantes de cadrage selon l'orientation détectée de l'image. */
 .article-image--portrait {
   width: auto;
   max-width: min(100%, 34rem);
@@ -171,6 +190,7 @@
   border-color: var(--color-accent);
 }
 
+/* Tableaux Markdown : scroll horizontal plutôt qu'écrasement sur mobile. */
 .article-content table {
   display: block;
   width: max-content;
@@ -207,6 +227,7 @@
   border-inline-end: 1px solid var(--color-border);
 }
 
+/* Blocs details/summary natifs, pour documenter des sections repliables. */
 .article-content details {
   padding: 1rem;
   border: 1px solid var(--color-border);
@@ -225,6 +246,7 @@
   margin-block-end: 0;
 }
 
+/* Fallback pour les blocs pre simples, avant enrichissement JS éventuel. */
 pre {
   overflow: auto;
   max-width: 100%;
@@ -238,6 +260,7 @@ pre {
   line-height: 1.55;
 }
 
+/* Bloc de code enrichi par JS : nom du langage + bouton copier. */
 .code-block {
   margin-block: 1.15rem;
   border: 1px solid var(--color-code-border);
@@ -289,6 +312,7 @@ pre {
   box-shadow: none;
 }
 
+/* Overlay de zoom image : activé par public/scripts/image-zoom.js. */
 .image-zoom-open {
   overflow: hidden;
 }
@@ -353,6 +377,7 @@ pre {
   background: rgba(0, 0, 0, 0.68);
 }
 
+/* Ajustements de lecture mobile : plus compact, sans changer la hiérarchie. */
 @media (max-width: 760px) {
   .site-main {
     width: min(100% - 1.25rem, var(--content-width));

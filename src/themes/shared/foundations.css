@@ -1,7 +1,16 @@
+/* ==========================================================================
+   Fondations partagées
+   --------------------------------------------------------------------------
+   Base CSS commune à tous les thèmes : reset léger, accessibilité, typographie
+   HTML native, gestion du mode couleur et rendu impression.
+   ========================================================================== */
+
+/* Reset minimal : assez pour stabiliser le rendu sans effacer les styles natifs utiles. */
 * {
   box-sizing: border-box;
 }
 
+/* Le color-scheme suit le mode choisi par l'utilisateur ou la préférence système. */
 html {
   min-height: 100%;
   color-scheme: light;
@@ -24,6 +33,7 @@ body {
   min-height: 100%;
 }
 
+/* Typographie de base pilotée par les variables exposées par chaque thème. */
 body {
   color: var(--color-text);
   background: var(--color-bg);
@@ -32,6 +42,7 @@ body {
   line-height: 1.6;
 }
 
+/* Liens accessibles : couleur thème + soulignement seulement à l'interaction. */
 a {
   color: var(--color-accent);
   text-decoration: none;
@@ -44,11 +55,13 @@ a:focus-visible {
   text-decoration: underline;
 }
 
+/* Focus clavier visible et cohérent avec la couleur d'accent du thème. */
 :focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
 
+/* Titres génériques : les pages et articles peuvent ensuite préciser leur mise en forme. */
 h1,
 h2,
 h3 {
@@ -95,6 +108,7 @@ textarea {
   font: inherit;
 }
 
+/* Classe utilitaire pour le texte lisible par lecteur d'écran uniquement. */
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -112,6 +126,7 @@ code {
   font-family: var(--font-mono);
 }
 
+/* Respect des préférences utilisateur : pas d'animations forcées. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -123,6 +138,7 @@ code {
   }
 }
 
+/* Version imprimable : contraste maximal, pas d'éléments interactifs. */
 @media print {
   :root {
     --color-bg: #ffffff;

@@ -1,3 +1,12 @@
+/* ==========================================================================
+   Thème par défaut
+   --------------------------------------------------------------------------
+   Ce fichier ne définit que l'identité visuelle du thème public livré avec la
+   solution. La structure, les composants et le responsive commun restent dans
+   src/themes/shared/.
+   ========================================================================== */
+
+/* Jetons de design clairs : palette, typographies, rayons, ombres et espacements. */
 :root {
   --color-bg: #f5f6f8;
   --color-surface: #ffffff;
@@ -29,6 +38,7 @@
   --space-page: 2rem;
 }
 
+/* L'icône RSS est fournie par le thème afin de permettre une personnalisation complète. */
 .rss-icon::before {
   content: '';
   display: block;
@@ -39,6 +49,7 @@
   -webkit-mask: var(--icon-rss) center / contain no-repeat;
 }
 
+/* Surcharge explicite lorsque l'utilisateur force le mode sombre. */
 :root[data-color-mode='dark'] {
   --color-bg: #10141c;
   --color-surface: #181e29;
@@ -58,6 +69,7 @@
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.28);
 }
 
+/* Mode sombre automatique lorsque l'utilisateur n'a pas encore choisi de préférence. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-color-mode]) {
     --color-bg: #10141c;

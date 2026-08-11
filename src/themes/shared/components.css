@@ -1,3 +1,11 @@
+/* ==========================================================================
+   Composants partagés
+   --------------------------------------------------------------------------
+   Structure UI commune aux thèmes : header, navigation, footer, listes
+   d'articles, tags, couvertures, navigation d'article et pagination.
+   ========================================================================== */
+
+/* Header commun : calque au-dessus des effets de fond éventuels des thèmes. */
 .site-header {
   position: relative;
   z-index: 1;
@@ -5,6 +13,7 @@
   background: var(--color-surface);
 }
 
+/* Navigation desktop : identité à gauche, liens et actions à droite. */
 .site-nav {
   width: min(100% - 2rem, var(--content-width));
   margin: 0 auto;
@@ -15,6 +24,7 @@
   padding-block: 1rem;
 }
 
+/* Identité du site : titre cliquable et baseline optionnelle. */
 .site-identity {
   min-width: 0;
 }
@@ -42,6 +52,7 @@
   font-family: var(--font-mono);
 }
 
+/* Zone d'actions : liens principaux, prompt décoratif et switch light/dark. */
 .site-nav-actions,
 .site-links,
 .site-utility-actions {
@@ -60,6 +71,7 @@
   gap: 0.65rem;
 }
 
+/* Liens de navigation : état courant via aria-current. */
 .site-links {
   gap: 0.75rem 1.25rem;
   margin: 0;
@@ -87,12 +99,14 @@
   text-decoration: none;
 }
 
+/* Prompt décoratif partagé, stylisé plus fortement par le thème terminal. */
 .terminal-prompt {
   color: var(--color-accent);
   font-family: var(--font-mono);
   font-weight: 700;
 }
 
+/* Switch de mode couleur : l'état visuel est piloté par data-color-mode sur html. */
 .color-mode-switch {
   display: inline-grid;
   width: 2.25rem;
@@ -126,6 +140,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   border-color: var(--color-accent);
 }
 
+/* Footer : liste flexible pour conserver RSS et crédit sur petits écrans. */
 .site-footer {
   position: relative;
   z-index: 1;
@@ -155,6 +170,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-weight: 700;
 }
 
+/* Liens enrichis du footer : icône RSS thémable et icône projet globale. */
 .rss-link,
 .powered-link {
   display: inline-flex;
@@ -168,6 +184,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   flex-wrap: wrap;
 }
 
+/* Icône RSS : sa forme vient du thème via --icon-rss. */
 .rss-icon {
   display: inline-block;
   flex: 0 0 auto;
@@ -179,6 +196,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   color: var(--color-rss, #f26522);
 }
 
+/* Icône "Propulsé par" : globale, volontairement indépendante du thème. */
 .powered-icon {
   flex: 0 0 auto;
   width: var(--powered-icon-size, 1.15em);
@@ -187,6 +205,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   object-fit: cover;
 }
 
+/* Liste d'articles : base carte simple, ensuite spécialisée par chaque thème. */
 .post-list {
   display: grid;
   gap: 1.25rem;
@@ -195,6 +214,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   list-style: none;
 }
 
+/* Carte article : conteneur générique avec surface, bordure et ombre thémables. */
 .post-card {
   margin: 0;
   padding: 1.25rem;
@@ -218,6 +238,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   overflow-wrap: anywhere;
 }
 
+/* Pied de carte : date, séparateur et lien de lecture sur une ligne souple. */
 .post-card-footer {
   display: flex;
   align-items: center;
@@ -235,6 +256,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   color: var(--color-text-muted);
 }
 
+/* Métadonnées d'article : date de publication et éventuelle mise à jour. */
 .post-meta {
   display: flex;
   flex-wrap: wrap;
@@ -249,6 +271,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-weight: 600;
 }
 
+/* Tags : l'accent visuel vient de src/config/tags.ts via data-accent. */
 .post-category,
 .tag-chip {
   display: inline-flex;
@@ -272,6 +295,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   margin-block-end: 0.75rem;
 }
 
+/* Liste de tags dans les cartes et pages d'article. */
 .post-card-tags {
   display: flex;
   align-items: center;
@@ -300,6 +324,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-weight: 700;
 }
 
+/* Pages tags : index simple et nuage pondéré par nombre d'articles. */
 .tag-list {
   display: flex;
   align-items: center;
@@ -342,6 +367,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   margin-block: 1.5rem 2rem;
 }
 
+/* Nuage de tags desktop : placement logique par variables inline calculées côté Astro. */
 .tag-cloud {
   display: grid;
   grid-template-columns: repeat(7, max-content);
@@ -380,6 +406,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   line-height: 1;
 }
 
+/* Mobile : le nuage redevient une grille simple pour éviter l'overflow. */
 @media (max-width: 760px) {
   .tag-cloud {
     display: grid;
@@ -402,6 +429,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   }
 }
 
+/* Couvertures : ratio commun 1200x630 pour homogénéiser les listes. */
 .post-cover-wrapper {
   margin-block-end: 1rem;
 }
@@ -423,6 +451,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   aspect-ratio: 1200 / 630;
 }
 
+/* Navigation de fin d'article : précédent/suivant avec cartes symétriques. */
 .back-link {
   margin-block-start: 2.5rem;
   padding-block-start: 1rem;
@@ -477,6 +506,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   color: var(--color-accent);
 }
 
+/* Pagination des listes d'articles. */
 .pagination {
   margin-block-start: 2rem;
 }
@@ -500,6 +530,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   color: var(--color-text-muted);
 }
 
+/* Mobile global des composants : header compact et navigation d'article empilée. */
 @media (max-width: 760px) {
   .site-nav {
     width: min(100% - 1.25rem, var(--content-width));
