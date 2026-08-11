@@ -141,6 +141,38 @@ const getMeaningfulChildren = (node) => {
   );
 };
 
+const getLinkUrl = (href) => {
+  if (typeof href !== 'string' || !/^https?:\/\//i.test(href)) {
+    return undefined;
+  }
+
+  try {
+    return new URL(href);
+  } catch {
+    return undefined;
+  }
+};
+
+const enhanceLinkNode = (node, siteOrigin) => {
+  if (node?.type !== 'element' || node.tagName !== 'a') {
+    return;
+  }
+
+  node.properties = node.properties || {};
+  const url = getLinkUrl(node.properties.href);
+  if (!url || url.origin === siteOrigin) {
+    return;
+  }
+
+  node.properties.target = node.properties.target || '_blank';
+  node.properties.rel = node.properties.rel || 'noopener noreferrer';
+  addClassName(node.properties, 'external-link');
+
+  if (url.hostname === 'github.com' || url.hostname.endsWith('.github.com')) {
+    addClassName(node.properties, 'github-link');
+  }
+};
+
 const enhanceImageNode = (node, base) => {
   if (node?.type !== 'element' || node.tagName !== 'img') {
     return undefined;
@@ -167,7 +199,7 @@ const enhanceImageNode = (node, base) => {
   return { dimensions, orientation };
 };
 
-function rehypeArticleContentEnhancements({ base }) {
+function rehypeArticleContentEnhancements({ base, siteOrigin }) {
   return (tree) => {
     const visit = (node) => {
       if (!node || typeof node !== 'object') {
@@ -217,6 +249,7 @@ function rehypeArticleContentEnhancements({ base }) {
       }
 
       if (node.properties && typeof node.properties === 'object') {
+        enhanceLinkNode(node, siteOrigin);
         enhanceImageNode(node, base);
 
         for (const attribute of rootRelativeUrlAttributes) {
@@ -262,7 +295,7 @@ export default defineConfig({
   site,
   output: 'static',
   markdown: {
-    rehypePlugins: [[rehypeArticleContentEnhancements, { base }]]
+    rehypePlugins: [[rehypeArticleContentEnhancements, { base, siteOrigin: new URL(site).origin }]]
   },
   build: {
     outDir: 'dist'

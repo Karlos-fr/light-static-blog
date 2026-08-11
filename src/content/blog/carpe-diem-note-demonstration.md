@@ -26,7 +26,7 @@ Le contenu peut être structuré avec des paragraphes courts, des intertitres li
 
 ## Liens et image
 
-Un lien comme [la documentation d’Astro](https://docs.astro.build/) doit rester visible sans devenir agressif. Une image insérée dans le contenu doit, elle aussi, respecter la largeur de lecture.
+Un lien comme [la documentation d’Astro](https://docs.astro.build/) doit rester visible sans devenir agressif. Un lien vers [le dépôt GitHub de Light Static Blog](https://github.com/Karlos-fr/light-static-blog) doit, lui, pouvoir être identifié immédiatement. Une image insérée dans le contenu doit, elle aussi, respecter la largeur de lecture.
 
 ![Illustration abstraite Carpe diem](/images/carpe-diem-cover.png)
 
