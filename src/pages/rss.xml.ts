@@ -91,6 +91,10 @@ export async function GET() {
   const siteUrl = getAbsoluteUrl();
   const container = await AstroContainer.create();
   const items: string[] = [];
+  const lastBuildDate = posts
+    .map((post) => post.data.updatedDate ?? post.data.pubDate)
+    .sort((a, b) => b.getTime() - a.getTime())[0]
+    ?.toUTCString();
 
   for (const post of posts) {
     const url = getAbsoluteUrl(post.slug);
@@ -121,15 +125,19 @@ export async function GET() {
       ? `
       <media:thumbnail url="${escapeXml(imageUrls[0])}" />`
       : '';
+    const categories = post.data.tags
+      .map((tag) => `
+      <category>${escapeXml(tag)}</category>`)
+      .join('');
 
     items.push(`
     <item>
       <title>${escapeXml(post.data.title)}</title>
       <link>${url}</link>
-      <guid>${url}</guid>
+      <guid isPermaLink="true">${url}</guid>
       <pubDate>${pubDate}</pubDate>
-      <description><![CDATA[${escapeCdata(fullContent)}]]></description>
-      <content:encoded><![CDATA[${escapeCdata(fullContent)}]]></content:encoded>${media}${thumbnail}
+      <description><![CDATA[${escapeCdata(post.data.description)}]]></description>
+      <content:encoded><![CDATA[${escapeCdata(fullContent)}]]></content:encoded>${categories}${media}${thumbnail}
     </item>`);
   }
 
@@ -143,6 +151,8 @@ export async function GET() {
       <title>${escapeXml(siteConfig.name)}</title>
       <link>${siteUrl}</link>
       <description>${escapeXml(siteConfig.description)}</description>
+      <language>fr</language>${lastBuildDate ? `
+      <lastBuildDate>${lastBuildDate}</lastBuildDate>` : ''}
       <atom:link href="${getAbsoluteUrl('rss.xml')}" rel="self" type="application/rss+xml" />
       ${items.join('\n')}
     </channel>

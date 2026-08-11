@@ -479,11 +479,30 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 
 .xml-table td:last-child {
   color: var(--color-text-muted);
-  white-space: nowrap;
 }
 
 .xml-table a {
   overflow-wrap: anywhere;
+}
+
+.rss-feed-table {
+  table-layout: fixed;
+}
+
+.rss-feed-table th:nth-child(1),
+.rss-feed-table td:nth-child(1) {
+  width: 30%;
+}
+
+.rss-feed-table th:nth-child(2),
+.rss-feed-table td:nth-child(2) {
+  width: 11rem;
+  white-space: nowrap;
+}
+
+.rss-feed-table th:nth-child(3),
+.rss-feed-table td:nth-child(3) {
+  width: auto;
 }
 
 @media (max-width: 760px) {
