@@ -214,7 +214,7 @@ To add a theme:
 
 1. Create `src/themes/<identifier>/theme.css`.
 2. Define all semantic tokens used by the components, including light and dark palettes via `data-color-mode` and the `prefers-color-scheme` fallback.
-3. Define the theme's own visual resources, for example `--color-rss`, `--icon-rss` and the `--powered-icon-size` size of the project link.
+3. Define the theme's own visual resources, for example `--color-rss` and `--icon-rss`.
 4. Place theme-specific files in `src/themes/<identifier>/assets/` when needed. In `theme.css`, reference them with `__THEME_ASSETS__/`, for example `url('__THEME_ASSETS__/fonts/my-font.woff2')`.
 5. Run `npm run validate` with `SITE_THEME=<identifier>` and test both modes, responsive layout, RSS and the XML sitemap.
 
