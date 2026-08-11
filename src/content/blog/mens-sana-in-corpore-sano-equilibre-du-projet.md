@@ -1,7 +1,7 @@
 ---
 title: "Mens sana in corpore sano : l’équilibre du projet"
 description: "Un article de démonstration autour de Mens sana in corpore sano, pour illustrer équilibre, structure et rythme de maintenance."
-pubDate: 2026-03-10
+pubDate: 2026-08-08
 tags: ["demo", "latin", "methodologie"]
 draft: false
 cover: "/images/mens-sana-cover.png"

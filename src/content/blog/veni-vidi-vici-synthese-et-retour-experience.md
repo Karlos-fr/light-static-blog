@@ -1,7 +1,7 @@
 ---
 title: "Veni, vidi, vici : synthèse et retour d’expérience"
 description: "Un article de démonstration autour de Veni, vidi, vici, pour présenter une synthèse courte, une liste d'observations et un tableau de bilan."
-pubDate: 2026-04-18
+pubDate: 2026-08-11
 tags: ["demo", "latin", "projet"]
 draft: false
 cover: "/images/veni-vidi-vici-cover.png"

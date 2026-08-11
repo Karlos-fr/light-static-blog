@@ -1,7 +1,7 @@
 ---
 title: "Alea jacta est : décider sans tout maîtriser"
 description: "Un article de démonstration autour de Alea jacta est, avec citation, liste de critères et exemple de configuration."
-pubDate: 2026-04-05
+pubDate: 2026-08-10
 tags: ["demo", "latin", "methodologie"]
 draft: false
 cover: "/images/alea-jacta-est-cover.png"

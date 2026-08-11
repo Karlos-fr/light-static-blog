@@ -1,7 +1,7 @@
 ---
 title: "Audentes fortuna iuvat : oser itérer"
 description: "Un article de démonstration autour de Audentes fortuna iuvat, pour présenter une approche itérative et prudente."
-pubDate: 2026-02-08
+pubDate: 2026-08-05
 tags: ["demo", "latin", "markdown"]
 draft: false
 cover: "/images/audentes-fortuna-iuvat-cover.png"

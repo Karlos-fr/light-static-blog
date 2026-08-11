@@ -1,7 +1,7 @@
 ---
 title: "Memento mori : documenter ce qui compte"
 description: "Un article de démonstration autour de Memento mori, orienté documentation, traces utiles et maintenance."
-pubDate: 2026-03-22
+pubDate: 2026-08-09
 tags: ["demo", "latin", "markdown"]
 draft: false
 cover: "/images/memento-mori-cover.png"

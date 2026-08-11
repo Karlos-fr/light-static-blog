@@ -1,7 +1,7 @@
 ---
 title: "In vino veritas : clarifier les hypothèses"
 description: "Un article de démonstration autour de In vino veritas, avec une approche simple pour rendre les hypothèses explicites."
-pubDate: 2026-02-26
+pubDate: 2026-08-06
 tags: ["demo", "latin", "projet"]
 draft: false
 cover: "/images/in-vino-veritas-cover.png"

@@ -1,7 +1,7 @@
 ---
 title: "Carpe diem : une note de démonstration"
 description: "Un article de démonstration pour présenter les principaux éléments Markdown autour de la locution Carpe diem."
-pubDate: 2026-03-04
+pubDate: 2026-08-07
 tags: ["demo", "latin", "markdown"]
 draft: false
 cover: "/images/carpe-diem-cover.png"

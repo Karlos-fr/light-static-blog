@@ -1,8 +1,8 @@
 ---
 title: "Ad astra per aspera : viser haut avec méthode"
 description: "Un article de démonstration avec couverture, citation, tableau et bloc de configuration autour de la locution Ad astra per aspera."
-pubDate: 2026-02-12
-updatedDate: 2026-02-20
+pubDate: 2026-08-05
+updatedDate: 2026-08-11
 tags: ["demo", "projet", "latin"]
 draft: false
 cover: "/images/ad-astra-per-aspera-cover.png"

@@ -1,7 +1,7 @@
 ---
 title: "Festina lente : avancer sans se précipiter"
 description: "Un article de démonstration avec listes, emphase et extrait TypeScript autour de la locution Festina lente."
-pubDate: 2026-02-01
+pubDate: 2026-08-05
 tags: ["demo", "methodologie", "latin"]
 draft: false
 cover: "/images/festina-lente-cover.png"
