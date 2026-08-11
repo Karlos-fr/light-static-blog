@@ -18,6 +18,11 @@
   Par defaut, la sortie detaillee du build Astro est masquee pour garder un
   rendu console propre. Utiliser -VerboseBuild pour l'afficher en direct.
 
+  SyncMode controle la strategie de transfert :
+  - Full : transfere tous les fichiers generes ;
+  - Diff : compare les empreintes SHA-256 et transfere uniquement les fichiers
+    absents ou modifies.
+
 .EXAMPLE
   ./scripts/deploy-sftp.ps1 `
     -Site 'https://example.com' `
@@ -25,6 +30,7 @@
     -AuthorName 'Author name' `
     -SftpHost 'ftp.example.com' `
     -RemoteRoot '/home/example/www/blog' `
+    -SyncMode Diff `
     -ExpectedHostKeySha256 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 .NOTES
@@ -58,6 +64,7 @@ param(
   [Parameter(Mandatory = $true)][string]$ExpectedHostKeySha256,
   [string]$FileZillaConfig = (Join-Path $env:APPDATA 'FileZilla\sitemanager.xml'),
   [string]$FileZillaHost = '',
+  [ValidateSet('Full', 'Diff')][string]$SyncMode = 'Full',
   [string[]]$CheckUrls = @()
 )
 
@@ -182,6 +189,7 @@ function Write-DeployHeader {
   Write-BoxRule DarkCyan
   Write-BoxLine 'Deployment target' White -BorderColor DarkCyan -Center
   Write-BoxLine "SFTP host     $SftpHost" Gray -BorderColor DarkCyan
+  Write-BoxLine "Sync mode     $SyncMode" Gray -BorderColor DarkCyan
   Write-BoxLine "FileZilla     $ResolvedFileZillaHost" Gray -BorderColor DarkCyan
   Write-BoxLine "Remote root   $RemoteRoot" Gray -BorderColor DarkCyan
   Write-BoxLine "Robots root   $RootRobotsRemotePath" Gray -BorderColor DarkCyan
@@ -304,6 +312,7 @@ function Clear-DeployEnvironment {
     'DEPLOY_REMOTE_HOST_ROOT',
     'DEPLOY_ROOT_ROBOTS_REMOTE_PATH',
     'DEPLOY_EXPECTED_HOST_KEY',
+    'DEPLOY_SYNC_MODE',
     'SITE_NAME',
     'SITE_HOME_META_TITLE',
     'SITE_TAGLINE',
@@ -455,6 +464,7 @@ try {
   $env:DEPLOY_REMOTE_HOST_ROOT = $RemoteHostRoot
   $env:DEPLOY_ROOT_ROBOTS_REMOTE_PATH = $RootRobotsRemotePath
   $env:DEPLOY_EXPECTED_HOST_KEY = $ExpectedHostKeySha256
+  $env:DEPLOY_SYNC_MODE = $SyncMode
 
   @'
 import base64
@@ -475,9 +485,16 @@ config_path = Path(os.environ['DEPLOY_FILEZILLA_CONFIG'])
 filezilla_host = os.environ['DEPLOY_FILEZILLA_HOST']
 host = os.environ['DEPLOY_SFTP_HOST']
 remote_root = posixpath.normpath(os.environ['DEPLOY_REMOTE_ROOT'])
-remote_host_root = posixpath.normpath(os.environ.get('DEPLOY_REMOTE_HOST_ROOT') or '')
-root_robots_remote_path = posixpath.normpath(os.environ.get('DEPLOY_ROOT_ROBOTS_REMOTE_PATH') or '')
+remote_host_root_raw = os.environ.get('DEPLOY_REMOTE_HOST_ROOT') or ''
+root_robots_remote_path_raw = os.environ.get('DEPLOY_ROOT_ROBOTS_REMOTE_PATH') or ''
+remote_host_root = posixpath.normpath(remote_host_root_raw) if remote_host_root_raw else ''
+root_robots_remote_path = (
+    posixpath.normpath(root_robots_remote_path_raw)
+    if root_robots_remote_path_raw
+    else ''
+)
 expected_host_key = os.environ['DEPLOY_EXPECTED_HOST_KEY'].replace('SHA256:', '')
+sync_mode = os.environ.get('DEPLOY_SYNC_MODE', 'Full')
 
 server = next(
     (
@@ -508,10 +525,28 @@ port = int(server.findtext('Port', '22'))
 local_files = sorted(path for path in local_root.rglob('*') if path.is_file())
 if not local_files:
     raise RuntimeError('Le dossier dist ne contient aucun fichier')
-total_files = len(local_files) + (1 if root_robots_remote_path else 0)
-total_bytes = sum(path.stat().st_size for path in local_files)
+deploy_items = [
+    {
+        'local_path': path,
+        'relative_path': path.relative_to(local_root).as_posix(),
+        'remote_path': posixpath.normpath(
+            posixpath.join(remote_root, path.relative_to(local_root).as_posix())
+        ),
+        'is_root_robots': False,
+    }
+    for path in local_files
+]
 if root_robots_remote_path:
-    total_bytes += (local_root / 'robots.txt').stat().st_size
+    deploy_items.append(
+        {
+            'local_path': local_root / 'robots.txt',
+            'relative_path': '/robots.txt',
+            'remote_path': root_robots_remote_path,
+            'is_root_robots': True,
+        }
+    )
+total_files = len(deploy_items)
+total_bytes = sum(item['local_path'].stat().st_size for item in deploy_items)
 
 transport = paramiko.Transport((host, port))
 try:
@@ -542,61 +577,90 @@ try:
                 sftp.mkdir(current)
 
     ensure_directory(remote_root)
-    uploaded_bytes = 0
 
-    # Transfert miroir simple de dist/ vers RemoteRoot. Chaque chemin distant est
-    # normalise et controle pour rester sous la cible declaree.
-    uploaded_count = 0
-    for local_path in local_files:
-        relative_path = local_path.relative_to(local_root).as_posix()
-        remote_path = posixpath.normpath(posixpath.join(remote_root, relative_path))
+    def read_remote_hash(remote_path):
+        try:
+            with sftp.open(remote_path, 'rb') as remote_file:
+                return hashlib.sha256(remote_file.read()).digest()
+        except FileNotFoundError:
+            return None
+
+    def assert_remote_path_allowed(item):
+        remote_path = item['remote_path']
+        if item['is_root_robots']:
+            return
         if remote_path != remote_root and not remote_path.startswith(remote_root + '/'):
             raise RuntimeError(f'Chemin distant refuse : {remote_path}')
-        ensure_directory(posixpath.dirname(remote_path))
-        sftp.put(str(local_path), remote_path)
-        uploaded_count += 1
-        uploaded_bytes += local_path.stat().st_size
-        print(f'UPLOAD_PROGRESS={uploaded_count}|{total_files}|{uploaded_bytes}|{total_bytes}', flush=True)
 
-    if root_robots_remote_path:
-        # Option utile quand le blog vit dans un sous-repertoire : les moteurs
-        # cherchent robots.txt a la racine de l'hote, pas sous BASE_PATH.
-        local_robots_path = local_root / 'robots.txt'
-        ensure_directory(posixpath.dirname(root_robots_remote_path))
-        sftp.put(str(local_robots_path), root_robots_remote_path)
-        uploaded_bytes += local_robots_path.stat().st_size
-        uploaded_count += 1
-        print(f'UPLOAD_PROGRESS={uploaded_count}|{total_files}|{uploaded_bytes}|{total_bytes}', flush=True)
+    # Preparation du plan de synchronisation. En mode Full, tous les fichiers
+    # sont transferes ; en mode Diff, seules les empreintes distantes manquantes
+    # ou differentes sont ajoutees au plan.
+    plan = []
+    scan_bytes = 0
+    for index, item in enumerate(deploy_items, start=1):
+        local_path = item['local_path']
+        remote_path = item['remote_path']
+        assert_remote_path_allowed(item)
+        local_hash = hashlib.sha256(local_path.read_bytes()).digest()
+        item['local_hash'] = local_hash
+        scan_bytes += local_path.stat().st_size
+
+        should_upload = sync_mode == 'Full'
+        if sync_mode == 'Diff':
+            remote_hash = read_remote_hash(remote_path)
+            should_upload = remote_hash != local_hash
+
+        if should_upload:
+            plan.append(item)
+
+        print(f'SCAN_PROGRESS={index}|{total_files}|{scan_bytes}|{total_bytes}', flush=True)
+
+    upload_total_files = len(plan)
+    upload_total_bytes = sum(item['local_path'].stat().st_size for item in plan)
+    uploaded_count = 0
+    uploaded_bytes = 0
+    if upload_total_files == 0:
+        print('UPLOAD_SKIPPED=0|0', flush=True)
+    else:
+        for item in plan:
+            local_path = item['local_path']
+            remote_path = item['remote_path']
+            ensure_directory(posixpath.dirname(remote_path))
+            sftp.put(str(local_path), remote_path)
+            uploaded_count += 1
+            uploaded_bytes += local_path.stat().st_size
+            print(
+                f'UPLOAD_PROGRESS={uploaded_count}|{upload_total_files}|{uploaded_bytes}|{upload_total_bytes}',
+                flush=True,
+            )
 
     # Relecture des fichiers distants pour comparer les empreintes SHA-256 : le
     # transfert n'est considere reussi que si les octets publies correspondent.
     verified_count = 0
     verified_bytes = 0
-    for local_path in local_files:
-        relative_path = local_path.relative_to(local_root).as_posix()
-        remote_path = posixpath.normpath(posixpath.join(remote_root, relative_path))
-        local_hash = hashlib.sha256(local_path.read_bytes()).digest()
-        with sftp.open(remote_path, 'rb') as remote_file:
-            remote_hash = hashlib.sha256(remote_file.read()).digest()
-        if local_hash != remote_hash:
-            raise RuntimeError(f'Controle SHA-256 echoue : {relative_path}')
-        verified_count += 1
-        verified_bytes += local_path.stat().st_size
-        print(f'VERIFY_PROGRESS={verified_count}|{total_files}|{verified_bytes}|{total_bytes}', flush=True)
-
-    if root_robots_remote_path:
-        local_robots_hash = hashlib.sha256((local_root / 'robots.txt').read_bytes()).digest()
-        with sftp.open(root_robots_remote_path, 'rb') as remote_file:
-            remote_robots_hash = hashlib.sha256(remote_file.read()).digest()
-        if local_robots_hash != remote_robots_hash:
-            raise RuntimeError('Controle SHA-256 echoue : robots.txt racine')
-        verified_count += 1
-        verified_bytes += (local_root / 'robots.txt').stat().st_size
-        print(f'VERIFY_PROGRESS={verified_count}|{total_files}|{verified_bytes}|{total_bytes}', flush=True)
+    verify_items = plan if sync_mode == 'Diff' else deploy_items
+    verify_total_files = len(verify_items)
+    verify_total_bytes = sum(item['local_path'].stat().st_size for item in verify_items)
+    if verify_total_files == 0:
+        print('VERIFY_SKIPPED=0|0', flush=True)
+    else:
+        for item in verify_items:
+            local_path = item['local_path']
+            remote_path = item['remote_path']
+            remote_hash = read_remote_hash(remote_path)
+            if item['local_hash'] != remote_hash:
+                raise RuntimeError(f"Controle SHA-256 echoue : {item['relative_path']}")
+            verified_count += 1
+            verified_bytes += local_path.stat().st_size
+            print(
+                f'VERIFY_PROGRESS={verified_count}|{verify_total_files}|{verified_bytes}|{verify_total_bytes}',
+                flush=True,
+            )
 
     print(f'SSH_FINGERPRINT=SHA256:{fingerprint}')
     print(f'UPLOADED_FILES={uploaded_count}')
     print(f'UPLOADED_BYTES={uploaded_bytes}')
+    print(f'SKIPPED_FILES={total_files - uploaded_count}')
 finally:
     transport.close()
 '@ | python - | ForEach-Object {
@@ -608,6 +672,17 @@ finally:
     } elseif ($_ -like 'UPLOADED_BYTES=*') {
       $Bytes = [int64]$_.Replace('UPLOADED_BYTES=', '')
       Write-Info ("Volume transfere : {0:N2} Mo" -f ($Bytes / 1MB))
+    } elseif ($_ -like 'SKIPPED_FILES=*') {
+      Write-Info ($_.Replace('SKIPPED_FILES=', 'Fichiers inchanges ignores : '))
+    } elseif ($_ -like 'SCAN_PROGRESS=*') {
+      $Parts = $_.Replace('SCAN_PROGRESS=', '').Split('|')
+      $ScanLabel = if ($SyncMode -eq 'Diff') { 'Analyse diff' } else { 'Preparation' }
+      Write-ProgressLine `
+        -Label $ScanLabel `
+        -Current ([int]$Parts[0]) `
+        -Total ([int]$Parts[1]) `
+        -Bytes ([int64]$Parts[2]) `
+        -TotalBytes ([int64]$Parts[3])
     } elseif ($_ -like 'UPLOAD_PROGRESS=*') {
       $Parts = $_.Replace('UPLOAD_PROGRESS=', '').Split('|')
       Write-ProgressLine `
@@ -624,6 +699,12 @@ finally:
         -Total ([int]$Parts[1]) `
         -Bytes ([int64]$Parts[2]) `
         -TotalBytes ([int64]$Parts[3])
+    } elseif ($_ -like 'UPLOAD_SKIPPED=*') {
+      Complete-ProgressLine
+      Write-Ok 'Aucun fichier a transferer'
+    } elseif ($_ -like 'VERIFY_SKIPPED=*') {
+      Complete-ProgressLine
+      Write-Ok 'Aucune verification SHA-256 distante necessaire'
     } else {
       Complete-ProgressLine
       Write-DeployLine "  $_" Gray

@@ -280,10 +280,11 @@ A generic script is provided for hosting providers reachable through SFTP with a
   -SiteFeedAccentColor '#f26522' `
   -SftpHost 'ftp.example.com' `
   -RemoteRoot '/remote/path/to/blog' `
+  -SyncMode Diff `
   -ExpectedHostKeySha256 'server-sha256-fingerprint'
 ```
 
-The script runs the build unless `-SkipBuild` is used, checks RSS/sitemap/canonical/JSON-LD output, uploads `dist/`, verifies remote files with SHA-256, then checks public URLs. Astro's detailed output is hidden by default to keep the console clean; `-VerboseBuild` displays it. If the blog is served from a subpath, `-RootRobotsRemotePath` can also publish `robots.txt` at the host root.
+The script runs the build unless `-SkipBuild` is used, checks RSS/sitemap/canonical/JSON-LD output, uploads `dist/`, verifies remote files with SHA-256, then checks public URLs. By default, `-SyncMode Full` uploads every generated file; `-SyncMode Diff` compares remote SHA-256 hashes and only uploads missing or changed files. Astro's detailed output is hidden by default to keep the console clean; `-VerboseBuild` displays it. If the blog is served from a subpath, `-RootRobotsRemotePath` can also publish `robots.txt` at the host root.
 
 The script exposes the blog customization parameters: site, base path, author, name, homepage SEO title, tagline, SEO description, social image, RSS title/description/icon/logo/accent color and theme.
 
