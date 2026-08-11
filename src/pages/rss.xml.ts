@@ -30,7 +30,6 @@ function getImageMimeType(path: string): string | undefined {
     jpg: 'image/jpeg',
     png: 'image/png',
     svg: 'image/svg+xml',
-    webp: 'image/webp',
   };
 
   return extension ? mimeTypes[extension] : undefined;

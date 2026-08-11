@@ -17,7 +17,6 @@ const contentTypes: Record<string, string> = {
   '.jpeg': 'image/jpeg',
   '.png': 'image/png',
   '.svg': 'image/svg+xml; charset=utf-8',
-  '.webp': 'image/webp',
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',
 };

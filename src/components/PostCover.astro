@@ -1,5 +1,5 @@
 ---
-import { getImageDimensions, getWebpVariant } from '../lib/images';
+import { getImageDimensions } from '../lib/images';
 import { getPath } from '../lib/urls';
 
 interface Props {
@@ -11,7 +11,6 @@ interface Props {
 
 const { cover, title, href, eager = false } = Astro.props as Props;
 const src = getPath(cover);
-const webpSrc = getWebpVariant(cover);
 const alt = `Couverture de l’article « ${title} »`;
 const dimensions = getImageDimensions(cover);
 const loading = eager ? 'eager' : 'lazy';
@@ -21,31 +20,25 @@ const fetchpriority = eager ? 'high' : undefined;
 {href ? (
   <div class="post-cover-wrapper">
     <a class="cover-link" href={href} aria-label={`Lire ${title}`}>
-      <picture>
-        {webpSrc ? <source srcset={getPath(webpSrc)} type="image/webp" /> : null}
-        <img
-          class="post-cover"
-          src={src}
-          alt={alt}
-          loading={loading}
-          fetchpriority={fetchpriority}
-          width={dimensions?.width}
-          height={dimensions?.height}
-        />
-      </picture>
-    </a>
-  </div>
-) : (
-  <div class="post-cover-wrapper">
-    <picture>
-      {webpSrc ? <source srcset={getPath(webpSrc)} type="image/webp" /> : null}
       <img
         class="post-cover"
         src={src}
         alt={alt}
+        loading={loading}
+        fetchpriority={fetchpriority}
         width={dimensions?.width}
         height={dimensions?.height}
       />
-    </picture>
+    </a>
+  </div>
+) : (
+  <div class="post-cover-wrapper">
+    <img
+      class="post-cover"
+      src={src}
+      alt={alt}
+      width={dimensions?.width}
+      height={dimensions?.height}
+    />
   </div>
 )}

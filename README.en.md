@@ -300,10 +300,7 @@ The script exposes the blog customization parameters: site, base path, author, n
 
 ```bash
 npm install
-npm run optimize:images
 SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Author name" SITE_THEME="default" npm run dev
 SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Author name" SITE_THEME="default" npm run validate
 SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Author name" SITE_THEME="default" npm run preview
 ```
-
-`npm run optimize:images` generates WebP variants from PNG files in `public/images/`. PNG files remain the source files and fallbacks.

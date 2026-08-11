@@ -114,17 +114,6 @@ const getImageDimensions = (src, base) => {
   return extension === '.png' ? getPngDimensions(filePath) : undefined;
 };
 
-const getWebpImageSource = (src, base) => {
-  if (typeof src !== 'string' || !src.toLowerCase().split(/[?#]/, 1)[0].endsWith('.png')) {
-    return undefined;
-  }
-
-  const webpSrc = src.replace(/\.png(?=([?#]|$))/i, '.webp');
-  const webpPath = getPublicImagePath(webpSrc, base);
-
-  return webpPath && existsSync(webpPath) ? webpSrc : undefined;
-};
-
 const getImageOrientation = (dimensions) => {
   if (!dimensions) {
     return undefined;
@@ -201,11 +190,6 @@ const enhanceImageNode = (node, base) => {
   if (dimensions) {
     node.properties.width = node.properties.width || dimensions.width;
     node.properties.height = node.properties.height || dimensions.height;
-  }
-
-  const webpSrc = getWebpImageSource(node.properties.src, base);
-  if (webpSrc && !node.properties.srcset) {
-    node.properties.srcset = webpSrc;
   }
 
   const orientation = getImageOrientation(dimensions);

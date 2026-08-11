@@ -54,14 +54,3 @@ export function getImageDimensions(src: string): ImageDimensions | undefined {
 
   return extension === '.png' ? getPngDimensions(filePath) : undefined;
 }
-
-export function getWebpVariant(src: string): string | undefined {
-  if (!src.toLowerCase().split(/[?#]/, 1)[0].endsWith('.png')) {
-    return undefined;
-  }
-
-  const webpSrc = src.replace(/\.png(?=([?#]|$))/i, '.webp');
-  const webpPath = getPublicImagePath(webpSrc);
-
-  return webpPath && existsSync(webpPath) ? webpSrc : undefined;
-}
