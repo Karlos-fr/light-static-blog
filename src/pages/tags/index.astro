@@ -1,9 +1,51 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAllTags, getTagAccent } from '../../lib/content';
+import { getTagAccent, getTagStats } from '../../lib/content';
 import { getPath } from '../../lib/urls';
 
-const tags = await getAllTags();
+const tags = (await getTagStats()).sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+const tagCounts = tags.map(({ count }) => count);
+const minCount = Math.min(...tagCounts);
+const maxCount = Math.max(...tagCounts);
+const getTagWeight = (count: number) => {
+  if (maxCount === minCount) {
+    return 3;
+  }
+
+  return Math.round(1 + ((count - minCount) / (maxCount - minCount)) * 4);
+};
+const cloudSlots = [
+  [4, 2],
+  [3, 2],
+  [5, 2],
+  [4, 1],
+  [4, 3],
+  [2, 2],
+  [6, 2],
+  [3, 1],
+  [5, 3],
+  [5, 1],
+  [3, 3],
+  [1, 2],
+  [7, 2],
+  [2, 1],
+  [6, 3],
+  [6, 1],
+  [2, 3],
+] as const;
+const positionedTags = tags.map((tag, index) => {
+  const [column, row] = cloudSlots[index] ?? [
+    (index % 7) + 1,
+    Math.floor(index / 7) + 4,
+  ];
+
+  return {
+    ...tag,
+    column,
+    row,
+    weight: getTagWeight(tag.count),
+  };
+});
 ---
 
 <BaseLayout title="Tags" description="Liste des tags du blog.">
@@ -12,10 +54,18 @@ const tags = await getAllTags();
   {tags.length === 0 ? (
     <p>Aucun tag pour le moment.</p>
   ) : (
-    <ul class="tag-index">
-      {tags.map((tag) => (
-        <li>
-          <a class="tag-chip" data-accent={getTagAccent(tag)} href={getPath('tags', tag)}>{tag}</a>
+    <ul class="tag-cloud">
+      {positionedTags.map(({ tag, count, column, row, weight }) => (
+        <li style={`--tag-weight: ${weight}; --tag-column: ${column}; --tag-row: ${row}`}>
+          <a
+            class="tag-chip tag-cloud-link"
+            data-accent={getTagAccent(tag)}
+            data-count={count}
+            href={getPath('tags', tag)}
+          >
+            <span>{tag}</span>
+            <span class="tag-count" aria-label={`${count} article${count > 1 ? 's' : ''}`}>{count}</span>
+          </a>
         </li>
       ))}
     </ul>

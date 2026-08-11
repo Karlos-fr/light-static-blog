@@ -181,13 +181,15 @@ The mapping between a tag and its visual accent is defined in `src/config/tags.t
 
 ```ts
 export const tagAccents = {
-  javascript: 'orange',
-  retro: 'violet',
-  shell: 'blue',
+  demo: 'primary',
+  latin: 'violet',
+  markdown: 'blue',
+  methodologie: 'orange',
+  projet: 'blue',
 };
 ```
 
-Available accents are `primary`, `violet`, `blue` and `orange`. If a tag is not listed, the site automatically assigns it a stable accent.
+Available accents are `primary`, `violet`, `blue` and `orange`. If a tag is not listed, it uses the `primary` accent.
 
 ## Edit the About Page
 

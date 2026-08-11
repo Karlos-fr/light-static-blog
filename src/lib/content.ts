@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-import { TAG_ACCENTS, tagAccents, type TagAccent } from '../config/tags';
+import { tagAccents, type TagAccent } from '../config/tags';
 
 export type BlogEntry = CollectionEntry<'blog'>;
 
@@ -53,15 +53,7 @@ export async function getPublicPosts(): Promise<BlogEntry[]> {
 export function getTagAccent(tag: string): TagAccent {
   const normalizedTag = normalizeTag(tag);
 
-  if (tagAccents[normalizedTag]) {
-    return tagAccents[normalizedTag];
-  }
-
-  const score = normalizedTag
-    .split('')
-    .reduce((total, character, index) => total + character.charCodeAt(0) * (index + 3), 0);
-
-  return TAG_ACCENTS[score % TAG_ACCENTS.length];
+  return tagAccents[normalizedTag] ?? 'primary';
 }
 
 export async function getAllTags(): Promise<string[]> {
@@ -73,6 +65,22 @@ export async function getAllTags(): Promise<string[]> {
   });
 
   return [...tags].sort();
+}
+
+export async function getTagStats(): Promise<Array<{ tag: string; count: number }>> {
+  const posts = await getPublicPosts();
+  const stats = new Map<string, number>();
+
+  posts.forEach((post) => {
+    const postTags = new Set(post.data.tags.map((tag) => normalizeTag(tag)));
+    postTags.forEach((tag) => {
+      stats.set(tag, (stats.get(tag) ?? 0) + 1);
+    });
+  });
+
+  return [...stats.entries()]
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => a.tag.localeCompare(b.tag));
 }
 
 export async function getPublicPostsByTag(tag: string): Promise<BlogEntry[]> {

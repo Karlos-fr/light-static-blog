@@ -302,7 +302,8 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 }
 
 .tag-list ul,
-.tag-index {
+.tag-index,
+.tag-cloud {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
@@ -312,7 +313,8 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 }
 
 .tag-list li,
-.tag-index li {
+.tag-index li,
+.tag-cloud li {
   margin: 0;
 }
 
@@ -325,6 +327,51 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 .tag-index {
   gap: 0.65rem;
   margin-block: 1.5rem 2rem;
+}
+
+.tag-cloud {
+  display: grid;
+  grid-template-columns: repeat(7, max-content);
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 0.9rem;
+  max-width: 40rem;
+  margin-block: 1.5rem 2rem;
+}
+
+.tag-cloud li {
+  grid-column: var(--tag-column);
+  grid-row: var(--tag-row);
+  justify-self: center;
+}
+
+.tag-cloud-link {
+  gap: 0.45em;
+  min-height: calc(2rem + var(--tag-weight, 3) * 0.22rem);
+  padding: 0.22em 0.42em 0.22em 0.7em;
+  font-size: calc(0.8rem + var(--tag-weight, 3) * 0.16rem);
+  font-weight: calc(500 + var(--tag-weight, 3) * 80);
+}
+
+.tag-count {
+  display: inline-grid;
+  min-width: calc(1.1rem + var(--tag-weight, 3) * 0.08rem);
+  height: calc(1.1rem + var(--tag-weight, 3) * 0.08rem);
+  padding: 0 0.35em;
+  place-items: center;
+  color: var(--color-surface);
+  background: var(--tag-accent, var(--color-accent));
+  border-radius: 999px;
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 760px) {
+  .tag-cloud {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .post-cover-wrapper {

@@ -181,13 +181,15 @@ L'association entre un tag et son accent visuel est définie dans `src/config/ta
 
 ```ts
 export const tagAccents = {
-  javascript: 'orange',
-  retro: 'violet',
-  shell: 'blue',
+  demo: 'primary',
+  latin: 'violet',
+  markdown: 'blue',
+  methodologie: 'orange',
+  projet: 'blue',
 };
 ```
 
-Les accents disponibles sont `primary`, `violet`, `blue` et `orange`. Si un tag n'est pas listé, le site lui attribue automatiquement un accent stable.
+Les accents disponibles sont `primary`, `violet`, `blue` et `orange`. Si un tag n'est pas listé, il utilise l'accent `primary`.
 
 ## Modifier la page À propos
 
