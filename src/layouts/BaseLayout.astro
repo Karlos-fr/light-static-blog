@@ -2,6 +2,7 @@
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { siteConfig } from '../config/site';
+import { getImageDimensions } from '../lib/images';
 import { getAbsoluteUrl, getCanonicalUrl, getPath } from '../lib/urls';
 
 interface Props {
@@ -35,6 +36,7 @@ const canonicalUrl = getCanonicalUrl(Astro.url.pathname);
 const socialImageUrl = image
   ? getAbsoluteUrl(image)
   : getAbsoluteUrl(siteConfig.socialImage);
+const socialImageDimensions = getImageDimensions(image ?? siteConfig.socialImage);
 const serializedStructuredData = structuredData
   ? JSON.stringify(structuredData).replace(/</g, '\\u003c')
   : undefined;
@@ -52,6 +54,7 @@ const serializedStructuredData = structuredData
     <script src={getPath('scripts/color-mode-toggle.js')} defer is:inline></script>
     <script src={getPath('scripts/code-block-enhancements.js')} defer is:inline></script>
     <script src={getPath('scripts/image-zoom.js')} defer is:inline></script>
+    <link rel="icon" href={getPath('images/light-static-blog-icon.png')} type="image/png" />
     <link rel="canonical" href={canonicalUrl} />
     {previousUrl ? <link rel="prev" href={previousUrl} /> : null}
     {nextUrl ? <link rel="next" href={nextUrl} /> : null}
@@ -63,8 +66,12 @@ const serializedStructuredData = structuredData
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:image" content={socialImageUrl} />
     <meta property="og:image:alt" content={title} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    {socialImageDimensions ? (
+      <>
+        <meta property="og:image:width" content={String(socialImageDimensions.width)} />
+        <meta property="og:image:height" content={String(socialImageDimensions.height)} />
+      </>
+    ) : null}
     {type === 'article' && publishedTime ? (
       <meta property="article:published_time" content={publishedTime.toISOString()} />
     ) : null}

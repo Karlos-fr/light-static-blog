@@ -30,12 +30,12 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 │   └── scripts/                # Minimal light/dark switch, dependency-free
 ├── src/
 │   ├── components/             # Shared structure, lists and pagination
+│   ├── content.config.ts       # Content collections, loaders and frontmatter validation
 │   ├── config/site.ts          # Identity, active theme and page size
 │   ├── config/tags.ts          # Optional mapping of tags to visual accents
 │   ├── content/
 │   │   ├── blog/               # Markdown articles; the filename becomes the slug
-│   │   ├── pages/              # Markdown editorial pages, including About
-│   │   └── config.ts           # Frontmatter schema and validation
+│   │   └── pages/              # Markdown editorial pages, including About
 │   ├── layouts/
 │   │   └── BaseLayout.astro    # Shared HTML structure and SEO
 │   ├── lib/                    # Content, URLs and pagination
@@ -161,7 +161,7 @@ tags:
   - javascript
   - astro
 draft: false
-cover: "/images/cover.webp" # optional
+cover: "/images/cover.png" # optional
 ---
 
 Article content in Markdown.
@@ -299,7 +299,10 @@ The script exposes the blog customization parameters: site, base path, author, n
 
 ```bash
 npm install
+npm run optimize:images
 SITE="http://localhost:4321" BASE_PATH="/" AUTHOR_NAME="Author name" SITE_THEME="default" npm run dev
 SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Author name" SITE_THEME="default" npm run validate
 SITE="https://example.com" BASE_PATH="/blog/" AUTHOR_NAME="Author name" SITE_THEME="default" npm run preview
 ```
+
+`npm run optimize:images` generates WebP variants from PNG files in `public/images/`. PNG files remain the source files and fallbacks.

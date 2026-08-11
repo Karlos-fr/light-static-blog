@@ -1,7 +1,7 @@
 ---
 import type { BlogEntry } from '../lib/content';
 import { getTagAccent, normalizeTag } from '../lib/content';
-import { getPath } from '../lib/urls';
+import { getPagePath } from '../lib/urls';
 import PostCover from './PostCover.astro';
 import PostMeta from './PostMeta.astro';
 
@@ -23,7 +23,7 @@ const Heading = headingLevel;
   <p>{emptyMessage}</p>
 ) : (
   <ul class="post-list">
-    {posts.map((post) => {
+    {posts.map((post, index) => {
       const primaryTag = post.data.tags[0];
       return (
       <li
@@ -35,7 +35,8 @@ const Heading = headingLevel;
           <PostCover
             cover={post.data.cover}
             title={post.data.title}
-            href={getPath(post.slug)}
+            href={getPagePath(post.slug)}
+            eager={index === 0}
           />
         ) : null}
         <div class="post-card-content">
@@ -45,7 +46,7 @@ const Heading = headingLevel;
                 <a
                   class="post-category"
                   data-accent={getTagAccent(tag)}
-                  href={getPath('tags', normalizeTag(tag))}
+                  href={getPagePath('tags', normalizeTag(tag))}
                 >
                   {tag}
                 </a>
@@ -53,13 +54,13 @@ const Heading = headingLevel;
             ))}
           </ul>
           <Heading class="post-title">
-            <a href={getPath(post.slug)}>{post.data.title}</a>
+            <a href={getPagePath(post.slug)}>{post.data.title}</a>
           </Heading>
           <p class="post-description">{post.data.description}</p>
           <div class="post-card-footer">
             <PostMeta pubDate={post.data.pubDate} />
             <span class="post-card-footer-separator" aria-hidden="true">•</span>
-            <a class="read-more" href={getPath(post.slug)} aria-label={`Lire la suite de « ${post.data.title} »`}>
+            <a class="read-more" href={getPagePath(post.slug)} aria-label={`Lire la suite de « ${post.data.title} »`}>
               Lire la suite →
             </a>
           </div>

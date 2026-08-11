@@ -1,7 +1,7 @@
 ---
 import { siteConfig } from '../config/site';
 import type { BlogEntry } from '../lib/content';
-import { getPath } from '../lib/urls';
+import { getAbsolutePageUrl } from '../lib/urls';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Pagination from './Pagination.astro';
 import PostList from './PostList.astro';
@@ -18,10 +18,10 @@ const title = currentPage === 1
   ? siteConfig.homeMetaTitle
   : `Articles - Page ${currentPage} | ${siteConfig.name}`;
 const previousUrl = currentPage > 1
-  ? (currentPage === 2 ? getPath() : getPath('page', String(currentPage - 1)))
+  ? (currentPage === 2 ? getAbsolutePageUrl() : getAbsolutePageUrl('page', String(currentPage - 1)))
   : undefined;
 const nextUrl = currentPage < totalPages
-  ? getPath('page', String(currentPage + 1))
+  ? getAbsolutePageUrl('page', String(currentPage + 1))
   : undefined;
 const Heading = currentPage === 1 ? 'h2' : 'h1';
 const postHeadingLevel = currentPage === 1 ? 'h3' : 'h2';

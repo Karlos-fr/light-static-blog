@@ -7,7 +7,7 @@ import {
   getPublicPostsByTag,
   getDisplayTag,
 } from '../../lib/content';
-import { getPath } from '../../lib/urls';
+import { getAbsolutePageUrl, getPagePath } from '../../lib/urls';
 
 export async function getStaticPaths() {
   const tags = await getAllTags();
@@ -24,16 +24,32 @@ type Props = {
 
 const { tag } = Astro.props as Props;
 const posts = await getPublicPostsByTag(tag);
-
+const displayTag = getDisplayTag(tag);
+const pageUrl = getAbsolutePageUrl('tags', tag);
+const description = posts.length > 0
+  ? `${posts.length} article${posts.length > 1 ? 's' : ''} autour du tag ${displayTag} sur ${siteConfig.name}.`
+  : `Articles autour du tag ${displayTag} sur ${siteConfig.name}.`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  '@id': `${pageUrl}#collection`,
+  url: pageUrl,
+  name: `Articles sur ${displayTag}`,
+  description,
+  inLanguage: 'fr',
+  isPartOf: {
+    '@id': `${getAbsolutePageUrl()}#website`,
+  },
+};
 ---
 
-<BaseLayout title={`Articles sur ${getDisplayTag(tag)} | ${siteConfig.name}`} description={`Articles taggés ${getDisplayTag(tag)}.`}>
-  <h1>Tag : {getDisplayTag(tag)}</h1>
+<BaseLayout title={`Articles sur ${displayTag} | ${siteConfig.name}`} description={description} structuredData={structuredData}>
+  <h1>Tag : {displayTag}</h1>
 
   <PostList
     posts={posts}
     emptyMessage="Aucun article pour ce tag."
   />
 
-  <p class="back-link"><a href={getPath('tags')}>← retour aux tags</a></p>
+  <p class="back-link"><a href={getPagePath('tags')}>← retour aux tags</a></p>
 </BaseLayout>

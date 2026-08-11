@@ -3,6 +3,7 @@ import ArticleIndex from '../../components/ArticleIndex.astro';
 import { siteConfig } from '../../config/site';
 import { getPublicPosts } from '../../lib/content';
 import { getPageCount, paginateItems } from '../../lib/pagination';
+import { getAbsolutePageUrl } from '../../lib/urls';
 
 export async function getStaticPaths() {
   const posts = await getPublicPosts();
@@ -16,6 +17,24 @@ export async function getStaticPaths() {
 interface Props { posts: Awaited<ReturnType<typeof getPublicPosts>>; currentPage: number; }
 const { posts, currentPage } = Astro.props as Props;
 const page = paginateItems(posts, currentPage, siteConfig.postsPerPage);
+const pageUrl = getAbsolutePageUrl('page', String(currentPage));
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  '@id': `${pageUrl}#collection`,
+  url: pageUrl,
+  name: `Articles - Page ${currentPage}`,
+  description: siteConfig.description,
+  inLanguage: 'fr',
+  isPartOf: {
+    '@id': `${getAbsolutePageUrl()}#website`,
+  },
+};
 ---
 
-<ArticleIndex posts={page.items} currentPage={page.currentPage} totalPages={page.totalPages} />
+<ArticleIndex
+  posts={page.items}
+  currentPage={page.currentPage}
+  totalPages={page.totalPages}
+  structuredData={structuredData}
+/>

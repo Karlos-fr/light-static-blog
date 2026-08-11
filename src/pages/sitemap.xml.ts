@@ -1,7 +1,7 @@
 import { siteConfig } from '../config/site';
 import { getAllTags, getPublicPosts } from '../lib/content';
 import { getPageCount } from '../lib/pagination';
-import { getAbsoluteUrl } from '../lib/urls';
+import { getAbsolutePageUrl } from '../lib/urls';
 
 export const prerender = true;
 
@@ -24,25 +24,25 @@ export async function GET() {
   const tags = await getAllTags();
 
   const entries: SitemapEntry[] = [
-    { loc: getAbsoluteUrl() },
-    { loc: getAbsoluteUrl('about') },
-    { loc: getAbsoluteUrl('tags') },
+    { loc: getAbsolutePageUrl() },
+    { loc: getAbsolutePageUrl('about') },
+    { loc: getAbsolutePageUrl('tags') },
   ];
 
   const totalPages = getPageCount(posts.length, siteConfig.postsPerPage);
   for (let page = 2; page <= totalPages; page += 1) {
-    entries.push({ loc: getAbsoluteUrl('page', String(page)) });
+    entries.push({ loc: getAbsolutePageUrl('page', String(page)) });
   }
 
   posts.forEach((post) => {
     entries.push({
-      loc: getAbsoluteUrl(post.slug),
+      loc: getAbsolutePageUrl(post.slug),
       lastmod: post.data.updatedDate ?? post.data.pubDate,
     });
   });
 
   tags.forEach((tag) => {
-    entries.push({ loc: getAbsoluteUrl('tags', tag) });
+    entries.push({ loc: getAbsolutePageUrl('tags', tag) });
   });
 
   const urls = entries

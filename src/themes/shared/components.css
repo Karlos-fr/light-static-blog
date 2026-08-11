@@ -382,6 +382,11 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   display: block;
 }
 
+.post-cover-wrapper picture,
+.cover-link picture {
+  display: block;
+}
+
 .post-cover,
 .xml-feed-cover,
 .xml-feed-content img {

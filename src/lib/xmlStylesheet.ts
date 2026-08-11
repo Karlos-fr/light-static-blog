@@ -50,8 +50,8 @@ export function getXmlStylesheetHeader({
             <div class="site-nav-actions">
               <ul class="site-links">
                 <li><a href="${siteUrlHref}">Articles</a></li>
-                <li><a href="{concat(${siteUrlExpression}, 'tags')}">Tags</a></li>
-                <li><a href="{concat(${siteUrlExpression}, 'about')}">À propos</a></li>
+                <li><a href="{concat(${siteUrlExpression}, 'tags/')}">Tags</a></li>
+                <li><a href="{concat(${siteUrlExpression}, 'about/')}">À propos</a></li>
               </ul>
               <span class="terminal-prompt" aria-hidden="true">&gt;_</span>
               <button class="color-mode-switch" type="button" role="switch" aria-checked="false" aria-label="Activer le mode sombre" title="Activer le mode sombre" data-color-mode-switch="">
@@ -72,7 +72,7 @@ export function getXmlStylesheetFooter(siteUrl: string): string {
           <nav aria-label="Liens complémentaires"><ul>
             <li><a class="rss-link" href="{concat(${siteUrl}, 'rss.xml')}"><span class="rss-icon" aria-hidden="true"></span>RSS</a></li>
             <li class="footer-separator" aria-hidden="true">/</li>
-            <li><a class="powered-link" href="${projectUrl}" target="_blank" rel="noopener noreferrer"><img class="powered-icon" src="${getPath('images/light-static-blog-icon.png')}" alt="" aria-hidden="true" loading="lazy" />Propulsé par Light Static Blog</a></li>
+            <li><a class="powered-link" href="${projectUrl}" target="_blank" rel="noopener noreferrer"><img class="powered-icon" src="${getPath('images/light-static-blog-icon.png')}" alt="" aria-hidden="true" loading="lazy" width="1254" height="1254" />Propulsé par Light Static Blog</a></li>
           </ul></nav>
         </footer>`;
 }

@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config/site';
 import { getTagAccent, getTagStats } from '../../lib/content';
-import { getPath } from '../../lib/urls';
+import { getAbsolutePageUrl, getPagePath } from '../../lib/urls';
 
 const tags = (await getTagStats()).sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
 const tagCounts = tags.map(({ count }) => count);
@@ -46,9 +47,23 @@ const positionedTags = tags.map((tag, index) => {
     weight: getTagWeight(tag.count),
   };
 });
+const pageUrl = getAbsolutePageUrl('tags');
+const description = `Nuage de tags de ${siteConfig.name} pour explorer les articles par thème.`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  '@id': `${pageUrl}#collection`,
+  url: pageUrl,
+  name: 'Tags',
+  description,
+  inLanguage: 'fr',
+  isPartOf: {
+    '@id': `${getAbsolutePageUrl()}#website`,
+  },
+};
 ---
 
-<BaseLayout title="Tags" description="Liste des tags du blog.">
+<BaseLayout title={`Tags | ${siteConfig.name}`} description={description} structuredData={structuredData}>
   <h1>Tags</h1>
 
   {tags.length === 0 ? (
@@ -61,7 +76,7 @@ const positionedTags = tags.map((tag, index) => {
             class="tag-chip tag-cloud-link"
             data-accent={getTagAccent(tag)}
             data-count={count}
-            href={getPath('tags', tag)}
+            href={getPagePath('tags', tag)}
           >
             <span>{tag}</span>
             <span class="tag-count" aria-label={`${count} article${count > 1 ? 's' : ''}`}>{count}</span>

@@ -1,12 +1,12 @@
 ---
 import { siteConfig } from '../config/site';
-import { getPath } from '../lib/urls';
+import { getPagePath } from '../lib/urls';
 import ColorModeSwitch from './ColorModeSwitch.astro';
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const homePath = getPath().replace(/\/+$/, '') || '/';
-const tagsPath = getPath('tags').replace(/\/+$/, '');
-const aboutPath = getPath('about').replace(/\/+$/, '');
+const homePath = getPagePath().replace(/\/+$/, '') || '/';
+const tagsPath = getPagePath('tags').replace(/\/+$/, '');
+const aboutPath = getPagePath('about').replace(/\/+$/, '');
 const isHome = currentPath === homePath;
 const isArticles = currentPath === homePath
   || (!currentPath.startsWith(tagsPath) && currentPath !== aboutPath);
@@ -17,18 +17,18 @@ const isArticles = currentPath === homePath
     <div class="site-identity">
       {isHome ? (
         <h1 class="brand-heading">
-          <a href={getPath()} class="brand" aria-current="page">{siteConfig.name}</a>
+          <a href={getPagePath()} class="brand" aria-current="page">{siteConfig.name}</a>
         </h1>
       ) : (
-        <a href={getPath()} class="brand">{siteConfig.name}</a>
+        <a href={getPagePath()} class="brand">{siteConfig.name}</a>
       )}
       {siteConfig.tagline ? <p class="site-tagline">{siteConfig.tagline}</p> : null}
     </div>
     <div class="site-nav-actions">
       <ul class="site-links">
-        <li><a href={getPath()} aria-current={isArticles ? 'page' : undefined}>Articles</a></li>
-        <li><a href={getPath('tags')} aria-current={currentPath.startsWith(tagsPath) ? 'page' : undefined}>Tags</a></li>
-        <li><a href={getPath('about')} aria-current={currentPath === aboutPath ? 'page' : undefined}>À propos</a></li>
+        <li><a href={getPagePath()} aria-current={isArticles ? 'page' : undefined}>Articles</a></li>
+        <li><a href={getPagePath('tags')} aria-current={currentPath.startsWith(tagsPath) ? 'page' : undefined}>Tags</a></li>
+        <li><a href={getPagePath('about')} aria-current={currentPath === aboutPath ? 'page' : undefined}>À propos</a></li>
       </ul>
       <span class="terminal-prompt" aria-hidden="true">&gt;_</span>
       <ColorModeSwitch />

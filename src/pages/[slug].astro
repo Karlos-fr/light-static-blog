@@ -1,4 +1,6 @@
 ---
+import { render } from 'astro:content';
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleNavigation from '../components/ArticleNavigation.astro';
 import PostCover from '../components/PostCover.astro';
@@ -7,7 +9,7 @@ import TagList from '../components/TagList.astro';
 import { siteConfig } from '../config/site';
 import { getPublicPosts } from '../lib/content';
 import { getAuthorName } from '../lib/site';
-import { getAbsoluteUrl, getPath } from '../lib/urls';
+import { getAbsolutePageUrl, getAbsoluteUrl, getPagePath } from '../lib/urls';
 
 export async function getStaticPaths() {
   const posts = await getPublicPosts();
@@ -29,9 +31,9 @@ type Props = {
 };
 
 const { post, newerPost, olderPost } = Astro.props as Props;
-const { Content } = await post.render();
-const siteUrl = getAbsoluteUrl();
-const articleUrl = getAbsoluteUrl(post.slug);
+const { Content } = await render(post);
+const siteUrl = getAbsolutePageUrl();
+const articleUrl = getAbsolutePageUrl(post.slug);
 const authorName = getAuthorName();
 const author = {
   '@type': 'Person',
@@ -67,8 +69,8 @@ const structuredData = {
   description={post.data.description}
   type="article"
   structuredData={structuredData}
-  previousUrl={newerPost ? getAbsoluteUrl(newerPost.slug) : undefined}
-  nextUrl={olderPost ? getAbsoluteUrl(olderPost.slug) : undefined}
+  previousUrl={newerPost ? getAbsolutePageUrl(newerPost.slug) : undefined}
+  nextUrl={olderPost ? getAbsolutePageUrl(olderPost.slug) : undefined}
   image={post.data.cover}
   publishedTime={post.data.pubDate}
   modifiedTime={post.data.updatedDate ?? post.data.pubDate}
@@ -92,5 +94,5 @@ const structuredData = {
 
   <ArticleNavigation newerPost={newerPost} olderPost={olderPost} />
 
-  <p class="back-link"><a href={getPath()}>← retour à l'accueil</a></p>
+  <p class="back-link"><a href={getPagePath()}>← retour à l'accueil</a></p>
 </BaseLayout>

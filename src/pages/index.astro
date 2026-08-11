@@ -4,11 +4,11 @@ import { siteConfig } from '../config/site';
 import { getPublicPosts } from '../lib/content';
 import { paginateItems } from '../lib/pagination';
 import { getAuthorName } from '../lib/site';
-import { getAbsoluteUrl } from '../lib/urls';
+import { getAbsolutePageUrl } from '../lib/urls';
 
 const posts = await getPublicPosts();
 const page = paginateItems(posts, 1, siteConfig.postsPerPage);
-const siteUrl = getAbsoluteUrl();
+const siteUrl = getAbsolutePageUrl();
 const author = {
   '@type': 'Person',
   '@id': `${siteUrl}#author`,
@@ -16,13 +16,29 @@ const author = {
 };
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  '@id': `${siteUrl}#website`,
-  url: siteUrl,
-  name: siteConfig.name,
-  description: siteConfig.description,
-  inLanguage: 'fr',
-  author,
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}#website`,
+      url: siteUrl,
+      name: siteConfig.name,
+      description: siteConfig.description,
+      inLanguage: 'fr',
+      author,
+    },
+    {
+      '@type': 'Blog',
+      '@id': `${siteUrl}#blog`,
+      url: siteUrl,
+      name: siteConfig.name,
+      description: siteConfig.description,
+      inLanguage: 'fr',
+      isPartOf: {
+        '@id': `${siteUrl}#website`,
+      },
+      author,
+    },
+  ],
 };
 ---
 

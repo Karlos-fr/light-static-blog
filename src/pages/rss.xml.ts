@@ -1,7 +1,9 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { render } from 'astro:content';
 import { siteConfig } from '../config/site';
 import { getPublicPosts } from '../lib/content';
-import { getAbsoluteUrl, getCanonicalUrl, getPath } from '../lib/urls';
+import { getAuthorName } from '../lib/site';
+import { getAbsolutePageUrl, getAbsoluteUrl, getCanonicalUrl, getPath } from '../lib/urls';
 
 export const prerender = true;
 
@@ -98,9 +100,10 @@ function getImageUrls(html: string): string[] {
 
 export async function GET() {
   const posts = await getPublicPosts();
-  const siteUrl = getAbsoluteUrl();
+  const siteUrl = getAbsolutePageUrl();
   const feedIconUrl = getAbsoluteFeedAssetUrl(siteConfig.feedIcon);
   const feedLogoUrl = getAbsoluteFeedAssetUrl(siteConfig.feedLogo);
+  const authorName = getAuthorName();
   const container = await AstroContainer.create();
   const items: string[] = [];
   const lastBuildDate = posts
@@ -109,12 +112,12 @@ export async function GET() {
     ?.toUTCString();
 
   for (const post of posts) {
-    const url = getAbsoluteUrl(post.slug);
+    const url = getAbsolutePageUrl(post.slug);
     const pubDate = new Date(post.data.pubDate).toUTCString();
     const coverUrl = post.data.cover
       ? getAbsoluteUrl(post.data.cover)
       : undefined;
-    const { Content } = await post.render();
+    const { Content } = await render(post);
     const renderedContent = await container.renderToString(Content);
     const articleContent = absolutizeHtmlUrls(renderedContent, url);
     const coverHtml = coverUrl
@@ -148,6 +151,7 @@ export async function GET() {
       <link>${url}</link>
       <guid isPermaLink="true">${url}</guid>
       <pubDate>${pubDate}</pubDate>
+      <dc:creator>${escapeXml(authorName)}</dc:creator>
       <description><![CDATA[${escapeCdata(post.data.description)}]]></description>
       <content:encoded><![CDATA[${escapeCdata(fullContent)}]]></content:encoded>${categories}${media}${thumbnail}
     </item>`);
@@ -158,6 +162,7 @@ export async function GET() {
   <rss version="2.0"
     xmlns:atom="http://www.w3.org/2005/Atom"
     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:media="http://search.yahoo.com/mrss/"
     xmlns:webfeeds="http://webfeeds.org/rss/1.0">
     <channel>

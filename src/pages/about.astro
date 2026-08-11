@@ -1,8 +1,9 @@
 ---
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../config/site';
+import { getAbsolutePageUrl } from '../lib/urls';
 
 const about = await getEntry('pages', 'about');
 
@@ -10,10 +11,23 @@ if (!about) {
   throw new Error('La page de contenu "about" est introuvable dans src/content/pages/about.md.');
 }
 
-const { Content } = await about.render();
+const { Content } = await render(about);
+const aboutUrl = getAbsolutePageUrl('about');
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${aboutUrl}#webpage`,
+  url: aboutUrl,
+  name: about.data.title,
+  description: about.data.description,
+  inLanguage: 'fr',
+  isPartOf: {
+    '@id': `${getAbsolutePageUrl()}#website`,
+  },
+};
 ---
 
-<BaseLayout title={`${about.data.title} | ${siteConfig.name}`} description={about.data.description}>
+<BaseLayout title={`${about.data.title} | ${siteConfig.name}`} description={about.data.description} structuredData={structuredData}>
   <article class="article-content">
     <h1>{about.data.title}</h1>
     <Content />

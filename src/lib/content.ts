@@ -2,7 +2,16 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 import { tagAccents, type TagAccent } from '../config/tags';
 
-export type BlogEntry = CollectionEntry<'blog'>;
+export type BlogEntry = CollectionEntry<'blog'> & {
+  slug: string;
+};
+
+function withSlug(post: CollectionEntry<'blog'>): BlogEntry {
+  return {
+    ...post,
+    slug: post.id.replace(/\.md$/i, ''),
+  };
+}
 
 const RESERVED_POST_SLUGS = new Set([
   'about',
@@ -67,7 +76,7 @@ export function getDisplayTag(tag: string): string {
 
 export async function getPublicPosts(): Promise<BlogEntry[]> {
   const posts = await getCollection('blog');
-  const publicPosts = posts.filter((post) => !post.data.draft);
+  const publicPosts = posts.filter((post) => !post.data.draft).map(withSlug);
 
   assertAvailablePostSlugs(publicPosts);
   assertDeclaredTags(publicPosts);

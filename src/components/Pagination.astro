@@ -1,9 +1,9 @@
 ---
-import { getPath } from '../lib/urls';
+import { getPagePath } from '../lib/urls';
 
 interface Props { currentPage: number; totalPages: number; }
 const { currentPage, totalPages } = Astro.props as Props;
-const pagePath = (page: number) => page === 1 ? getPath() : getPath('page', String(page));
+const pagePath = (page: number) => page === 1 ? getPagePath() : getPagePath('page', String(page));
 ---
 
 {totalPages > 1 ? (
