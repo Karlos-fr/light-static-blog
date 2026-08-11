@@ -190,7 +190,7 @@ export const tagAccents = {
 };
 ```
 
-Les accents disponibles sont `primary`, `violet`, `blue` et `orange`. Si un tag n'est pas listé, il utilise l'accent `primary`.
+Les accents disponibles sont `primary`, `violet`, `blue` et `orange`. Chaque tag utilisé par un article public doit être déclaré dans `tagAccents` ; sinon le build échoue avec la liste des tags manquants.
 
 ## Modifier la page À propos
 

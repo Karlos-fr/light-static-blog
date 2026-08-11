@@ -23,6 +23,32 @@ function assertAvailablePostSlugs(posts: BlogEntry[]): void {
   }
 }
 
+function assertDeclaredTags(posts: BlogEntry[]): void {
+  const declaredTags = new Set(Object.keys(tagAccents).map(normalizeTag));
+  const missingTags = new Set<string>();
+
+  posts.forEach((post) => {
+    post.data.tags.forEach((tag) => {
+      const normalizedTag = normalizeTag(tag);
+
+      if (!declaredTags.has(normalizedTag)) {
+        missingTags.add(normalizedTag);
+      }
+    });
+  });
+
+  if (missingTags.size > 0) {
+    throw new Error(
+      [
+        'Tags non déclarés dans src/config/tags.ts :',
+        ...[...missingTags].sort().map((tag) => `- ${tag}`),
+        '',
+        'Ajoutez chaque tag dans tagAccents avec un accent visuel avant de builder.',
+      ].join('\n')
+    );
+  }
+}
+
 export function normalizeTag(tag: string): string {
   return tag
     .trim()
@@ -44,6 +70,7 @@ export async function getPublicPosts(): Promise<BlogEntry[]> {
   const publicPosts = posts.filter((post) => !post.data.draft);
 
   assertAvailablePostSlugs(publicPosts);
+  assertDeclaredTags(publicPosts);
 
   return publicPosts.sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -53,7 +80,7 @@ export async function getPublicPosts(): Promise<BlogEntry[]> {
 export function getTagAccent(tag: string): TagAccent {
   const normalizedTag = normalizeTag(tag);
 
-  return tagAccents[normalizedTag] ?? 'primary';
+  return tagAccents[normalizedTag];
 }
 
 export async function getAllTags(): Promise<string[]> {
