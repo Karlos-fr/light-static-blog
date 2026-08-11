@@ -11,6 +11,70 @@ const normalizeBase = (value) => {
   return resolved.endsWith('/') ? resolved : `${resolved}/`;
 };
 
+const rootRelativeUrlAttributes = ['href', 'src', 'poster', 'cite'];
+
+const prefixRootRelativeUrl = (value, base) => {
+  if (
+    typeof value !== 'string' ||
+    base === '/' ||
+    !value.startsWith('/') ||
+    value.startsWith('//') ||
+    value.startsWith(base)
+  ) {
+    return value;
+  }
+
+  return `${base.replace(/\/$/, '')}${value}`;
+};
+
+const prefixRootRelativeSrcset = (value, base) => {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  return value
+    .split(',')
+    .map((candidate) => {
+      const match = candidate.trim().match(/^(\S+)(.*)$/);
+
+      return match
+        ? `${prefixRootRelativeUrl(match[1], base)}${match[2]}`
+        : candidate;
+    })
+    .join(', ');
+};
+
+function rehypeBasePathForRootRelativeUrls({ base }) {
+  return (tree) => {
+    const visit = (node) => {
+      if (!node || typeof node !== 'object') {
+        return;
+      }
+
+      if (node.properties && typeof node.properties === 'object') {
+        for (const attribute of rootRelativeUrlAttributes) {
+          node.properties[attribute] = prefixRootRelativeUrl(
+            node.properties[attribute],
+            base
+          );
+        }
+
+        node.properties.srcset = prefixRootRelativeSrcset(
+          node.properties.srcset,
+          base
+        );
+      }
+
+      if (Array.isArray(node.children)) {
+        node.children.forEach(visit);
+      }
+    };
+
+    visit(tree);
+  };
+}
+
+const base = normalizeBase(process.env.BASE_PATH);
 const rawSite = process.env.SITE?.trim();
 if (!rawSite) {
   throw new Error(
@@ -27,9 +91,12 @@ if (!process.env.AUTHOR_NAME?.trim()) {
 }
 
 export default defineConfig({
-  base: normalizeBase(process.env.BASE_PATH),
+  base,
   site,
   output: 'static',
+  markdown: {
+    rehypePlugins: [[rehypeBasePathForRootRelativeUrls, { base }]]
+  },
   build: {
     outDir: 'dist'
   }
