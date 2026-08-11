@@ -30,6 +30,10 @@ Un lien comme [la documentation d’Astro](https://docs.astro.build/) doit reste
 
 ![Illustration abstraite Carpe diem](/images/carpe-diem-cover.png)
 
+La même logique s’applique aussi aux images verticales : elles doivent rester lisibles sans écraser toute la page.
+
+![Variation portrait de l’illustration Carpe diem](/images/carpe-diem-portrait-demo.png)
+
 ## Exemple de code
 
 Voici un petit extrait en JavaScript.

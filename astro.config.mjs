@@ -1,4 +1,6 @@
 import { defineConfig } from 'astro/config';
+import { existsSync, readFileSync } from 'node:fs';
+import { extname, join } from 'node:path';
 
 const normalizeBase = (value) => {
   const resolved = value?.trim();
@@ -12,6 +14,23 @@ const normalizeBase = (value) => {
 };
 
 const rootRelativeUrlAttributes = ['href', 'src', 'poster', 'cite'];
+
+const publicDir = join(process.cwd(), 'public');
+
+const addClassName = (properties, className) => {
+  const current = properties.className;
+  const classNames = Array.isArray(current)
+    ? current
+    : typeof current === 'string'
+      ? current.split(/\s+/).filter(Boolean)
+      : [];
+
+  if (!classNames.includes(className)) {
+    classNames.push(className);
+  }
+
+  properties.className = classNames;
+};
 
 const prefixRootRelativeUrl = (value, base) => {
   if (
@@ -44,14 +63,162 @@ const prefixRootRelativeSrcset = (value, base) => {
     .join(', ');
 };
 
-function rehypeBasePathForRootRelativeUrls({ base }) {
+const getPublicImagePath = (value, base) => {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  let path = value.split(/[?#]/, 1)[0];
+
+  if (/^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(path)) {
+    return undefined;
+  }
+
+  if (base !== '/' && path.startsWith(base)) {
+    path = `/${path.slice(base.length)}`;
+  }
+
+  if (!path.startsWith('/')) {
+    return undefined;
+  }
+
+  return join(publicDir, ...path.split('/').filter(Boolean));
+};
+
+const getPngDimensions = (filePath) => {
+  const buffer = readFileSync(filePath);
+
+  if (
+    buffer.length < 24 ||
+    buffer.readUInt32BE(0) !== 0x89504e47 ||
+    buffer.readUInt32BE(4) !== 0x0d0a1a0a
+  ) {
+    return undefined;
+  }
+
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+  };
+};
+
+const getImageDimensions = (src, base) => {
+  const filePath = getPublicImagePath(src, base);
+  if (!filePath || !existsSync(filePath)) {
+    return undefined;
+  }
+
+  const extension = extname(filePath).toLowerCase();
+
+  return extension === '.png' ? getPngDimensions(filePath) : undefined;
+};
+
+const getImageOrientation = (dimensions) => {
+  if (!dimensions) {
+    return undefined;
+  }
+
+  const ratio = dimensions.width / dimensions.height;
+
+  if (ratio >= 1.2) {
+    return 'landscape';
+  }
+
+  if (ratio <= 0.85) {
+    return 'portrait';
+  }
+
+  return 'square';
+};
+
+const getMeaningfulChildren = (node) => {
+  if (!Array.isArray(node.children)) {
+    return [];
+  }
+
+  return node.children.filter(
+    (child) => child.type !== 'text' || child.value.trim() !== ''
+  );
+};
+
+const enhanceImageNode = (node, base) => {
+  if (node?.type !== 'element' || node.tagName !== 'img') {
+    return undefined;
+  }
+
+  node.properties = node.properties || {};
+  node.properties.loading = node.properties.loading || 'lazy';
+  node.properties.decoding = node.properties.decoding || 'async';
+  node.properties.tabIndex = node.properties.tabIndex ?? 0;
+  node.properties.dataZoomable = 'true';
+  addClassName(node.properties, 'article-image');
+
+  const dimensions = getImageDimensions(node.properties.src, base);
+  if (dimensions) {
+    node.properties.width = node.properties.width || dimensions.width;
+    node.properties.height = node.properties.height || dimensions.height;
+  }
+
+  const orientation = getImageOrientation(dimensions);
+  if (orientation) {
+    addClassName(node.properties, `article-image--${orientation}`);
+  }
+
+  return { dimensions, orientation };
+};
+
+function rehypeArticleContentEnhancements({ base }) {
   return (tree) => {
     const visit = (node) => {
       if (!node || typeof node !== 'object') {
         return;
       }
 
+      if (Array.isArray(node.children)) {
+        node.children = node.children.map((child) => {
+          if (child?.type === 'element' && child.tagName === 'p') {
+            const meaningfulChildren = getMeaningfulChildren(child);
+            const image = meaningfulChildren[0];
+
+            if (
+              meaningfulChildren.length === 1 &&
+              image?.type === 'element' &&
+              image.tagName === 'img'
+            ) {
+              const { orientation } = enhanceImageNode(image, base) || {};
+              const alt = image.properties?.alt;
+              const figure = {
+                type: 'element',
+                tagName: 'figure',
+                properties: {
+                  className: [
+                    'article-figure',
+                    ...(orientation ? [`article-figure--${orientation}`] : []),
+                  ],
+                },
+                children: [image],
+              };
+
+              if (typeof alt === 'string' && alt.trim()) {
+                figure.children.push({
+                  type: 'element',
+                  tagName: 'figcaption',
+                  properties: {},
+                  children: [{ type: 'text', value: alt.trim() }],
+                });
+              }
+
+              return figure;
+            }
+          }
+
+          return child;
+        });
+      }
+
       if (node.properties && typeof node.properties === 'object') {
+        enhanceImageNode(node, base);
+
         for (const attribute of rootRelativeUrlAttributes) {
           node.properties[attribute] = prefixRootRelativeUrl(
             node.properties[attribute],
@@ -95,7 +262,7 @@ export default defineConfig({
   site,
   output: 'static',
   markdown: {
-    rehypePlugins: [[rehypeBasePathForRootRelativeUrls, { base }]]
+    rehypePlugins: [[rehypeArticleContentEnhancements, { base }]]
   },
   build: {
     outDir: 'dist'
