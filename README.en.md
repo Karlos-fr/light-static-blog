@@ -46,10 +46,11 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 │   │   ├── index.astro         # First article page
 │   │   ├── page/[page].astro   # Following static pages
 │   │   ├── robots.txt.ts       # robots.txt generated with the sitemap URL
-│   │   ├── rss.xml.ts
-│   │   ├── rss.xsl.ts          # RSS feed presentation in a browser
+│   │   ├── rss.xml.ts          # RSS feed with lightweight CSS presentation
 │   │   ├── sitemap.xml.ts
-│   │   └── styles/theme.css.ts # Stable stylesheet composed at build time
+│   │   └── styles/
+│   │       ├── rss.css.ts      # CSS stylesheet applied to the RSS feed in browsers
+│   │       └── theme.css.ts    # Stable stylesheet composed at build time
 │   └── themes/
 │       ├── registry.ts         # Theme registry and validation
 │       ├── shared/             # Shared foundations and contracts

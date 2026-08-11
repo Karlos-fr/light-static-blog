@@ -46,10 +46,11 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 │   │   ├── index.astro         # Première page des articles
 │   │   ├── page/[page].astro   # Pages statiques suivantes
 │   │   ├── robots.txt.ts       # robots.txt généré avec l'URL du sitemap
-│   │   ├── rss.xml.ts
-│   │   ├── rss.xsl.ts          # Présentation du flux RSS dans un navigateur
+│   │   ├── rss.xml.ts          # Flux RSS avec mise en forme CSS légère
 │   │   ├── sitemap.xml.ts
-│   │   └── styles/theme.css.ts # Feuille stable composée au build
+│   │   └── styles/
+│   │       ├── rss.css.ts      # Feuille CSS appliquée au flux RSS dans un navigateur
+│   │       └── theme.css.ts    # Feuille stable composée au build
 │   └── themes/
 │       ├── registry.ts         # Registre et validation des thèmes
 │       ├── shared/             # Fondations et contrats communs
