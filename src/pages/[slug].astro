@@ -32,10 +32,11 @@ const { post, newerPost, olderPost } = Astro.props as Props;
 const { Content } = await post.render();
 const siteUrl = getAbsoluteUrl();
 const articleUrl = getAbsoluteUrl(post.slug);
+const authorName = getAuthorName();
 const author = {
   '@type': 'Person',
   '@id': `${siteUrl}#author`,
-  name: getAuthorName(),
+  name: authorName,
 };
 const structuredData = {
   '@context': 'https://schema.org',
@@ -68,6 +69,11 @@ const structuredData = {
   structuredData={structuredData}
   previousUrl={newerPost ? getAbsoluteUrl(newerPost.slug) : undefined}
   nextUrl={olderPost ? getAbsoluteUrl(olderPost.slug) : undefined}
+  image={post.data.cover}
+  publishedTime={post.data.pubDate}
+  modifiedTime={post.data.updatedDate ?? post.data.pubDate}
+  authorName={authorName}
+  tags={post.data.tags}
 >
   <article class="article-content">
     <h1>{post.data.title}</h1>

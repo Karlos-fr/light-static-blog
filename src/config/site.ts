@@ -26,6 +26,7 @@ export const siteConfig = {
   homeMetaTitle: getOptionalEnv('SITE_HOME_META_TITLE', `${siteName} | Blog personnel`),
   tagline: getOptionalEnv('SITE_TAGLINE', '// Développement. Notes. Projets.', { allowEmpty: true }),
   description: siteDescription,
+  socialImage: getOptionalEnv('SITE_SOCIAL_IMAGE', '/images/social-card.png'),
   feedTitle: getOptionalEnv('SITE_FEED_TITLE', siteName),
   feedDescription: getOptionalEnv('SITE_FEED_DESCRIPTION', siteDescription),
   feedIcon: getOptionalEnv('SITE_FEED_ICON', '/images/feed-icon.png'),

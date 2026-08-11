@@ -113,6 +113,7 @@ Trois variables d'environnement sont obligatoires et plusieurs sont optionnelles
 - `SITE_HOME_META_TITLE` : balise `<title>` de la page d'accueil ; elle est dérivée de `SITE_NAME` par défaut.
 - `SITE_TAGLINE` : signature courte affichée sous le nom du site ; définir une chaîne vide permet de la masquer.
 - `SITE_DESCRIPTION` : description SEO utilisée par la home, les métadonnées, le RSS et le sitemap.
+- `SITE_SOCIAL_IMAGE` : image Open Graph/Twitter Card par défaut ; par défaut `/images/social-card.png`.
 - `SITE_FEED_TITLE` : titre affiché dans les lecteurs RSS ; par défaut `SITE_NAME`.
 - `SITE_FEED_DESCRIPTION` : description affichée dans les lecteurs RSS ; par défaut `SITE_DESCRIPTION`.
 - `SITE_FEED_ICON` : icône carrée du flux RSS ; par défaut `/images/feed-icon.png`.

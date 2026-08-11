@@ -113,6 +113,7 @@ Three environment variables are required and several are optional:
 - `SITE_HOME_META_TITLE`: homepage `<title>` tag; by default it is derived from `SITE_NAME`.
 - `SITE_TAGLINE`: short tagline displayed under the site name; set an empty string to hide it.
 - `SITE_DESCRIPTION`: SEO description used by the homepage, metadata, RSS and sitemap.
+- `SITE_SOCIAL_IMAGE`: default Open Graph/Twitter Card image; defaults to `/images/social-card.png`.
 - `SITE_FEED_TITLE`: title displayed in RSS readers; defaults to `SITE_NAME`.
 - `SITE_FEED_DESCRIPTION`: description displayed in RSS readers; defaults to `SITE_DESCRIPTION`.
 - `SITE_FEED_ICON`: square RSS feed icon; defaults to `/images/feed-icon.png`.
