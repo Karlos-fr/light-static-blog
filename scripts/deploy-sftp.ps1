@@ -80,7 +80,9 @@ $EffectiveSiteHomeMetaTitle = if ($SiteHomeMetaTitle) { $SiteHomeMetaTitle } els
 $EffectiveSiteFeedTitle = if ($SiteFeedTitle) { $SiteFeedTitle } else { $SiteName }
 $EffectiveSiteFeedDescription = if ($SiteFeedDescription) { $SiteFeedDescription } else { $SiteDescription }
 $CliWidth = 74
-$BoxBackground = [ConsoleColor]::DarkBlue
+$BoxBackground = [ConsoleColor]::Black
+$HeaderBoxBackground = [ConsoleColor]::DarkCyan
+$StepBoxBackground = [ConsoleColor]::DarkGray
 
 # Helpers d'affichage : garder toute la decoration console au meme endroit rend
 # le script plus lisible et facilite la personnalisation du theme console.
@@ -156,17 +158,34 @@ function Write-BoxBottomRule {
 
 function Write-DeployHeader {
   Clear-Host
-  Write-BoxRule Cyan
-  Write-BoxLine 'Light Static Blog - SFTP Deploy' Cyan -BorderColor Cyan -Center
-  Write-BoxBottomRule Cyan
+  Write-BoxRule Cyan -BackgroundColor $HeaderBoxBackground
+  Write-BoxLine 'Light Static Blog - SFTP Deploy' White -BackgroundColor $HeaderBoxBackground -BorderColor Cyan -Center
+  Write-BoxBottomRule Cyan -BackgroundColor $HeaderBoxBackground
   Write-DeployLine ''
-  Write-BoxRule DarkGray
-  Write-BoxLine "Site    $PublicRoot" Gray -BorderColor DarkGray
-  Write-BoxLine "Host    $SftpHost" Gray -BorderColor DarkGray
-  Write-BoxLine "Remote  $RemoteRoot" Gray -BorderColor DarkGray
-  Write-BoxLine "Theme   $SiteTheme" Gray -BorderColor DarkGray
-  Write-BoxLine "RSS     $EffectiveSiteFeedTitle" Gray -BorderColor DarkGray
-  Write-BoxBottomRule DarkGray
+  Write-BoxRule DarkCyan
+  Write-BoxLine 'Blog configuration' White -BorderColor DarkCyan -Center
+  Write-BoxLine "Site          $PublicRoot" Gray -BorderColor DarkCyan
+  Write-BoxLine "Author        $AuthorName" Gray -BorderColor DarkCyan
+  Write-BoxLine "Name          $SiteName" Gray -BorderColor DarkCyan
+  Write-BoxLine "Home title    $EffectiveSiteHomeMetaTitle" Gray -BorderColor DarkCyan
+  Write-BoxLine "Tagline       $SiteTagline" Gray -BorderColor DarkCyan
+  Write-BoxLine "Description   $SiteDescription" Gray -BorderColor DarkCyan
+  Write-BoxLine "Social image  $SiteSocialImage" Gray -BorderColor DarkCyan
+  Write-BoxLine "Theme         $SiteTheme" Gray -BorderColor DarkCyan
+  Write-BoxLine "RSS title     $EffectiveSiteFeedTitle" Gray -BorderColor DarkCyan
+  Write-BoxLine "RSS desc.     $EffectiveSiteFeedDescription" Gray -BorderColor DarkCyan
+  Write-BoxLine "RSS icon      $SiteFeedIcon" Gray -BorderColor DarkCyan
+  Write-BoxLine "RSS logo      $SiteFeedLogo" Gray -BorderColor DarkCyan
+  Write-BoxLine "RSS accent    $SiteFeedAccentColor" Gray -BorderColor DarkCyan
+  Write-BoxBottomRule DarkCyan
+  Write-DeployLine ''
+  Write-BoxRule DarkCyan
+  Write-BoxLine 'Deployment target' White -BorderColor DarkCyan -Center
+  Write-BoxLine "SFTP host     $SftpHost" Gray -BorderColor DarkCyan
+  Write-BoxLine "FileZilla     $ResolvedFileZillaHost" Gray -BorderColor DarkCyan
+  Write-BoxLine "Remote root   $RemoteRoot" Gray -BorderColor DarkCyan
+  Write-BoxLine "Robots root   $RootRobotsRemotePath" Gray -BorderColor DarkCyan
+  Write-BoxBottomRule DarkCyan
   Write-DeployLine ''
 }
 
@@ -178,11 +197,10 @@ function Write-Step {
   )
 
   Write-DeployLine ''
-  $StepBackground = [ConsoleColor]::DarkCyan
   $StepText = "[{0}/{1}] {2}" -f $Index, $Total, $Title.ToUpperInvariant()
-  Write-BoxRule Cyan -BackgroundColor $StepBackground
-  Write-BoxLine $StepText White -BackgroundColor $StepBackground -BorderColor Cyan
-  Write-BoxBottomRule Cyan -BackgroundColor $StepBackground
+  Write-BoxRule Cyan -BackgroundColor $StepBoxBackground
+  Write-BoxLine $StepText White -BackgroundColor $StepBoxBackground -BorderColor Cyan
+  Write-BoxBottomRule Cyan -BackgroundColor $StepBoxBackground
 }
 
 function Write-Ok {
