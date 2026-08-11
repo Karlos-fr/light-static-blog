@@ -16,15 +16,21 @@ function getOptionalEnv(
 }
 
 const siteName = getOptionalEnv('SITE_NAME', 'Light Static Blog');
+const siteDescription = getOptionalEnv(
+  'SITE_DESCRIPTION',
+  'Blog personnel statique consacré au développement, aux notes techniques et aux projets personnels.'
+);
 
 export const siteConfig = {
   name: siteName,
   homeMetaTitle: getOptionalEnv('SITE_HOME_META_TITLE', `${siteName} | Blog personnel`),
   tagline: getOptionalEnv('SITE_TAGLINE', '// Développement. Notes. Projets.', { allowEmpty: true }),
-  description: getOptionalEnv(
-    'SITE_DESCRIPTION',
-    'Blog personnel statique consacré au développement, aux notes techniques et aux projets personnels.'
-  ),
+  description: siteDescription,
+  feedTitle: getOptionalEnv('SITE_FEED_TITLE', siteName),
+  feedDescription: getOptionalEnv('SITE_FEED_DESCRIPTION', siteDescription),
+  feedIcon: getOptionalEnv('SITE_FEED_ICON', '/images/feed-icon.png'),
+  feedLogo: getOptionalEnv('SITE_FEED_LOGO', '/images/feed-icon.png'),
+  feedAccentColor: getOptionalEnv('SITE_FEED_ACCENT_COLOR', '#f26522'),
   postsPerPage: 6,
   theme: resolveTheme(import.meta.env.SITE_THEME),
 } as const;

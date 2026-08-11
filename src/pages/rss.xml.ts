@@ -46,6 +46,16 @@ function getAbsoluteContentUrl(value: string, articleUrl: string): string {
   return new URL(value, `${articleUrl}/`).toString();
 }
 
+function getAbsoluteFeedAssetUrl(value: string): string {
+  if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(value)) {
+    return value.startsWith('//') ? new URL(value, getAbsoluteUrl()).toString() : value;
+  }
+
+  return value.startsWith('/')
+    ? getCanonicalUrl(value)
+    : getAbsoluteUrl(value);
+}
+
 function absolutizeHtmlUrls(html: string, articleUrl: string): string {
   const withAttributes = html.replace(
     /\b(href|src|poster)=("([^"]*)"|'([^']*)')/gi,
@@ -89,6 +99,8 @@ function getImageUrls(html: string): string[] {
 export async function GET() {
   const posts = await getPublicPosts();
   const siteUrl = getAbsoluteUrl();
+  const feedIconUrl = getAbsoluteFeedAssetUrl(siteConfig.feedIcon);
+  const feedLogoUrl = getAbsoluteFeedAssetUrl(siteConfig.feedLogo);
   const container = await AstroContainer.create();
   const items: string[] = [];
   const lastBuildDate = posts
@@ -146,13 +158,23 @@ export async function GET() {
   <rss version="2.0"
     xmlns:atom="http://www.w3.org/2005/Atom"
     xmlns:content="http://purl.org/rss/1.0/modules/content/"
-    xmlns:media="http://search.yahoo.com/mrss/">
+    xmlns:media="http://search.yahoo.com/mrss/"
+    xmlns:webfeeds="http://webfeeds.org/rss/1.0">
     <channel>
-      <title>${escapeXml(siteConfig.name)}</title>
+      <title>${escapeXml(siteConfig.feedTitle)}</title>
       <link>${siteUrl}</link>
-      <description>${escapeXml(siteConfig.description)}</description>
+      <description>${escapeXml(siteConfig.feedDescription)}</description>
+      <image>
+        <url>${escapeXml(feedIconUrl)}</url>
+        <title>${escapeXml(siteConfig.feedTitle)}</title>
+        <link>${siteUrl}</link>
+      </image>
+      <webfeeds:icon>${escapeXml(feedIconUrl)}</webfeeds:icon>
+      <webfeeds:logo>${escapeXml(feedLogoUrl)}</webfeeds:logo>
+      <webfeeds:accentColor>${escapeXml(siteConfig.feedAccentColor.replace(/^#/, ''))}</webfeeds:accentColor>
       <language>fr</language>${lastBuildDate ? `
       <lastBuildDate>${lastBuildDate}</lastBuildDate>` : ''}
+      <ttl>60</ttl>
       <atom:link href="${getAbsoluteUrl('rss.xml')}" rel="self" type="application/rss+xml" />
       ${items.join('\n')}
     </channel>

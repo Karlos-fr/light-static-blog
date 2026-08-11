@@ -113,6 +113,11 @@ Three environment variables are required and several are optional:
 - `SITE_HOME_META_TITLE`: homepage `<title>` tag; by default it is derived from `SITE_NAME`.
 - `SITE_TAGLINE`: short tagline displayed under the site name; set an empty string to hide it.
 - `SITE_DESCRIPTION`: SEO description used by the homepage, metadata, RSS and sitemap.
+- `SITE_FEED_TITLE`: title displayed in RSS readers; defaults to `SITE_NAME`.
+- `SITE_FEED_DESCRIPTION`: description displayed in RSS readers; defaults to `SITE_DESCRIPTION`.
+- `SITE_FEED_ICON`: square RSS feed icon; defaults to `/images/feed-icon.png`.
+- `SITE_FEED_LOGO`: logo used by Webfeeds-compatible RSS readers; defaults to `/images/feed-icon.png`.
+- `SITE_FEED_ACCENT_COLOR`: RSS feed accent color, in hexadecimal format; defaults to `#f26522`.
 
 These values feed internal links, canonical URLs, titles, social metadata, JSON-LD structured data, the RSS feed and the sitemap.
 
@@ -165,7 +170,7 @@ Article content in Markdown.
 - `draft: false` publishes the article.
 - `draft: true` excludes it from pages, tags, RSS and sitemap.
 - `cover` references a file placed in `public/` from the public root.
-- The RSS feed contains the full HTML of each article. Covers and all images embedded in the content are published there with absolute URLs and Media RSS tags.
+- The RSS feed contains the full HTML of each article in `content:encoded`. Each entry's `description` remains a short summary. Covers and all images embedded in the content are published there with absolute URLs and Media RSS tags.
 - Slugs matching a reserved route, such as `about`, `blog` or `tags`, are rejected at build time.
 
 The `ARTICLE_TEMPLATE.md` file can be used as a starting point.

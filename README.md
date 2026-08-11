@@ -113,6 +113,11 @@ Trois variables d'environnement sont obligatoires et plusieurs sont optionnelles
 - `SITE_HOME_META_TITLE` : balise `<title>` de la page d'accueil ; elle est dérivée de `SITE_NAME` par défaut.
 - `SITE_TAGLINE` : signature courte affichée sous le nom du site ; définir une chaîne vide permet de la masquer.
 - `SITE_DESCRIPTION` : description SEO utilisée par la home, les métadonnées, le RSS et le sitemap.
+- `SITE_FEED_TITLE` : titre affiché dans les lecteurs RSS ; par défaut `SITE_NAME`.
+- `SITE_FEED_DESCRIPTION` : description affichée dans les lecteurs RSS ; par défaut `SITE_DESCRIPTION`.
+- `SITE_FEED_ICON` : icône carrée du flux RSS ; par défaut `/images/feed-icon.png`.
+- `SITE_FEED_LOGO` : logo utilisé par les lecteurs RSS compatibles Webfeeds ; par défaut `/images/feed-icon.png`.
+- `SITE_FEED_ACCENT_COLOR` : couleur d'accent du flux RSS, au format hexadécimal ; par défaut `#f26522`.
 
 Ces valeurs alimentent les liens internes, les URL canonical, les titres, les métadonnées sociales, les données structurées JSON-LD, le flux RSS et le sitemap.
 
@@ -165,7 +170,7 @@ Contenu de l'article en Markdown.
 - `draft: false` publie l'article.
 - `draft: true` l'exclut des pages, des tags, du RSS et du sitemap.
 - `cover` référence un fichier placé dans `public/` depuis la racine publique.
-- Le flux RSS contient le HTML complet de chaque article. Les couvertures et toutes les images intégrées au contenu y sont publiées avec des URL absolues et des balises Media RSS.
+- Le flux RSS contient le HTML complet de chaque article dans `content:encoded`. La balise `description` de chaque entrée reste un résumé court. Les couvertures et toutes les images intégrées au contenu y sont publiées avec des URL absolues et des balises Media RSS.
 - Les slugs correspondant à une route réservée, comme `about`, `blog` ou `tags`, sont refusés au build.
 
 Le fichier `ARTICLE_TEMPLATE.md` peut servir de point de départ.
