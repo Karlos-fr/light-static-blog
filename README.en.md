@@ -261,13 +261,39 @@ The project is compatible with any hosting able to serve static files.
 
 The `dist/` folder is a generated artifact, ignored by Git and intended to be rebuilt before each deployment.
 
+### Optional SFTP deployment
+
+A generic script is provided for hosting providers reachable through SFTP with a local FileZilla profile:
+
+```powershell
+.\scripts\deploy-sftp.ps1 `
+  -Site 'https://example.com' `
+  -BasePath '/blog/' `
+  -AuthorName 'Author name' `
+  -SiteName 'My blog' `
+  -SiteDescription 'Public blog description.' `
+  -SiteSocialImage '/images/social-card.png' `
+  -SiteFeedTitle 'My RSS feed' `
+  -SiteFeedDescription 'RSS feed description.' `
+  -SiteFeedIcon '/images/feed-icon.png' `
+  -SiteFeedLogo '/images/feed-icon.png' `
+  -SiteFeedAccentColor '#f26522' `
+  -SftpHost 'ftp.example.com' `
+  -RemoteRoot '/remote/path/to/blog' `
+  -ExpectedHostKeySha256 'server-sha256-fingerprint'
+```
+
+The script runs the build unless `-SkipBuild` is used, checks RSS/sitemap/canonical/JSON-LD output, uploads `dist/`, verifies remote files with SHA-256, then checks public URLs. Astro's detailed output is hidden by default to keep the console clean; `-VerboseBuild` displays it. If the blog is served from a subpath, `-RootRobotsRemotePath` can also publish `robots.txt` at the host root.
+
+The script exposes the blog customization parameters: site, base path, author, name, homepage SEO title, tagline, SEO description, social image, RSS title/description/icon/logo/accent color and theme.
+
 ## Constraints
 
 - No backend
 - No database
 - No CMS
 - No runtime API
-- Client-side JavaScript limited to the light/dark switch; the content remains usable without JavaScript
+- Client-side JavaScript limited to progressive enhancements; the content remains usable without JavaScript
 
 ## Useful Commands
 

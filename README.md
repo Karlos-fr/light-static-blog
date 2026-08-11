@@ -261,13 +261,39 @@ Le projet est compatible avec tout hébergement capable de servir des fichiers s
 
 Le dossier `dist/` est un artefact généré, ignoré par Git et destiné à être reconstruit avant chaque déploiement.
 
+### Déploiement SFTP optionnel
+
+Un script générique est fourni pour les hébergements accessibles en SFTP avec un profil FileZilla local :
+
+```powershell
+.\scripts\deploy-sftp.ps1 `
+  -Site 'https://example.com' `
+  -BasePath '/blog/' `
+  -AuthorName "Nom de l'auteur" `
+  -SiteName 'Mon blog' `
+  -SiteDescription 'Description publique du blog.' `
+  -SiteSocialImage '/images/social-card.png' `
+  -SiteFeedTitle 'Mon flux RSS' `
+  -SiteFeedDescription 'Description du flux RSS.' `
+  -SiteFeedIcon '/images/feed-icon.png' `
+  -SiteFeedLogo '/images/feed-icon.png' `
+  -SiteFeedAccentColor '#f26522' `
+  -SftpHost 'ftp.example.com' `
+  -RemoteRoot '/remote/path/to/blog' `
+  -ExpectedHostKeySha256 'empreinte-sha256-du-serveur'
+```
+
+Le script lance le build sauf avec `-SkipBuild`, contrôle RSS/sitemap/canonical/JSON-LD, transfère `dist/`, vérifie les fichiers distants par SHA-256, puis contrôle les URL publiques. La sortie détaillée d'Astro est masquée par défaut pour garder un rendu console propre ; `-VerboseBuild` permet de l'afficher. Si le blog est servi dans un sous-chemin, `-RootRobotsRemotePath` permet aussi de publier `robots.txt` à la racine de l'hôte.
+
+Le script expose les paramètres de personnalisation du blog : site, base path, auteur, nom, titre SEO de l'accueil, tagline, description SEO, image sociale, titre/description/icône/logo/couleur du flux RSS et thème.
+
 ## Contraintes
 
 - Pas de backend
 - Pas de base de données
 - Pas de CMS
 - Pas d'API à l'exécution
-- JavaScript client limité au switch clair/sombre ; le contenu reste utilisable sans JavaScript
+- JavaScript client limité à des améliorations progressives ; le contenu reste utilisable sans JavaScript
 
 ## Commandes utiles
 
