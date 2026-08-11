@@ -35,8 +35,7 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 │   ├── content/
 │   │   ├── blog/               # Articles Markdown ; le nom devient le slug
 │   │   ├── pages/              # Pages éditoriales Markdown, dont À propos
-│   │   ├── config.ts           # Schéma et validation du frontmatter
-│   │   └── TAGGING.md          # Convention de tags
+│   │   └── config.ts           # Schéma et validation du frontmatter
 │   ├── layouts/
 │   │   └── BaseLayout.astro    # Structure HTML commune et SEO
 │   ├── lib/                    # Contenu, URL et pagination
@@ -236,7 +235,7 @@ Les thèmes sont découverts automatiquement depuis `src/themes/<identifiant>/th
 - [ ] Le titre et la description correspondent au contenu.
 - [ ] `pubDate` est correcte.
 - [ ] `updatedDate` n'est renseignée qu'en cas de mise à jour.
-- [ ] Les tags sont cohérents avec `src/content/TAGGING.md`.
+- [ ] Les tags utilisés sont déclarés dans `src/config/tags.ts`.
 - [ ] La couverture éventuelle existe dans `public/`.
 - [ ] `draft: false` est défini.
 - [ ] `npm run validate` passe sans erreur.
