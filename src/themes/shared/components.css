@@ -512,17 +512,32 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     width: 100%;
     align-items: center;
     flex-direction: row;
+    flex-wrap: nowrap;
     gap: 0.5rem 0.75rem;
     justify-content: flex-start;
   }
 
   .site-links {
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    min-width: 0;
     gap: 0.5rem 0.8rem;
   }
 
+  .site-links a {
+    min-height: 2.25rem;
+  }
+
   .site-utility-actions {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
     margin-inline-start: 0;
     gap: 0.45rem;
+  }
+
+  .color-mode-switch {
+    width: 2rem;
+    height: 2rem;
   }
 
   .post-card {
