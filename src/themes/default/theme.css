@@ -22,6 +22,10 @@
   --color-tag-orange: #9a4c00;
   --color-rss: #f26522;
   --icon-rss: url('__THEME_ASSETS__/icons/rss.svg');
+  --icon-external-link: url('__THEME_ASSETS__/icons/external-link.svg');
+  --icon-github: url('__THEME_ASSETS__/icons/github.svg');
+  --icon-color-mode-sun: url('__THEME_ASSETS__/icons/sun.svg');
+  --icon-color-mode-moon: url('__THEME_ASSETS__/icons/moon.svg');
   --powered-icon-size: 1.2em;
   --powered-icon-radius: 0.22rem;
   --color-code-bg: #0f1425;
