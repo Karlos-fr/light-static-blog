@@ -292,6 +292,10 @@ The script runs the build unless `-SkipBuild` is used, checks RSS/sitemap/canoni
 
 The script exposes the blog customization parameters: site, base path, author, name, homepage SEO title, tagline, SEO description, social image, RSS title/description/icon/logo/accent color and theme.
 
+## Versions and changelog
+
+Notable changes are tracked in [CHANGELOG.md](../CHANGELOG.md). The current project version is also declared in `package.json`.
+
 ## Constraints
 
 - No backend

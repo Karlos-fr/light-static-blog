@@ -292,6 +292,10 @@ Le script lance le build sauf avec `-SkipBuild`, contrôle RSS/sitemap/canonical
 
 Le script expose les paramètres de personnalisation du blog : site, base path, auteur, nom, titre SEO de l'accueil, tagline, description SEO, image sociale, titre/description/icône/logo/couleur du flux RSS et thème.
 
+## Versions et changelog
+
+Les changements notables sont suivis dans [CHANGELOG.md](CHANGELOG.md). La version courante du projet est également indiquée dans `package.json`.
+
 ## Contraintes
 
 - Pas de backend
