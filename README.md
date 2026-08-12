@@ -55,6 +55,7 @@ Le projet est entièrement statique : Astro transforme les pages et les articles
 │       ├── registry.ts         # Registre et validation des thèmes
 │       ├── shared/             # Fondations et contrats communs
 │       ├── default/theme.css   # Thème public par défaut
+│       ├── folio/theme.css     # Thème public éditorial et sobre
 │       └── <identifiant>/      # Éventuels thèmes supplémentaires
 │           ├── theme.css
 │           └── assets/         # Polices, images et icônes propres au thème
@@ -210,6 +211,8 @@ La route `src/pages/about.astro` charge ce fichier, applique le layout commun et
 ## Thèmes et mode clair/sombre
 
 Le thème est choisi au build avec `SITE_THEME`. Le navigateur peut seulement basculer sa palette claire ou sombre. Sans choix enregistré, le site suit `prefers-color-scheme` ; le switch mémorise ensuite le choix dans `localStorage`. Les pages HTML et le rendu navigateur du RSS chargent `styles/theme.css` et les deux mêmes scripts statiques.
+
+Deux thèmes publics sont fournis : `default` pour un rendu simple et polyvalent, et `folio` pour un rendu éditorial plus sobre. Les thèmes personnels peuvent rester ignorés par Git.
 
 Pour ajouter un thème :
 

@@ -1,0 +1,328 @@
+/* ==========================================================================
+   Thème folio
+   --------------------------------------------------------------------------
+   Thème public éditorial : sobre, élégant, proche d'un carnet imprimé. Il se
+   distingue du thème par défaut par ses tons papier/encre, ses typographies
+   serif et une mise en page plus magazine.
+   ========================================================================== */
+
+/* Jetons de design : palette chaude, serif système et icônes propres au thème. */
+:root {
+  --color-bg: #fbf7ef;
+  --color-surface: #fffdf8;
+  --color-surface-alt: #f2eadf;
+  --color-text: #27211b;
+  --color-text-muted: #6e6256;
+  --color-border: #ded0bd;
+  --color-accent: #8a5a32;
+  --color-accent-hover: #5f3d22;
+  --color-focus: #8a5a32;
+  --color-tag-violet: #75608a;
+  --color-tag-blue: #456f78;
+  --color-tag-orange: #a8662f;
+  --color-rss: #c7672b;
+  --icon-rss: url('__THEME_ASSETS__/icons/rss.svg');
+  --icon-external-link: url('__THEME_ASSETS__/icons/external-link.svg');
+  --icon-github: url('__THEME_ASSETS__/icons/github.svg');
+  --icon-color-mode-sun: url('__THEME_ASSETS__/icons/sun.svg');
+  --icon-color-mode-moon: url('__THEME_ASSETS__/icons/moon.svg');
+  --powered-icon-size: 1.05em;
+  --powered-icon-radius: 0.2rem;
+  --color-code-bg: #2b241e;
+  --color-code-text: #fbf7ef;
+  --color-code-border: #4a3b2f;
+  --font-body: Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
+  --font-heading: Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --content-width: 68rem;
+  --reading-width: 44rem;
+  --radius-card: 18px;
+  --radius-control: 999px;
+  --shadow-card: 0 1.2rem 3rem rgba(72, 49, 29, 0.08);
+  --space-page: 3rem;
+}
+
+/* Icône RSS thémable : le composant partagé ne porte que la structure. */
+.rss-icon::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  mask: var(--icon-rss) center / contain no-repeat;
+  -webkit-mask: var(--icon-rss) center / contain no-repeat;
+}
+
+/* Palette sombre : brun-noir doux, sans contraste brutal. */
+:root[data-color-mode='dark'] {
+  --color-bg: #17130f;
+  --color-surface: #211b16;
+  --color-surface-alt: #2b241e;
+  --color-text: #f4eadb;
+  --color-text-muted: #bcae9d;
+  --color-border: #47382c;
+  --color-accent: #d8a15f;
+  --color-accent-hover: #efc78c;
+  --color-focus: #d8a15f;
+  --color-tag-violet: #c8a6df;
+  --color-tag-blue: #92c7ce;
+  --color-tag-orange: #e4a66b;
+  --color-rss: #e88f4a;
+  --color-code-bg: #0f0c0a;
+  --color-code-border: #4a3b2f;
+  --shadow-card: 0 1.2rem 3rem rgba(0, 0, 0, 0.28);
+}
+
+/* Mode sombre automatique lorsque l'utilisateur n'a pas encore choisi. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-color-mode]) {
+    --color-bg: #17130f;
+    --color-surface: #211b16;
+    --color-surface-alt: #2b241e;
+    --color-text: #f4eadb;
+    --color-text-muted: #bcae9d;
+    --color-border: #47382c;
+    --color-accent: #d8a15f;
+    --color-accent-hover: #efc78c;
+    --color-focus: #d8a15f;
+    --color-tag-violet: #c8a6df;
+    --color-tag-blue: #92c7ce;
+    --color-tag-orange: #e4a66b;
+    --color-rss: #e88f4a;
+    --color-code-bg: #0f0c0a;
+    --color-code-border: #4a3b2f;
+    --shadow-card: 0 1.2rem 3rem rgba(0, 0, 0, 0.28);
+  }
+}
+
+/* Fond papier discret, construit uniquement en CSS. */
+body {
+  background-image:
+    radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent 26rem),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-border) 22%, transparent) 1px, transparent 1px);
+  background-size: auto, 5.5rem 100%;
+}
+
+/* Header aérien : moins application, plus revue éditoriale. */
+.site-header {
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.site-nav {
+  padding-block: 1.75rem 1.4rem;
+}
+
+.brand {
+  color: var(--color-text);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+
+.brand:hover,
+.brand:focus-visible {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.site-tagline {
+  margin-block-start: 0.35rem;
+  max-width: 36rem;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+}
+
+/* Le thème folio abandonne volontairement le clin d'œil console. */
+.terminal-prompt {
+  display: none;
+}
+
+.site-links a {
+  min-height: 2.25rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.color-mode-switch {
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
+}
+
+/* Titre de page : style revue, avec fin filet décoratif. */
+.article-index-title,
+.site-main > h1 {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  color: var(--color-text);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.article-index-title::after,
+.site-main > h1::after {
+  content: '';
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* Liste d'articles : rythme magazine, cartes ouvertes et respirantes. */
+.post-list {
+  gap: 1.1rem;
+  margin-block-start: 2rem;
+}
+
+.post-card {
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--color-surface) 94%, transparent), var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-border) 82%, transparent);
+}
+
+.post-card[data-has-cover='true'] {
+  display: grid;
+  grid-template-columns: minmax(12rem, 32%) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 1.6rem);
+  align-items: stretch;
+}
+
+.post-card .post-cover-wrapper {
+  margin: 0;
+}
+
+.post-card .cover-link,
+.post-card .post-cover {
+  height: 100%;
+}
+
+.post-card .post-cover {
+  border: 0;
+  border-radius: calc(var(--radius-card) - 6px);
+  filter: saturate(0.9) contrast(0.98);
+}
+
+.post-card-content {
+  align-self: center;
+}
+
+.post-title {
+  font-size: clamp(1.55rem, 4vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+
+.post-title a {
+  color: var(--color-text);
+}
+
+.post-description {
+  max-width: 42rem;
+  font-size: 1.02rem;
+}
+
+.post-card-footer {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  letter-spacing: 0.02em;
+}
+
+/* Tags comme petites annotations éditoriales. */
+.post-category,
+.tag-chip {
+  min-height: 1.75rem;
+  padding: 0.16rem 0.55rem;
+  background: transparent;
+  border-color: color-mix(in srgb, currentColor 34%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tag-cloud {
+  justify-content: start;
+}
+
+.tag-cloud-link {
+  background: var(--color-surface);
+}
+
+/* Articles : lecture confortable, proche d'une page imprimée. */
+.article-content {
+  font-size: 1.08rem;
+}
+
+.article-content h1 {
+  font-weight: 400;
+  letter-spacing: -0.055em;
+}
+
+.article-content blockquote {
+  padding: 0.9rem 1.25rem;
+  border-inline-start: 0;
+  border-block-start: 1px solid var(--color-border);
+  border-block-end: 1px solid var(--color-border);
+  font-style: italic;
+}
+
+.article-content :not(pre) > code {
+  border-radius: 0.35rem;
+}
+
+.article-content table,
+.article-content details,
+.code-block,
+pre {
+  box-shadow: none;
+}
+
+.article-navigation-link {
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+}
+
+.site-footer {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+}
+
+@media (max-width: 760px) {
+  .site-nav {
+    padding-block: 1.25rem;
+  }
+
+  .site-nav-actions {
+    gap: 0.6rem;
+  }
+
+  .site-links a {
+    font-size: 0.78rem;
+  }
+
+  .post-card[data-has-cover='true'] {
+    display: block;
+  }
+
+  .post-card .post-cover-wrapper {
+    margin-block-end: 1rem;
+  }
+
+  .post-card .cover-link,
+  .post-card .post-cover {
+    height: auto;
+  }
+
+  .article-index-title,
+  .site-main > h1 {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+}
