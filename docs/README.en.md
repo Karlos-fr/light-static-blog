@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="doc/header.png" alt="Light Static Blog" />
+  <img src="../doc/header.png" alt="Light Static Blog" />
 </p>
 
 <p align="center">
-  <a href="README.md"><img src="doc/flag-fr.svg" alt="" width="18" height="12" /> Français</a>
+  <a href="../README.md"><img src="../doc/flag-fr.svg" alt="" width="18" height="12" /> Français</a>
   /
-  <a href="README.en.md"><img src="doc/flag-gb.svg" alt="" width="18" height="12" /> English</a>
+  <a href="README.en.md"><img src="../doc/flag-gb.svg" alt="" width="18" height="12" /> English</a>
 </p>
 
 # Light Static Blog
