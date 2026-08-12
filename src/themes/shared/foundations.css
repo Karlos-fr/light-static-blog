@@ -17,16 +17,19 @@ html {
   background: var(--color-bg);
 }
 
+/* Mode sombre forc? : informe le navigateur des contr?les et couleurs natives attendues. */
 html[data-color-mode='dark'] {
   color-scheme: dark;
 }
 
+/* Mode sombre syst?me : utilis? uniquement tant que le site n'a pas de choix explicite. */
 @media (prefers-color-scheme: dark) {
   html:not([data-color-mode]) {
     color-scheme: dark;
   }
 }
 
+/* Document : supprime les marges natives et garantit une hauteur pleine page. */
 html,
 body {
   margin: 0;
@@ -49,6 +52,7 @@ a {
   text-underline-offset: 0.2em;
 }
 
+/* Interaction lien : le soulignement appara?t seulement au survol ou focus clavier. */
 a:hover,
 a:focus-visible {
   color: var(--color-accent-hover);
@@ -64,6 +68,7 @@ a:focus-visible {
 /* Titres génériques : les pages et articles peuvent ensuite préciser leur mise en forme. */
 h1,
 h2,
+/* H3 g?n?rique : niveau de titre compact. */
 h3 {
   color: var(--color-text);
   font-family: var(--font-heading);
@@ -71,11 +76,13 @@ h3 {
   text-wrap: balance;
 }
 
+/* H1 g?n?rique : taille fluide utilis?e hors variantes sp?cifiques de th?me. */
 h1 {
   margin-block: 0 1.5rem;
   font-size: clamp(2rem, 6vw, 2.75rem);
 }
 
+/* H2 g?n?rique : rythme vertical des sous-sections. */
 h2 {
   margin-block: 2rem 0.75rem;
 }
@@ -84,23 +91,28 @@ h3 {
   margin-block: 1.5rem 0.5rem;
 }
 
+/* Paragraphes g?n?riques : couleur secondaire par d?faut. */
 p {
   color: var(--color-text-muted);
 }
 
+/* Listes g?n?riques : retrait lisible sans d?pendre du navigateur. */
 ul,
 ol {
   padding-inline-start: 1.25rem;
 }
 
+/* Items de liste : respiration verticale minimale. */
 li {
   margin-block: 0.5rem;
 }
 
+/* Images natives : emp?chent tout d?bordement horizontal par d?faut. */
 img {
   max-width: 100%;
 }
 
+/* Contr?les de formulaire : h?ritent de la police du th?me. */
 button,
 input,
 select,
@@ -121,6 +133,7 @@ textarea {
   border: 0 !important;
 }
 
+/* Code natif : police monospace fournie par le th?me actif. */
 pre,
 code {
   font-family: var(--font-mono);
@@ -139,7 +152,9 @@ code {
 }
 
 /* Version imprimable : contraste maximal, pas d'éléments interactifs. */
+/* Impression : force un rendu clair et retire les ?l?ments purement interactifs. */
 @media print {
+  /* Variables d'impression : contraste maximal noir sur blanc. */
   :root {
     --color-bg: #ffffff;
     --color-surface: #ffffff;
@@ -151,6 +166,7 @@ code {
     --color-accent-hover: #000000;
   }
 
+  /* ?l?ments non imprimables : effets d'?cran et switch de th?me. */
   body::before,
   .color-mode-switch {
     display: none !important;

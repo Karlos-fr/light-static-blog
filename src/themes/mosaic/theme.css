@@ -101,15 +101,18 @@ body {
   background-size: 2.4rem 2.4rem;
 }
 
+/* Header : bordure forte et surface identique au fond pour l'effet affiche. */
 .site-header {
   background: var(--color-bg);
   border-bottom-width: 3px;
 }
 
+/* Navigation : compacte, pour laisser la grille porter le th?me. */
 .site-nav {
   padding-block: 1.2rem;
 }
 
+/* Marque : typographie massive, presque logo. */
 .brand {
   color: var(--color-text);
   font-family: var(--font-heading);
@@ -119,25 +122,30 @@ body {
   text-transform: uppercase;
 }
 
+/* Interaction de marque : passage ? l'accent sans soulignement. */
 .brand:hover,
 .brand:focus-visible {
   color: var(--color-accent);
   text-decoration: none;
 }
 
+/* Microtypographie commune aux ?l?ments secondaires. */
 .site-tagline,
 .site-links a,
 .post-card-footer,
+/* Footer : m?me langage graphique que le header. */
 .site-footer {
   font-family: var(--font-mono);
 }
 
+/* Baseline : compacte et uppercase pour renforcer le style graphique. */
 .site-tagline {
   max-width: 40rem;
   font-size: 0.8rem;
   text-transform: uppercase;
 }
 
+/* Navigation : liens francs, carr?s, sans arrondis. */
 .site-links a {
   min-height: 2.2rem;
   color: var(--color-text);
@@ -145,6 +153,7 @@ body {
   text-transform: uppercase;
 }
 
+/* ?tat actif/survol : inversion plein/aplat fa?on ?tiquette. */
 .site-links a:hover,
 .site-links a:focus-visible,
 .site-links a[aria-current='page'] {
@@ -154,6 +163,7 @@ body {
   padding-inline: 0.35rem;
 }
 
+/* Switch : bouton ? bordure ?paisse et ombre dure. */
 .color-mode-switch {
   color: var(--color-text);
   background: var(--color-surface);
@@ -185,6 +195,7 @@ body {
   margin-block-start: 2rem;
 }
 
+/* Carte de base : bloc dense qui occupe plusieurs cellules de grille. */
 .post-card {
   position: relative;
   display: grid;
@@ -199,39 +210,47 @@ body {
     box-shadow 180ms ease;
 }
 
+/* Interaction carte : petit d?placement physique fa?on carte imprim?e. */
 .post-card:hover {
   transform: translate(-0.18rem, -0.18rem);
   box-shadow: 0.75rem 0.75rem 0 color-mix(in srgb, var(--color-border) 24%, transparent);
 }
 
+/* Premi?re carte : mise en avant visuelle de l'article le plus r?cent. */
 .post-card:nth-child(1) {
   grid-column: span 4;
   grid-row: span 2;
   min-height: 34rem;
 }
 
+/* Cartes secondaires ?troites pour casser la monotonie de la grille. */
 .post-card:nth-child(2),
 .post-card:nth-child(5) {
   grid-column: span 2;
 }
 
+/* Variantes de fond : touches color?es p?riodiques dans la mosa?que. */
 .post-card:nth-child(3n) {
   background: color-mix(in srgb, var(--color-surface) 84%, var(--color-tag-blue));
 }
 
+/* Variante violette : deuxi?me rythme chromatique de la grille. */
 .post-card:nth-child(4n) {
   background: color-mix(in srgb, var(--color-surface) 86%, var(--color-tag-violet));
 }
 
+/* Couvertures : l'image remplit son emplacement sans respiration externe. */
 .post-card .post-cover-wrapper {
   margin: 0;
 }
 
+/* Lien et image de couverture : hauteur pleine dans la zone visuelle. */
 .post-card .cover-link,
 .post-card .post-cover {
   height: 100%;
 }
 
+/* Image : rendu plus contrast? pour coller au style affiche. */
 .post-card .post-cover {
   width: 100%;
   border: 0;
@@ -239,18 +258,22 @@ body {
   filter: saturate(0.85) contrast(1.08);
 }
 
+/* Carte avec image : d?coupe verticale image puis contenu. */
 .post-card[data-has-cover='true'] {
   grid-template-rows: minmax(10rem, 1fr) auto;
 }
 
+/* Zone image minimale pour pr?server la composition. */
 .post-card[data-has-cover='true'] .post-cover-wrapper {
   min-height: 12rem;
 }
 
+/* Grande carte : image plus haute sur le premier article. */
 .post-card:nth-child(1)[data-has-cover='true'] .post-cover-wrapper {
   min-height: 20rem;
 }
 
+/* Contenu de carte : ancr? en bas, s?par? par une bordure forte. */
 .post-card-content {
   display: grid;
   align-content: end;
@@ -259,6 +282,7 @@ body {
   border-top: 3px solid var(--color-border);
 }
 
+/* Titre de carte : bloc typographique court, tr?s contrast?. */
 .post-title {
   margin-block: 0.45rem 0.65rem;
   font-family: var(--font-heading);
@@ -269,20 +293,24 @@ body {
   text-transform: uppercase;
 }
 
+/* Premier titre : ?chelle renforc?e pour la carte mise en avant. */
 .post-card:nth-child(1) .post-title {
   font-size: clamp(2.1rem, 5vw, 4.2rem);
 }
 
+/* Lien de titre : noir/ivoire par d?faut, accent ? l'interaction. */
 .post-title a {
   color: var(--color-text);
 }
 
+/* Interaction du titre : couleur accent sans soulignement. */
 .post-title a:hover,
 .post-title a:focus-visible {
   color: var(--color-accent);
   text-decoration: none;
 }
 
+/* Description : texte dense pour tenir dans la grille. */
 .post-description {
   margin-block: 0;
   color: var(--color-text);
@@ -290,6 +318,7 @@ body {
   line-height: 1.45;
 }
 
+/* Pied de carte : informations secondaires en uppercase monospace. */
 .post-card-footer {
   align-items: center;
   margin-block-start: 1rem;
@@ -297,6 +326,7 @@ body {
   text-transform: uppercase;
 }
 
+/* Lien de lecture : accent principal du th?me. */
 .read-more {
   color: var(--color-accent);
 }
@@ -324,6 +354,7 @@ body {
   justify-content: start;
 }
 
+/* Tags du nuage : petites cartes avec ombre dure. */
 .tag-cloud-link {
   background: var(--color-surface);
   box-shadow: 0.25rem 0.25rem 0 color-mix(in srgb, var(--color-border) 22%, transparent);
@@ -337,6 +368,7 @@ body {
   text-transform: uppercase;
 }
 
+/* Blocs de lecture : bordures ?paisses et ombres graphiques. */
 .article-content blockquote,
 .article-content table,
 .article-content details,
@@ -347,6 +379,7 @@ pre {
   box-shadow: 0.35rem 0.35rem 0 color-mix(in srgb, var(--color-border) 22%, transparent);
 }
 
+/* Navigation article : espace renforc? entre les deux cartes. */
 .article-navigation {
   gap: 1.35rem;
 }
@@ -356,6 +389,7 @@ pre {
   text-transform: uppercase;
 }
 
+/* Tablette : la mosa?que passe de six ? deux colonnes. */
 @media (max-width: 920px) {
   .post-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -369,6 +403,7 @@ pre {
   }
 }
 
+/* Mobile : la mosa?que devient une liste verticale sans perte de style. */
 @media (max-width: 760px) {
   .site-nav-actions {
     gap: 0.55rem;

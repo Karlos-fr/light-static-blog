@@ -109,10 +109,12 @@ body {
   backdrop-filter: blur(14px);
 }
 
+/* Espacement de navigation : respiration verticale plus ?ditoriale. */
 .site-nav {
   padding-block: 1.75rem 1.4rem;
 }
 
+/* Marque : grand titre serif, volontairement moins app-like. */
 .brand {
   color: var(--color-text);
   font-size: clamp(1.8rem, 4vw, 2.6rem);
@@ -120,12 +122,14 @@ body {
   letter-spacing: -0.045em;
 }
 
+/* Interaction de marque : couleur accent sans soulignement. */
 .brand:hover,
 .brand:focus-visible {
   color: var(--color-accent);
   text-decoration: none;
 }
 
+/* Baseline : note secondaire compacte sous le titre du site. */
 .site-tagline {
   margin-block-start: 0.35rem;
   max-width: 36rem;
@@ -134,6 +138,7 @@ body {
   letter-spacing: 0.02em;
 }
 
+/* Navigation : petites capitales monospace, comme un sommaire de revue. */
 .site-links a {
   min-height: 2.25rem;
   color: var(--color-text-muted);
@@ -143,6 +148,7 @@ body {
   text-transform: uppercase;
 }
 
+/* Switch clair/sombre : bouton discret sur surface translucide. */
 .color-mode-switch {
   width: 2rem;
   height: 2rem;
@@ -175,6 +181,7 @@ body {
   margin-block-start: 2rem;
 }
 
+/* Carte standard : surface papier avec bordure adoucie. */
 .post-card {
   padding: clamp(1.1rem, 3vw, 1.6rem);
   background:
@@ -182,6 +189,7 @@ body {
   border-color: color-mix(in srgb, var(--color-border) 82%, transparent);
 }
 
+/* Carte avec couverture : composition image + texte en deux colonnes. */
 .post-card[data-has-cover='true'] {
   display: grid;
   grid-template-columns: minmax(12rem, 32%) minmax(0, 1fr);
@@ -189,25 +197,30 @@ body {
   align-items: stretch;
 }
 
+/* Couverture dans une carte : l'image occupe toute sa colonne. */
 .post-card .post-cover-wrapper {
   margin: 0;
 }
 
+/* Lien et image de couverture : hauteur pleine pour l'effet magazine. */
 .post-card .cover-link,
 .post-card .post-cover {
   height: 100%;
 }
 
+/* Image de couverture : coins l?g?rement r?duits et rendu moins satur?. */
 .post-card .post-cover {
   border: 0;
   border-radius: calc(var(--radius-card) - 6px);
   filter: saturate(0.9) contrast(0.98);
 }
 
+/* Contenu de carte : alignement vertical au centre pour ?quilibrer l'image. */
 .post-card-content {
   align-self: center;
 }
 
+/* Titre d'article : grand serif, proche d'un titre de papier. */
 .post-title {
   font-size: clamp(1.55rem, 4vw, 2.35rem);
   font-weight: 400;
@@ -215,15 +228,18 @@ body {
   letter-spacing: -0.05em;
 }
 
+/* Lien de titre : conserve la couleur texte jusqu'? l'interaction. */
 .post-title a {
   color: var(--color-text);
 }
 
+/* Description : largeur born?e pour ?viter les lignes trop longues. */
 .post-description {
   max-width: 42rem;
   font-size: 1.02rem;
 }
 
+/* Pied de carte : microtypographie technique pour date et lien. */
 .post-card-footer {
   font-family: var(--font-mono);
   font-size: 0.84rem;
@@ -247,6 +263,7 @@ body {
   justify-content: start;
 }
 
+/* Tags du nuage : surface papier pour ressortir du fond. */
 .tag-cloud-link {
   background: var(--color-surface);
 }
@@ -256,11 +273,13 @@ body {
   font-size: 1.08rem;
 }
 
+/* Titre d'article : m?me esprit serif que les cartes. */
 .article-content h1 {
   font-weight: 400;
   letter-spacing: -0.055em;
 }
 
+/* Citation : traitement ?ditorial horizontal plut?t qu'un simple filet gauche. */
 .article-content blockquote {
   padding: 0.9rem 1.25rem;
   border-inline-start: 0;
@@ -269,10 +288,12 @@ body {
   font-style: italic;
 }
 
+/* Code inline : coins doux coh?rents avec la carte. */
 .article-content :not(pre) > code {
   border-radius: 0.35rem;
 }
 
+/* Blocs techniques : suppression de l'ombre pour un rendu plus imprim?. */
 .article-content table,
 .article-content details,
 .code-block,
@@ -280,15 +301,18 @@ pre {
   box-shadow: none;
 }
 
+/* Navigation article : surface l?g?re pour rester secondaire. */
 .article-navigation-link {
   background: color-mix(in srgb, var(--color-surface) 90%, transparent);
 }
 
+/* Footer : reprend la microtypographie de navigation. */
 .site-footer {
   font-family: var(--font-mono);
   font-size: 0.86rem;
 }
 
+/* Responsive folio : retour ? une lecture lin?aire sur petit ?cran. */
 @media (max-width: 760px) {
   .site-nav {
     padding-block: 1.25rem;

@@ -43,6 +43,7 @@
 }
 
 /* L'icône RSS est fournie par le thème afin de permettre une personnalisation complète. */
+/* Variables d'ic?nes : chaque th?me fournit ses pictogrammes sans changer le HTML. */
 .rss-icon::before {
   content: '';
   display: block;
@@ -54,6 +55,7 @@
 }
 
 /* Surcharge explicite lorsque l'utilisateur force le mode sombre. */
+/* Variables sombres : m?mes r?les que :root, adapt?es ? un fond fonc?. */
 :root[data-color-mode='dark'] {
   --color-bg: #10141c;
   --color-surface: #181e29;
@@ -74,6 +76,7 @@
 }
 
 /* Mode sombre automatique lorsque l'utilisateur n'a pas encore choisi de préférence. */
+/* Fallback syst?me : applique la palette sombre tant qu'aucun choix utilisateur n'est stock?. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-color-mode]) {
     --color-bg: #10141c;

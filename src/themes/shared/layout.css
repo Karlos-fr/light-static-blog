@@ -34,38 +34,46 @@
   line-height: 1.2;
 }
 
+/* Sous-titres d'article : marge haute suffisante pour rythmer la lecture. */
 .article-content :where(h2, h3, h4, h5, h6) {
   margin-block: 2.5rem 0.8rem;
 }
 
+/* H2 article : niveau de section principal dans le Markdown. */
 .article-content h2 {
   font-size: clamp(1.55rem, 4vw, 2rem);
 }
 
+/* H3 article : sous-section compacte. */
 .article-content h3 {
   font-size: clamp(1.25rem, 3vw, 1.55rem);
 }
 
+/* H4 article : titre discret de niveau profond. */
 .article-content h4 {
   font-size: 1.1rem;
 }
 
+/* H5/H6 article : niveaux rares, rendus comme intertitres techniques. */
 .article-content :where(h5, h6) {
   font-size: 1rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
+/* Paragraphe d'article : interligne confortable pour la lecture longue. */
 .article-content p {
   line-height: 1.75;
 }
 
+/* Liens d'article : accent th?matique et soulignement lisible. */
 .article-content a {
   color: var(--color-accent);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
 }
 
+/* Interaction lien d'article : couleur d'accent renforc?e. */
 .article-content a:hover {
   color: var(--color-accent-hover);
 }
@@ -97,28 +105,34 @@
   -webkit-mask: var(--icon-github) center / contain no-repeat;
 }
 
+/* Liens GitHub : retire l'ic?ne externe g?n?rique pour ?viter le doublon. */
 .article-content a.github-link::after {
   content: none;
 }
 
 /* Listes, citations, séparateurs et code inline : couverture Markdown de base. */
+/* Listes Markdown : retrait commun des listes ordonn?es et non ordonn?es. */
 .article-content :where(ul, ol) {
   padding-inline-start: 1.5rem;
 }
 
+/* Listes imbriqu?es : rythme r?duit pour rester group?es. */
 .article-content :where(ul, ol) :where(ul, ol) {
   margin-block: 0.35rem;
 }
 
+/* Item Markdown : respiration verticale l?g?re. */
 .article-content li {
   margin-block: 0.35rem;
 }
 
+/* Strong Markdown : renforce aussi la couleur, pas seulement le poids. */
 .article-content strong {
   color: var(--color-text);
   font-weight: 700;
 }
 
+/* Citation Markdown : filet d'accent et surface secondaire. */
 .article-content blockquote {
   margin-inline: 0;
   padding: 0.25rem 1rem;
@@ -126,12 +140,14 @@
   background: var(--color-surface-alt);
 }
 
+/* S?parateur Markdown : filet horizontal discret. */
 .article-content hr {
   margin-block: 2.5rem;
   border: 0;
   border-top: 1px solid var(--color-border);
 }
 
+/* Code inline : capsule lisible sans prendre le style des blocs de code. */
 .article-content :not(pre) > code {
   padding: 0.1em 0.35em;
   background: var(--color-surface-alt);
@@ -148,6 +164,7 @@
   margin-inline: auto;
 }
 
+/* L?gende d'image : texte secondaire centr? sous la figure. */
 .article-figure figcaption {
   max-width: min(100%, var(--reading-width));
   color: var(--color-text-muted);
@@ -168,11 +185,13 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Image dans figure : la figure porte d?j? les marges. */
 .article-figure .article-image {
   margin: 0;
 }
 
 /* Variantes de cadrage selon l'orientation détectée de l'image. */
+/* Image portrait : limite la hauteur pour rester visible sans scroll excessif. */
 .article-image--portrait {
   width: auto;
   max-width: min(100%, 34rem);
@@ -180,21 +199,25 @@
   object-fit: contain;
 }
 
+/* Image paysage : hauteur born?e avec conservation du ratio. */
 .article-image--landscape {
   max-height: 72vh;
   object-fit: contain;
 }
 
+/* Image zoomable : curseur explicite pour annoncer l'interaction. */
 .article-image--zoomable {
   cursor: zoom-in;
 }
 
+/* Image zoomable au survol : bordure accentu?e. */
 .article-image--zoomable:hover {
   border-color: var(--color-accent);
 }
 
 /* Médias embarqués Markdown/HTML : vidéos et iframes restent fluides sur mobile. */
 .article-content video,
+/* Iframe Markdown/HTML : ratio 16/9 pour embeds vid?o et d?mos. */
 .article-content iframe {
   display: block;
   width: min(100%, var(--reading-width));
@@ -205,6 +228,7 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Vid?o Markdown/HTML : ratio natif et fond noir. */
 .article-content video {
   height: auto;
   background: #000;
@@ -230,6 +254,7 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Cellules de tableau : padding et bordures communes. */
 .article-content th,
 .article-content td {
   padding: 0.75rem 1rem;
@@ -238,16 +263,19 @@
   vertical-align: top;
 }
 
+/* En-t?te de tableau : surface secondaire et texte renforc?. */
 .article-content th {
   color: var(--color-text);
   background: var(--color-surface-alt);
   font-weight: 700;
 }
 
+/* Derni?re ligne de tableau : supprime la bordure basse finale. */
 .article-content tr:last-child > :where(th, td) {
   border-block-end: 0;
 }
 
+/* Colonnes de tableau : s?paration verticale entre cellules. */
 .article-content th:not(:last-child),
 .article-content td:not(:last-child) {
   border-inline-end: 1px solid var(--color-border);
@@ -262,17 +290,20 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Summary natif : indique l'interaction d'ouverture. */
 .article-content summary {
   cursor: pointer;
   color: var(--color-text);
   font-weight: 700;
 }
 
+/* Details : ?vite une marge basse doubl?e sur le dernier enfant. */
 .article-content details > :last-child {
   margin-block-end: 0;
 }
 
 /* Fallback pour les blocs pre simples, avant enrichissement JS éventuel. */
+/* Pr?format? natif : fallback des blocs de code avant enrichissement JS. */
 pre {
   overflow: auto;
   max-width: 100%;
@@ -296,10 +327,12 @@ pre {
   box-shadow: var(--shadow-card);
 }
 
+/* Bloc de code dans article : m?me rythme que les blocs Markdown. */
 .article-content > .code-block {
   margin-block: 1.15rem;
 }
 
+/* En-t?te de bloc de code : langage ? gauche, bouton copier ? droite. */
 .code-block-header {
   display: flex;
   align-items: center;
@@ -313,10 +346,12 @@ pre {
   font-size: 0.75rem;
 }
 
+/* Nom du langage : secondaire pour ne pas concurrencer le code. */
 .code-block-language {
   color: color-mix(in srgb, var(--color-code-text) 78%, transparent);
 }
 
+/* Bouton copier : contr?le discret mais accessible. */
 .code-block-copy {
   padding: 0.25rem 0.55rem;
   color: var(--color-code-text);
@@ -327,10 +362,12 @@ pre {
   font: inherit;
 }
 
+/* Bouton copier au survol : bordure renforc?e. */
 .code-block-copy:hover {
   border-color: var(--color-code-text);
 }
 
+/* Pre enrichi : retire les styles d?j? port?s par le conteneur code-block. */
 .code-block pre {
   margin: 0;
   border: 0;
@@ -339,14 +376,17 @@ pre {
 }
 
 /* Overlay de zoom image : activé par public/scripts/image-zoom.js. */
+/* ?tat zoom ouvert : bloque le scroll de la page. */
 .image-zoom-open {
   overflow: hidden;
 }
 
+/* Overlay masqu? : vrai retrait du flux d'affichage. */
 .image-zoom[hidden] {
   display: none;
 }
 
+/* Overlay zoom : calque plein ?cran centr?. */
 .image-zoom {
   position: fixed;
   z-index: 1000;
@@ -357,6 +397,7 @@ pre {
   background: color-mix(in srgb, var(--color-bg) 18%, rgba(0, 0, 0, 0.88));
 }
 
+/* Figure zoom?e : image et l?gende centr?es. */
 .image-zoom-figure {
   display: grid;
   justify-items: center;
@@ -365,6 +406,7 @@ pre {
   margin: 0;
 }
 
+/* Image zoom?e : taille maximale contr?l?e dans la fen?tre. */
 .image-zoom-image {
   max-width: min(100%, 1200px);
   max-height: 84vh;
@@ -375,6 +417,7 @@ pre {
   box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.45);
 }
 
+/* L?gende zoom?e : lisible sur fond sombre. */
 .image-zoom-caption {
   max-width: min(100%, var(--reading-width));
   color: #ffffff;
@@ -383,6 +426,7 @@ pre {
   text-align: center;
 }
 
+/* Bouton fermeture zoom : position fixe en haut ? droite. */
 .image-zoom-close {
   position: fixed;
   inset-block-start: 1rem;
@@ -399,17 +443,20 @@ pre {
   font: 1.6rem/1 var(--font-body);
 }
 
+/* Fermeture zoom au survol : fond plus opaque. */
 .image-zoom-close:hover {
   background: rgba(0, 0, 0, 0.68);
 }
 
 /* Ajustements de lecture mobile : plus compact, sans changer la hiérarchie. */
 @media (max-width: 760px) {
+  /* Mobile main : largeur plus compacte et rythme vertical r?duit. */
   .site-main {
     width: min(100% - 1.25rem, var(--content-width));
     padding-block: 1.25rem 3rem;
   }
 
+  /* Mobile article : taille l?g?rement r?duite pour petits ?crans. */
   .article-content {
     font-size: 1rem;
   }

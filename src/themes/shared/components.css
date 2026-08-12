@@ -29,12 +29,14 @@
   min-width: 0;
 }
 
+/* Wrapper H1 de marque : garde la typographie du lien sans ajouter de style propre. */
 .brand-heading {
   margin: 0;
   font: inherit;
   line-height: inherit;
 }
 
+/* Lien de marque : identit? textuelle principale du site. */
 .brand {
   display: inline-flex;
   align-items: center;
@@ -46,6 +48,7 @@
   letter-spacing: 0.04em;
 }
 
+/* Baseline : phrase courte optionnelle sous la marque. */
 .site-tagline {
   margin: 0.2rem 0 0;
   color: var(--color-text-muted);
@@ -55,12 +58,14 @@
 /* Zone d'actions : liens principaux et switch light/dark. */
 .site-nav-actions,
 .site-links,
+/* Actions utilitaires : switch de th?me et ajouts ?ventuels propres aux th?mes. */
 .site-utility-actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
 
+/* Conteneur d'actions : regroupe navigation et utilitaires ? droite du header. */
 .site-nav-actions {
   gap: 1rem;
   justify-content: flex-end;
@@ -79,10 +84,12 @@
   list-style: none;
 }
 
+/* Items de navigation : neutralise les marges de liste. */
 .site-links li {
   margin: 0;
 }
 
+/* Lien de navigation : grande zone cliquable et ?tat courant possible. */
 .site-links a {
   display: inline-flex;
   min-height: 2.75rem;
@@ -91,6 +98,7 @@
   border-bottom: 2px solid transparent;
 }
 
+/* ?tats de navigation : survol, focus clavier et page active. */
 .site-links a:hover,
 .site-links a:focus-visible,
 .site-links a[aria-current='page'] {
@@ -113,6 +121,7 @@
   cursor: pointer;
 }
 
+/* Ic?ne du switch : les deux pictogrammes partagent la m?me cellule. */
 .color-mode-icon {
   grid-area: 1 / 1;
   width: 100%;
@@ -120,21 +129,25 @@
   background: currentColor;
 }
 
+/* Ic?ne soleil : masque SVG fourni par le th?me actif. */
 .color-mode-icon-sun {
   mask: var(--icon-color-mode-sun) center / contain no-repeat;
   -webkit-mask: var(--icon-color-mode-sun) center / contain no-repeat;
 }
 
+/* Ic?ne lune : masque SVG fourni par le th?me actif. */
 .color-mode-icon-moon {
   mask: var(--icon-color-mode-moon) center / contain no-repeat;
   -webkit-mask: var(--icon-color-mode-moon) center / contain no-repeat;
 }
 
+/* Ic?ne visible : affiche lune ou soleil selon le mode courant. */
 html[data-color-mode='dark'] .color-mode-icon-sun,
 html:not([data-color-mode='dark']) .color-mode-icon-moon {
   display: none;
 }
 
+/* Interaction du switch : accentue le contr?le sans changer sa taille. */
 .color-mode-switch:hover {
   color: var(--color-accent);
   border-color: var(--color-accent);
@@ -150,6 +163,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   border-top: 1px solid var(--color-border);
 }
 
+/* Liste du footer : ligne flexible pour RSS et cr?dit. */
 .site-footer ul {
   display: flex;
   align-items: center;
@@ -160,11 +174,13 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   list-style: none;
 }
 
+/* Items du footer : autorise les longs liens ? revenir ? la ligne. */
 .site-footer li {
   min-width: 0;
   margin: 0;
 }
 
+/* S?parateur du footer : caract?re d?coratif entre les liens. */
 .site-footer .footer-separator {
   color: var(--color-text-muted);
   font-weight: 700;
@@ -172,6 +188,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 
 /* Liens enrichis du footer : icône RSS thémable et icône projet globale. */
 .rss-link,
+/* Lien propuls? par : peut se replier proprement sur plusieurs lignes. */
 .powered-link {
   display: inline-flex;
   align-items: center;
@@ -185,6 +202,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
 }
 
 /* Icône RSS : sa forme vient du thème via --icon-rss. */
+/* Bo?te d'ic?ne RSS : taille align?e sur le texte courant. */
 .rss-icon {
   display: inline-block;
   flex: 0 0 auto;
@@ -192,6 +210,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   height: 1em;
 }
 
+/* Couleur RSS : orange par d?faut, surchargeable par le th?me. */
 .rss-icon {
   color: var(--color-rss, #f26522);
 }
@@ -224,14 +243,17 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   box-shadow: var(--shadow-card);
 }
 
+/* Contenu de carte : autorise les textes longs ? se r?duire dans les grilles. */
 .post-card-content {
   min-width: 0;
 }
 
+/* Titre de carte : marge commune avant sp?cialisation de th?me. */
 .post-title {
   margin-block: 0 0.5rem;
 }
 
+/* Description de carte : texte r?sum?, robuste aux mots longs. */
 .post-description {
   margin-block: 0.5rem;
   max-width: 100%;
@@ -247,11 +269,14 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   margin-block-start: 0.75rem;
 }
 
+/* ?l?ments du pied de carte : supprime les marges internes parasites. */
 .post-card-footer .post-meta,
-.post-card-footer .read-more {
+.post-card-footer /* Lien lire la suite : accent typographique commun aux cartes. */
+.read-more {
   margin: 0;
 }
 
+/* S?parateur de carte : ponctuation visuelle entre date et lien. */
 .post-card-footer-separator {
   color: var(--color-text-muted);
 }
@@ -266,6 +291,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-size: 0.925rem;
 }
 
+/* Date : renforce l?g?rement la valeur temporelle. */
 .post-meta time {
   color: var(--color-text);
   font-weight: 600;
@@ -287,15 +313,18 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   line-height: 1.2;
 }
 
+/* Accents de tags : variables CSS d?riv?es de la configuration TypeScript. */
 [data-accent='violet'] { --tag-accent: var(--color-tag-violet, var(--color-accent)); }
 [data-accent='blue'] { --tag-accent: var(--color-tag-blue, var(--color-accent)); }
 [data-accent='orange'] { --tag-accent: var(--color-tag-orange, var(--color-accent)); }
 
+/* Tag dans une carte : espace sous le chip lorsqu'il est isol?. */
 .post-category {
   margin-block-end: 0.75rem;
 }
 
 /* Liste de tags dans les cartes et pages d'article. */
+/* Liste de tags d'une carte : chips horizontaux sans puces. */
 .post-card-tags {
   display: flex;
   align-items: center;
@@ -307,6 +336,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   list-style-type: none;
 }
 
+/* Item de tag de carte : neutralise le comportement de liste. */
 .post-card-tags li {
   display: inline-flex;
   margin: 0;
@@ -314,6 +344,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   list-style: none;
 }
 
+/* Tag dans liste horizontale : retire la marge pr?vue pour le cas isol?. */
 .post-card-tags .post-category {
   margin-block-end: 0;
 }
@@ -333,12 +364,14 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   margin-block: 1rem 0;
 }
 
+/* Libell? de liste de tags : annonce les chips sur une page article. */
 .tag-list-label {
   color: var(--color-text-muted);
   font-size: 0.875rem;
   font-weight: 700;
 }
 
+/* Listes de tags : m?me base flexible pour article, index et nuage. */
 .tag-list ul,
 .tag-index,
 .tag-cloud {
@@ -350,18 +383,22 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   list-style: none;
 }
 
+/* Items de tags : supprime les marges de liste natives. */
 .tag-list li,
 .tag-index li,
+/* Placement d'un tag du nuage : colonnes/lignes inject?es par Astro. */
 .tag-cloud li {
   margin: 0;
 }
 
+/* Interaction tag : surface invers?e l?g?re au survol/focus. */
 .tag-chip:hover,
 .tag-chip:focus-visible {
   color: var(--tag-accent, var(--color-accent-hover));
   background: var(--color-surface);
 }
 
+/* Index de tags simple : espacement d?di? quand il est utilis?. */
 .tag-index {
   gap: 0.65rem;
   margin-block: 1.5rem 2rem;
@@ -384,6 +421,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   justify-self: center;
 }
 
+/* Tag pond?r? : taille calcul?e selon le nombre d'articles. */
 .tag-cloud-link {
   gap: 0.45em;
   min-height: calc(2rem + var(--tag-weight, 3) * 0.22rem);
@@ -392,6 +430,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   font-weight: calc(500 + var(--tag-weight, 3) * 80);
 }
 
+/* Compteur de tag : pastille indiquant le nombre d'articles associ?s. */
 .tag-count {
   display: inline-grid;
   min-width: calc(1.1rem + var(--tag-weight, 3) * 0.08rem);
@@ -417,12 +456,14 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     gap: 0.55rem;
   }
 
+  /* Mobile tag cloud item : retour au flux naturel de la grille. */
   .tag-cloud li {
     grid-column: auto;
     grid-row: auto;
     max-width: 100%;
   }
 
+  /* Mobile tag cloud link : ?vite les d?bordements de libell?s longs. */
   .tag-cloud-link {
     max-width: 100%;
     overflow-wrap: anywhere;
@@ -434,10 +475,12 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   margin-block-end: 1rem;
 }
 
+/* Lien de couverture : rend l'image enti?re cliquable dans les listes. */
 .cover-link {
   display: block;
 }
 
+/* Image de couverture : base responsive commune. */
 .post-cover {
   display: block;
   width: 100%;
@@ -447,11 +490,13 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   border-radius: var(--radius-card);
 }
 
+/* Ratio de couverture : format social 1200x630 utilis? par les articles. */
 .post-cover {
   aspect-ratio: 1200 / 630;
 }
 
 /* Navigation de fin d'article : précédent/suivant avec cartes symétriques. */
+/* Lien retour : s?paration nette apr?s le contenu article. */
 .back-link {
   margin-block-start: 2.5rem;
   padding-block-start: 1rem;
@@ -467,6 +512,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   border-top: 1px solid var(--color-border);
 }
 
+/* Carte de navigation article : surface cliquable pour pr?c?dent/suivant. */
 .article-navigation-link {
   display: flex;
   min-height: 100%;
@@ -479,28 +525,33 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   box-shadow: var(--shadow-card);
 }
 
+/* Carte article plus ancien : align?e ? droite sur desktop. */
 .article-navigation-link--older {
   text-align: right;
 }
 
+/* Libell? pr?c?dent/suivant : information secondaire. */
 .article-navigation-label {
   color: var(--color-text-muted);
   font-size: 0.85rem;
   font-weight: 700;
 }
 
+/* Titre pr?c?dent/suivant : texte principal du lien. */
 .article-navigation-title {
   color: var(--color-text);
   font-family: var(--font-heading);
   font-weight: 700;
 }
 
+/* Interaction navigation article : bordure accentu?e. */
 .article-navigation-link:hover,
 .article-navigation-link:focus-visible {
   border-color: var(--color-accent);
   text-decoration: none;
 }
 
+/* Interaction titre navigation : accent sur le texte principal. */
 .article-navigation-link:hover .article-navigation-title,
 .article-navigation-link:focus-visible .article-navigation-title {
   color: var(--color-accent);
@@ -511,6 +562,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   margin-block-start: 2rem;
 }
 
+/* Liste de pagination : aligne pr?c?dent, ?tat courant et suivant. */
 .pagination-list {
   display: flex;
   align-items: center;
@@ -522,16 +574,19 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
   list-style: none;
 }
 
+/* Item de pagination : neutralise les marges de liste. */
 .pagination-list li {
   margin: 0;
 }
 
+/* ?tat courant de pagination : texte secondaire non cliquable. */
 .pagination-current {
   color: var(--color-text-muted);
 }
 
 /* Mobile global des composants : header compact et navigation d'article empilée. */
 @media (max-width: 760px) {
+  /* Mobile header : empile identit? et actions. */
   .site-nav {
     width: min(100% - 1.25rem, var(--content-width));
     flex-direction: column;
@@ -539,6 +594,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     gap: 0.75rem;
   }
 
+  /* Mobile actions : garde liens et switch sur la m?me ligne. */
   .site-nav-actions {
     width: 100%;
     align-items: center;
@@ -548,6 +604,7 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     justify-content: flex-start;
   }
 
+  /* Mobile liens : pas de retour ligne pour pr?server le header compact. */
   .site-links {
     flex: 0 1 auto;
     flex-wrap: nowrap;
@@ -555,11 +612,13 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     gap: 0.45rem;
   }
 
+  /* Mobile lien de navigation : hauteur et taille r?duites. */
   .site-links a {
     min-height: 2rem;
     font-size: 0.9rem;
   }
 
+  /* Mobile utilitaires : restent coll?s aux liens principaux. */
   .site-utility-actions {
     flex: 0 0 auto;
     flex-wrap: nowrap;
@@ -567,24 +626,29 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     gap: 0.3rem;
   }
 
+  /* Mobile switch : bouton plus petit. */
   .color-mode-switch {
     width: 1.75rem;
     height: 1.75rem;
     padding: 0.32rem;
   }
 
+  /* Mobile carte : padding r?duit pour maximiser la largeur utile. */
   .post-card {
     padding: 1rem;
   }
 
+  /* Mobile navigation article : cartes empil?es. */
   .article-navigation {
     grid-template-columns: 1fr;
   }
 
+  /* Mobile carte plus ancien : retour ? l'alignement gauche. */
   .article-navigation-link--older {
     text-align: left;
   }
 
+  /* Mobile footer : m?me largeur compacte que le contenu. */
   .site-footer {
     width: min(100% - 1.25rem, var(--content-width));
   }
