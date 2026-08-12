@@ -138,11 +138,6 @@ body {
   text-transform: uppercase;
 }
 
-.terminal-prompt {
-  color: var(--color-accent);
-  transform: rotate(-4deg);
-}
-
 .site-links a {
   min-height: 2.2rem;
   color: var(--color-text);

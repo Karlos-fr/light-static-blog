@@ -52,7 +52,7 @@
   font-family: var(--font-mono);
 }
 
-/* Zone d'actions : liens principaux, prompt décoratif et switch light/dark. */
+/* Zone d'actions : liens principaux et switch light/dark. */
 .site-nav-actions,
 .site-links,
 .site-utility-actions {
@@ -97,13 +97,6 @@
   color: var(--color-accent);
   border-bottom-color: var(--color-accent);
   text-decoration: none;
-}
-
-/* Prompt décoratif partagé, stylisé plus fortement par le thème terminal. */
-.terminal-prompt {
-  color: var(--color-accent);
-  font-family: var(--font-mono);
-  font-weight: 700;
 }
 
 /* Switch de mode couleur : l'état visuel est piloté par data-color-mode sur html. */
@@ -572,10 +565,6 @@ html:not([data-color-mode='dark']) .color-mode-icon-moon {
     flex-wrap: nowrap;
     margin-inline-start: 0;
     gap: 0.3rem;
-  }
-
-  .terminal-prompt {
-    font-size: 0.9rem;
   }
 
   .color-mode-switch {

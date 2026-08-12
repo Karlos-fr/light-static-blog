@@ -134,11 +134,6 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* Le thème folio abandonne volontairement le clin d'œil console. */
-.terminal-prompt {
-  display: none;
-}
-
 .site-links a {
   min-height: 2.25rem;
   color: var(--color-text-muted);

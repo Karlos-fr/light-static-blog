@@ -152,8 +152,7 @@ code {
   }
 
   body::before,
-  .color-mode-switch,
-  .terminal-prompt {
+  .color-mode-switch {
     display: none !important;
   }
 }
