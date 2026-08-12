@@ -1,7 +1,15 @@
+/**
+ * Endpoint CSS pour l'affichage navigateur du flux RSS.
+ *
+ * Le flux reste un XML RSS valide pour les lecteurs, mais les navigateurs qui
+ * appliquent les feuilles de style XML bénéficient d'un rendu compact.
+ */
 import { getPath } from '../../lib/urls';
 
+/** Force Astro à générer cette feuille CSS au build statique. */
 export const prerender = true;
 
+/** Génère la feuille CSS RSS en réutilisant les variables du thème actif. */
 export function GET() {
   const css = String.raw`@import url('${getPath('styles/theme.css')}');
 

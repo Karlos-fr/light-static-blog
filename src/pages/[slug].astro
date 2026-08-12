@@ -1,4 +1,10 @@
 ---
+/**
+ * Page détail d'un article.
+ *
+ * Génère une page statique par article public, avec contenu Markdown rendu,
+ * données structurées BlogPosting et navigation précédent/suivant.
+ */
 import { render } from 'astro:content';
 
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -11,6 +17,7 @@ import { getPublicPosts } from '../lib/content';
 import { getAuthorName } from '../lib/site';
 import { getAbsolutePageUrl, getAbsoluteUrl, getPagePath } from '../lib/urls';
 
+/** Déclare à Astro toutes les routes d'articles à générer. */
 export async function getStaticPaths() {
   const posts = await getPublicPosts();
 
@@ -24,22 +31,33 @@ export async function getStaticPaths() {
   }));
 }
 
+/** Props reçues depuis getStaticPaths pour la page article courante. */
 type Props = {
   post: Awaited<ReturnType<typeof getPublicPosts>>[number];
   newerPost?: Awaited<ReturnType<typeof getPublicPosts>>[number];
   olderPost?: Awaited<ReturnType<typeof getPublicPosts>>[number];
 };
 
+/** Article courant et voisins chronologiques. */
 const { post, newerPost, olderPost } = Astro.props as Props;
+
+/** Composant HTML généré depuis le Markdown de l'article. */
 const { Content } = await render(post);
+
+/** URLs absolues utilisées par le SEO et le JSON-LD. */
 const siteUrl = getAbsolutePageUrl();
 const articleUrl = getAbsolutePageUrl(post.slug);
+
+/** Auteur configuré au build et réutilisé dans les métadonnées. */
 const authorName = getAuthorName();
+
+/** Entité JSON-LD représentant l'auteur et l'éditeur. */
 const author = {
   '@type': 'Person',
   '@id': `${siteUrl}#author`,
   name: authorName,
 };
+/** Données structurées BlogPosting propres à l'article. */
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',

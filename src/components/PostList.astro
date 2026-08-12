@@ -1,21 +1,30 @@
 ---
+/**
+ * Liste de cartes d'articles.
+ *
+ * Le composant affiche les couvertures, tags, titres, descriptions et métadonnées
+ * des articles en laissant les thèmes contrôler entièrement la présentation.
+ */
 import type { BlogEntry } from '../lib/content';
 import { getTagAccent, normalizeTag } from '../lib/content';
 import { getPagePath } from '../lib/urls';
 import PostCover from './PostCover.astro';
 import PostMeta from './PostMeta.astro';
 
+/** Données nécessaires au rendu d'une liste d'articles. */
 interface Props {
   posts: BlogEntry[];
   emptyMessage: string;
   headingLevel?: 'h2' | 'h3';
 }
 
+/** Props de liste, avec un niveau de titre configurable pour préserver le SEO. */
 const {
   posts,
   emptyMessage,
   headingLevel = 'h2',
 } = Astro.props as Props;
+/** Composant de titre dynamique h2/h3 selon le contexte de page. */
 const Heading = headingLevel;
 ---
 

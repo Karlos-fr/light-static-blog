@@ -1,4 +1,10 @@
 ---
+/**
+ * Page de listing des articles.
+ *
+ * Ce composant factorise la page d'accueil et les pages paginées afin de
+ * conserver la même structure SEO, pagination et liste d'articles.
+ */
 import { siteConfig } from '../config/site';
 import type { BlogEntry } from '../lib/content';
 import { getAbsolutePageUrl } from '../lib/urls';
@@ -6,6 +12,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Pagination from './Pagination.astro';
 import PostList from './PostList.astro';
 
+/** Données nécessaires pour afficher une page d'index d'articles. */
 interface Props {
   posts: BlogEntry[];
   currentPage: number;
@@ -13,17 +20,25 @@ interface Props {
   structuredData?: Record<string, unknown>;
 }
 
+/** Props transmises par la page d'accueil ou la route paginée. */
 const { posts, currentPage, totalPages, structuredData } = Astro.props as Props;
+
+/** Titre SEO spécifique à la première page ou aux pages suivantes. */
 const title = currentPage === 1
   ? siteConfig.homeMetaTitle
   : `Articles - Page ${currentPage} | ${siteConfig.name}`;
+/** URL rel=prev pour aider les moteurs et lecteurs à comprendre la pagination. */
 const previousUrl = currentPage > 1
   ? (currentPage === 2 ? getAbsolutePageUrl() : getAbsolutePageUrl('page', String(currentPage - 1)))
   : undefined;
+/** URL rel=next pour aider les moteurs et lecteurs à comprendre la pagination. */
 const nextUrl = currentPage < totalPages
   ? getAbsolutePageUrl('page', String(currentPage + 1))
   : undefined;
+/** Niveau du titre principal selon que le H1 est déjà porté par le header. */
 const Heading = currentPage === 1 ? 'h2' : 'h1';
+
+/** Niveau des titres d'articles pour garder une hiérarchie HTML cohérente. */
 const postHeadingLevel = currentPage === 1 ? 'h3' : 'h2';
 ---
 

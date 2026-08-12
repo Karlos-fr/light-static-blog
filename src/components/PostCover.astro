@@ -1,7 +1,14 @@
 ---
+/**
+ * Image de couverture d'un article.
+ *
+ * Ce composant centralise les attributs d'accessibilité, les dimensions connues
+ * et la stratégie de chargement des illustrations.
+ */
 import { getImageDimensions } from '../lib/images';
 import { getPath } from '../lib/urls';
 
+/** Paramètres d'affichage d'une couverture d'article. */
 interface Props {
   cover: string;
   title: string;
@@ -9,10 +16,19 @@ interface Props {
   eager?: boolean;
 }
 
+/** Props de couverture, avec chargement eager réservé aux contenus prioritaires. */
 const { cover, title, href, eager = false } = Astro.props as Props;
+
+/** URL publique de l'image, compatible avec BASE_URL. */
 const src = getPath(cover);
+
+/** Texte alternatif descriptif construit à partir du titre de l'article. */
 const alt = `Couverture de l’article « ${title} »`;
+
+/** Dimensions PNG éventuelles pour limiter les décalages de mise en page. */
 const dimensions = getImageDimensions(cover);
+
+/** Stratégie de chargement et de priorité réseau de l'image. */
 const loading = eager ? 'eager' : 'lazy';
 const fetchpriority = eager ? 'high' : undefined;
 ---

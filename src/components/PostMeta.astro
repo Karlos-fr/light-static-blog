@@ -1,18 +1,28 @@
 ---
+/**
+ * Métadonnées temporelles d'un article.
+ *
+ * Le composant gère un affichage compact pour les listes et un affichage enrichi
+ * pour les pages articles.
+ */
 interface Props {
   pubDate: Date;
   updatedDate?: Date;
   variant?: 'summary' | 'article';
 }
 
+/** Props temporelles, avec une variante d'affichage selon le contexte. */
 const {
   pubDate,
   updatedDate,
   variant = 'summary',
 } = Astro.props as Props;
 
+/** Formate une date en français lisible pour l'utilisateur. */
 const formatDate = (value: Date) =>
   new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(value);
+
+/** Produit la valeur ISO attendue par l'attribut datetime. */
 const dateTime = (value: Date) => value.toISOString().slice(0, 10);
 ---
 

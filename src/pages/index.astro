@@ -1,4 +1,10 @@
 ---
+/**
+ * Page d'accueil du blog.
+ *
+ * Elle affiche la première page d'articles et publie les données structurées
+ * WebSite/Blog principales.
+ */
 import ArticleIndex from '../components/ArticleIndex.astro';
 import { siteConfig } from '../config/site';
 import { getPublicPosts } from '../lib/content';
@@ -6,14 +12,22 @@ import { paginateItems } from '../lib/pagination';
 import { getAuthorName } from '../lib/site';
 import { getAbsolutePageUrl } from '../lib/urls';
 
+/** Articles publics triés du plus récent au plus ancien. */
 const posts = await getPublicPosts();
+
+/** Première page de résultats selon la configuration de pagination. */
 const page = paginateItems(posts, 1, siteConfig.postsPerPage);
+
+/** URL absolue de l'accueil, réutilisée comme identifiant JSON-LD. */
 const siteUrl = getAbsolutePageUrl();
+
+/** Auteur configuré au build pour les données structurées. */
 const author = {
   '@type': 'Person',
   '@id': `${siteUrl}#author`,
   name: getAuthorName(),
 };
+/** Graphe JSON-LD décrivant le site et le blog. */
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [

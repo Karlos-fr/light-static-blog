@@ -1,11 +1,19 @@
 ---
+/**
+ * Liste de tags attachés à un article.
+ *
+ * Chaque tag pointe vers sa page dédiée et porte l'accent visuel déclaré dans la
+ * configuration des tags.
+ */
 import { getTagAccent, normalizeTag } from '../lib/content';
 import { getPagePath } from '../lib/urls';
 
+/** Tags bruts issus du frontmatter d'un article. */
 interface Props {
   tags: string[];
 }
 
+/** Props de tags fournies par la page article. */
 const { tags } = Astro.props as Props;
 ---
 

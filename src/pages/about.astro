@@ -1,17 +1,27 @@
 ---
+/**
+ * Page À propos.
+ *
+ * Le contenu éditorial vient de src/content/pages/about.md afin de rester
+ * modifiable sans toucher au composant de page.
+ */
 import { getEntry, render } from 'astro:content';
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../config/site';
 import { getAbsolutePageUrl } from '../lib/urls';
 
+/** Entrée Markdown source de la page À propos. */
 const about = await getEntry('pages', 'about');
 
 if (!about) {
   throw new Error('La page de contenu "about" est introuvable dans src/content/pages/about.md.');
 }
 
+/** Composant HTML généré depuis le Markdown de la page. */
 const { Content } = await render(about);
+
+/** URL absolue et données structurées de la page éditoriale. */
 const aboutUrl = getAbsolutePageUrl('about');
 const structuredData = {
   '@context': 'https://schema.org',

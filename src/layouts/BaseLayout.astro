@@ -1,10 +1,17 @@
 ---
+/**
+ * Layout HTML global.
+ *
+ * Il concentre le squelette de page, les métadonnées SEO/sociales, les scripts
+ * d'amélioration progressive et les composants communs header/footer.
+ */
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { siteConfig } from '../config/site';
 import { getImageDimensions } from '../lib/images';
 import { getAbsoluteUrl, getCanonicalUrl, getPath } from '../lib/urls';
 
+/** Métadonnées et options nécessaires au rendu d'une page complète. */
 interface Props {
   title: string;
   description?: string;
@@ -19,6 +26,7 @@ interface Props {
   tags?: string[];
 }
 
+/** Props de layout, avec des valeurs par défaut adaptées aux pages classiques. */
 const {
   title,
   description = '',
@@ -32,11 +40,17 @@ const {
   authorName,
   tags = [],
 } = Astro.props as Props;
+/** URL canonique de la page courante, tenant compte de BASE_URL. */
 const canonicalUrl = getCanonicalUrl(Astro.url.pathname);
+
+/** Image sociale spécifique à la page ou image par défaut du site. */
 const socialImageUrl = image
   ? getAbsoluteUrl(image)
   : getAbsoluteUrl(siteConfig.socialImage);
+/** Dimensions éventuelles de l'image sociale pour enrichir Open Graph. */
 const socialImageDimensions = getImageDimensions(image ?? siteConfig.socialImage);
+
+/** JSON-LD sérialisé et protégé contre une fermeture de balise involontaire. */
 const serializedStructuredData = structuredData
   ? JSON.stringify(structuredData).replace(/</g, '\\u003c')
   : undefined;

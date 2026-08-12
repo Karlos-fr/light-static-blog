@@ -1,10 +1,17 @@
 ---
+/**
+ * Pages paginées de la liste d'articles.
+ *
+ * La première page reste l'accueil ; cette route ne génère que les pages 2 et
+ * suivantes pour éviter les doublons d'URL.
+ */
 import ArticleIndex from '../../components/ArticleIndex.astro';
 import { siteConfig } from '../../config/site';
 import { getPublicPosts } from '../../lib/content';
 import { getPageCount, paginateItems } from '../../lib/pagination';
 import { getAbsolutePageUrl } from '../../lib/urls';
 
+/** Déclare à Astro les pages de pagination à générer. */
 export async function getStaticPaths() {
   const posts = await getPublicPosts();
   const totalPages = getPageCount(posts.length, siteConfig.postsPerPage);
@@ -14,9 +21,16 @@ export async function getStaticPaths() {
   }));
 }
 
+/** Props transmises à chaque page paginée. */
 interface Props { posts: Awaited<ReturnType<typeof getPublicPosts>>; currentPage: number; }
+
+/** Articles complets et numéro de page courant. */
 const { posts, currentPage } = Astro.props as Props;
+
+/** Tranche d'articles affichée sur cette page. */
 const page = paginateItems(posts, currentPage, siteConfig.postsPerPage);
+
+/** URL absolue et JSON-LD de la page de collection. */
 const pageUrl = getAbsolutePageUrl('page', String(currentPage));
 const structuredData = {
   '@context': 'https://schema.org',

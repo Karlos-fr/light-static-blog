@@ -1,8 +1,19 @@
 ---
+/**
+ * Navigation de pagination des listes d'articles.
+ *
+ * Le composant reste volontairement générique et ne connaît que la page courante
+ * et le nombre total de pages.
+ */
 import { getPagePath } from '../lib/urls';
 
+/** État minimal nécessaire pour générer les liens précédent/suivant. */
 interface Props { currentPage: number; totalPages: number; }
+
+/** Props de pagination fournies par la page appelante. */
 const { currentPage, totalPages } = Astro.props as Props;
+
+/** Construit le chemin canonique d'une page paginée. */
 const pagePath = (page: number) => page === 1 ? getPagePath() : getPagePath('page', String(page));
 ---
 

@@ -1,13 +1,24 @@
 ---
+/**
+ * Page nuage de tags.
+ *
+ * Elle affiche tous les tags utilisés avec un poids visuel lié au nombre
+ * d'articles associés, puis expose une page CollectionPage en JSON-LD.
+ */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { siteConfig } from '../../config/site';
 import { getTagAccent, getTagStats } from '../../lib/content';
 import { getAbsolutePageUrl, getPagePath } from '../../lib/urls';
 
+/** Tags triés par popularité puis par ordre alphabétique stable. */
 const tags = (await getTagStats()).sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+
+/** Bornes de fréquence utilisées pour calculer les poids visuels. */
 const tagCounts = tags.map(({ count }) => count);
 const minCount = Math.min(...tagCounts);
 const maxCount = Math.max(...tagCounts);
+
+/** Convertit un nombre d'articles en poids de nuage de 1 à 5. */
 const getTagWeight = (count: number) => {
   if (maxCount === minCount) {
     return 3;
@@ -15,6 +26,8 @@ const getTagWeight = (count: number) => {
 
   return Math.round(1 + ((count - minCount) / (maxCount - minCount)) * 4);
 };
+
+/** Positions préférentielles pour placer les tags les plus fréquents au centre. */
 const cloudSlots = [
   [4, 2],
   [3, 2],
@@ -34,6 +47,8 @@ const cloudSlots = [
   [6, 1],
   [2, 3],
 ] as const;
+
+/** Tags enrichis avec une position et un poids CSS pour le nuage. */
 const positionedTags = tags.map((tag, index) => {
   const [column, row] = cloudSlots[index] ?? [
     (index % 7) + 1,
@@ -47,6 +62,8 @@ const positionedTags = tags.map((tag, index) => {
     weight: getTagWeight(tag.count),
   };
 });
+
+/** Métadonnées SEO et JSON-LD de la page Tags. */
 const pageUrl = getAbsolutePageUrl('tags');
 const description = `Nuage de tags de ${siteConfig.name} pour explorer les articles par thème.`;
 const structuredData = {

@@ -1,7 +1,14 @@
+/**
+ * Déclaration des collections de contenu Astro.
+ *
+ * Ce fichier définit les schémas Markdown attendus pour les articles de blog
+ * et les pages éditoriales, afin de valider le contenu au build.
+ */
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+/** Collection des articles Markdown publiables. */
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
@@ -21,6 +28,7 @@ const blog = defineCollection({
   }),
 });
 
+/** Collection des pages éditoriales simples, comme la page À propos. */
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: z.object({
@@ -29,6 +37,7 @@ const pages = defineCollection({
   }),
 });
 
+/** Registre des collections exposé à Astro Content. */
 export const collections = {
   blog,
   pages,

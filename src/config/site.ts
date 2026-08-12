@@ -1,5 +1,12 @@
+/**
+ * Configuration centrale du site.
+ *
+ * Ce module agrège les valeurs personnalisables par variables d'environnement
+ * avec des valeurs par défaut génériques pour le dépôt public.
+ */
 import { resolveTheme } from '../themes/registry';
 
+/** Lit une variable d'environnement optionnelle et applique un fallback fiable. */
 function getOptionalEnv(
   name: string,
   fallback: string,
@@ -15,12 +22,16 @@ function getOptionalEnv(
   return trimmedValue || (options.allowEmpty ? '' : fallback);
 }
 
+/** Nom public du site, utilisé dans le header, le SEO et les flux. */
 const siteName = getOptionalEnv('SITE_NAME', 'Light Static Blog');
+
+/** Description éditoriale par défaut, utilisée aussi comme base SEO/RSS. */
 const siteDescription = getOptionalEnv(
   'SITE_DESCRIPTION',
   'Une solution de blog statique simple avec Astro et Markdown, prête pour GitHub Pages. Festina lente : publier sobrement, sans complexité.'
 );
 
+/** Configuration exportée et consommée par les pages, layouts, flux et thèmes. */
 export const siteConfig = {
   name: siteName,
   homeMetaTitle: getOptionalEnv('SITE_HOME_META_TITLE', `${siteName} | Blog statique Astro`),

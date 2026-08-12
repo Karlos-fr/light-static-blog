@@ -1,3 +1,9 @@
+/**
+ * Endpoint statique du flux RSS.
+ *
+ * Le flux expose une description courte, le contenu HTML complet des articles,
+ * les médias détectés et quelques métadonnées utiles aux lecteurs modernes.
+ */
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { render } from 'astro:content';
 import { siteConfig } from '../config/site';
@@ -5,8 +11,10 @@ import { getPublicPosts } from '../lib/content';
 import { getAuthorName } from '../lib/site';
 import { getAbsolutePageUrl, getAbsoluteUrl, getCanonicalUrl, getPath } from '../lib/urls';
 
+/** Force Astro à générer ce flux au build statique. */
 export const prerender = true;
 
+/** Échappe une valeur injectée dans un nœud ou attribut XML. */
 function escapeXml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -16,10 +24,12 @@ function escapeXml(value: string): string {
     .replace(/'/g, '&apos;');
 }
 
+/** Sécurise une chaîne injectée dans une section CDATA. */
 function escapeCdata(value: string): string {
   return value.replace(/]]>/g, ']]]]><![CDATA[>');
 }
 
+/** Déduit le type MIME image depuis l'extension du fichier. */
 function getImageMimeType(path: string): string | undefined {
   const extension = path.split(/[?#]/, 1)[0].split('.').pop()?.toLowerCase();
 
@@ -35,6 +45,7 @@ function getImageMimeType(path: string): string | undefined {
   return extension ? mimeTypes[extension] : undefined;
 }
 
+/** Transforme une URL trouvée dans le HTML d'article en URL absolue. */
 function getAbsoluteContentUrl(value: string, articleUrl: string): string {
   if (/^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(value)) {
     return value.startsWith('//') ? new URL(value, articleUrl).toString() : value;
@@ -47,6 +58,7 @@ function getAbsoluteContentUrl(value: string, articleUrl: string): string {
   return new URL(value, `${articleUrl}/`).toString();
 }
 
+/** Transforme une URL d'icône/logo RSS en URL absolue. */
 function getAbsoluteFeedAssetUrl(value: string): string {
   if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(value)) {
     return value.startsWith('//') ? new URL(value, getAbsoluteUrl()).toString() : value;
@@ -57,6 +69,7 @@ function getAbsoluteFeedAssetUrl(value: string): string {
     : getAbsoluteUrl(value);
 }
 
+/** Rend absolues les URLs href/src/poster/srcset du HTML embarqué dans le flux. */
 function absolutizeHtmlUrls(html: string, articleUrl: string): string {
   const withAttributes = html.replace(
     /\b(href|src|poster)=("([^"]*)"|'([^']*)')/gi,
@@ -91,12 +104,14 @@ function absolutizeHtmlUrls(html: string, articleUrl: string): string {
   );
 }
 
+/** Extrait les URLs d'images présentes dans le HTML déjà rendu d'un article. */
 function getImageUrls(html: string): string[] {
   return [...html.matchAll(/<img\b[^>]*\bsrc=(?:"([^"]+)"|'([^']+)')[^>]*>/gi)]
     .map((match) => match[1] ?? match[2])
     .filter((url): url is string => Boolean(url));
 }
 
+/** Génère le document RSS complet. */
 export async function GET() {
   const posts = await getPublicPosts();
   const siteUrl = getAbsolutePageUrl();

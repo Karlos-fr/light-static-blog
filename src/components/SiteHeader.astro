@@ -1,12 +1,23 @@
 ---
+/**
+ * En-tête commun du site.
+ *
+ * Il affiche l'identité éditoriale, la navigation principale et les actions
+ * utilitaires, tout en posant le H1 sur la page d'accueil.
+ */
 import { siteConfig } from '../config/site';
 import { getPagePath } from '../lib/urls';
 import ColorModeSwitch from './ColorModeSwitch.astro';
 
+/** Chemin courant normalisé pour comparer les routes malgré les slashs finaux. */
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+/** Chemins de référence des entrées de navigation principales. */
 const homePath = getPagePath().replace(/\/+$/, '') || '/';
 const tagsPath = getPagePath('tags').replace(/\/+$/, '');
 const aboutPath = getPagePath('about').replace(/\/+$/, '');
+
+/** États actifs de navigation utilisés par aria-current. */
 const isHome = currentPath === homePath;
 const isArticles = currentPath === homePath
   || (!currentPath.startsWith(tagsPath) && currentPath !== aboutPath);

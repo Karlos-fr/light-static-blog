@@ -1,12 +1,20 @@
 ---
+/**
+ * Navigation entre articles voisins.
+ *
+ * Affiche les liens vers l'article plus récent et l'article plus ancien sur une
+ * page article, avec les relations HTML prev/next.
+ */
 import type { BlogEntry } from '../lib/content';
 import { getPagePath } from '../lib/urls';
 
+/** Articles voisins éventuels autour de l'article courant. */
 interface Props {
   newerPost?: BlogEntry;
   olderPost?: BlogEntry;
 }
 
+/** Props de navigation calculées par la page article. */
 const { newerPost, olderPost } = Astro.props as Props;
 ---
 

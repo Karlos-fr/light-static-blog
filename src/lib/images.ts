@@ -1,13 +1,22 @@
+/**
+ * Utilitaires de métadonnées d'images publiques.
+ *
+ * Astro ne connaît pas automatiquement les dimensions des fichiers placés dans
+ * public/. Ce module extrait les dimensions PNG utiles aux balises HTML/SEO.
+ */
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 
+/** Chemin absolu vers le dossier public du projet. */
 const publicDir = join(process.cwd(), 'public');
 
+/** Dimensions intrinsèques d'une image. */
 export type ImageDimensions = {
   width: number;
   height: number;
 };
 
+/** Convertit une URL publique locale en chemin disque, si elle pointe vers public/. */
 function getPublicImagePath(value: string): string | undefined {
   let path = value.split(/[?#]/, 1)[0];
 
@@ -27,6 +36,7 @@ function getPublicImagePath(value: string): string | undefined {
   return join(publicDir, ...path.split('/').filter(Boolean));
 }
 
+/** Lit les dimensions d'un PNG à partir de son en-tête binaire. */
 function getPngDimensions(filePath: string): ImageDimensions | undefined {
   const buffer = readFileSync(filePath);
 
@@ -44,6 +54,7 @@ function getPngDimensions(filePath: string): ImageDimensions | undefined {
   };
 }
 
+/** Retourne les dimensions connues d'une image publique locale supportée. */
 export function getImageDimensions(src: string): ImageDimensions | undefined {
   const filePath = getPublicImagePath(src);
   if (!filePath || !existsSync(filePath)) {

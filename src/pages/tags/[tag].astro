@@ -1,4 +1,9 @@
 ---
+/**
+ * Page détail d'un tag.
+ *
+ * Génère une page statique par tag utilisé, avec la liste des articles associés.
+ */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
 import { siteConfig } from '../../config/site';
@@ -9,6 +14,7 @@ import {
 } from '../../lib/content';
 import { getAbsolutePageUrl, getPagePath } from '../../lib/urls';
 
+/** Déclare à Astro toutes les routes de tags à générer. */
 export async function getStaticPaths() {
   const tags = await getAllTags();
 
@@ -18,13 +24,19 @@ export async function getStaticPaths() {
   }));
 }
 
+/** Props de route pour un tag normalisé. */
 type Props = {
   tag: string;
 };
 
+/** Tag courant issu de l'URL. */
 const { tag } = Astro.props as Props;
+
+/** Articles associés au tag et libellé lisible. */
 const posts = await getPublicPostsByTag(tag);
 const displayTag = getDisplayTag(tag);
+
+/** Métadonnées SEO et JSON-LD de la page de tag. */
 const pageUrl = getAbsolutePageUrl('tags', tag);
 const description = posts.length > 0
   ? `${posts.length} article${posts.length > 1 ? 's' : ''} autour du tag ${displayTag} sur ${siteConfig.name}.`
