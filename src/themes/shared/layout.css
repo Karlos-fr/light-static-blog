@@ -193,6 +193,29 @@
   border-color: var(--color-accent);
 }
 
+/* Médias embarqués Markdown/HTML : vidéos et iframes restent fluides sur mobile. */
+.article-content video,
+.article-content iframe {
+  display: block;
+  width: min(100%, var(--reading-width));
+  max-width: 100%;
+  margin: 1.5rem auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.article-content video {
+  height: auto;
+  background: #000;
+}
+
+.article-content iframe {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  background: var(--color-surface-alt);
+}
+
 /* Tableaux Markdown : scroll horizontal plutôt qu'écrasement sur mobile. */
 .article-content table {
   display: block;
