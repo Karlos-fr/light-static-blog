@@ -56,6 +56,7 @@ The project is fully static: Astro turns pages and Markdown articles into HTML f
 │       ├── shared/             # Shared foundations and contracts
 │       ├── default/theme.css   # Default public theme
 │       ├── folio/theme.css     # Sober editorial public theme
+│       ├── mosaic/theme.css    # Graphic grid public theme
 │       └── <identifier>/       # Optional additional themes
 │           ├── theme.css
 │           └── assets/         # Theme-specific fonts, images and icons
@@ -212,7 +213,7 @@ The `src/pages/about.astro` route loads this file, applies the shared layout and
 
 The theme is selected at build time with `SITE_THEME`. The browser can only switch its light or dark palette. Without a saved choice, the site follows `prefers-color-scheme`; the switch then stores the choice in `localStorage`. HTML pages and the browser-rendered RSS feed load `styles/theme.css` and the same two static scripts.
 
-Two public themes are included: `default` for a simple, versatile rendering, and `folio` for a more sober editorial rendering. Personal themes can remain ignored by Git.
+Three public themes are included: `default` for a simple, versatile rendering, `folio` for a more sober editorial rendering, and `mosaic` for a more graphic article grid. Personal themes can remain ignored by Git.
 
 To add a theme:
 
