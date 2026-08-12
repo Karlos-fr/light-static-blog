@@ -18,13 +18,13 @@ function getOptionalEnv(
 const siteName = getOptionalEnv('SITE_NAME', 'Light Static Blog');
 const siteDescription = getOptionalEnv(
   'SITE_DESCRIPTION',
-  'Blog personnel statique consacré au développement, aux notes techniques et aux projets personnels.'
+  'Une solution de blog statique simple avec Astro et Markdown, prête pour GitHub Pages. Festina lente : publier sobrement, sans complexité.'
 );
 
 export const siteConfig = {
   name: siteName,
-  homeMetaTitle: getOptionalEnv('SITE_HOME_META_TITLE', `${siteName} | Blog personnel`),
-  tagline: getOptionalEnv('SITE_TAGLINE', '// Développement. Notes. Projets.', { allowEmpty: true }),
+  homeMetaTitle: getOptionalEnv('SITE_HOME_META_TITLE', `${siteName} | Blog statique Astro`),
+  tagline: getOptionalEnv('SITE_TAGLINE', 'Festina lente : un blog statique simple pour GitHub Pages.', { allowEmpty: true }),
   description: siteDescription,
   socialImage: getOptionalEnv('SITE_SOCIAL_IMAGE', '/images/social-card.png'),
   feedTitle: getOptionalEnv('SITE_FEED_TITLE', siteName),
