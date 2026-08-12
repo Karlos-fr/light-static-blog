@@ -19,6 +19,25 @@ Blog personnel minimaliste avec Astro, TypeScript et Markdown.
 - Markdown pour les articles
 - CSS simple, sans framework frontend lourd
 
+## Aperçu
+
+![Animation de navigation entre les thèmes publics](doc/screenshots/themes-navigation.gif)
+
+### Thèmes publics
+
+| Default | Folio | Mosaic |
+| --- | --- | --- |
+| ![Accueil avec le thème default](doc/screenshots/default-home.png) | ![Accueil avec le thème folio](doc/screenshots/folio-home.png) | ![Accueil avec le thème mosaic](doc/screenshots/mosaic-home.png) |
+| ![Article avec le thème default](doc/screenshots/default-article.png) | ![Article avec le thème folio](doc/screenshots/folio-article.png) | ![Article avec le thème mosaic](doc/screenshots/mosaic-article.png) |
+
+Le thème `terminal` n'est pas présenté ici : il est prévu comme exemple de personnalisation privée et peut rester hors du dépôt public.
+
+### Pages principales
+
+| Tags | À propos | RSS |
+| --- | --- | --- |
+| ![Page des tags](doc/screenshots/page-tags.png) | ![Page À propos](doc/screenshots/page-about.png) | ![Rendu navigateur du flux RSS](doc/screenshots/page-rss.png) |
+
 ## Architecture et arborescence
 
 Le projet est entièrement statique : Astro transforme les pages et les articles Markdown en fichiers HTML dans `dist/`. Aucun serveur Node, backend, CMS ou base de données n'est nécessaire en production.
