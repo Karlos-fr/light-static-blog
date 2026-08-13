@@ -30,8 +30,6 @@ Blog personnel minimaliste avec Astro, TypeScript et Markdown.
 | ![Accueil avec le thème default](doc/screenshots/default-home.png) | ![Accueil avec le thème folio](doc/screenshots/folio-home.png) | ![Accueil avec le thème mosaic](doc/screenshots/mosaic-home.png) |
 | ![Article avec le thème default](doc/screenshots/default-article.png) | ![Article avec le thème folio](doc/screenshots/folio-article.png) | ![Article avec le thème mosaic](doc/screenshots/mosaic-article.png) |
 
-Le thème `terminal` n'est pas présenté ici : il est prévu comme exemple de personnalisation privée et peut rester hors du dépôt public.
-
 ### Pages principales
 
 | Tags | À propos | RSS |
