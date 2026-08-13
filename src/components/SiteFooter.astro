@@ -5,9 +5,16 @@
  * Il expose le flux RSS et le lien de crédit vers le projet Light Static Blog.
  */
 import { getPath } from '../lib/urls';
+import { getPackageVersion } from '../lib/site';
 
 /** URL publique du dépôt source de la solution. */
 const projectUrl = 'https://github.com/Karlos-fr/light-static-blog';
+
+/** Version du moteur affichée en aide contextuelle du lien de crédit. */
+const projectVersion = getPackageVersion();
+
+/** Libellé accessible enrichi sans alourdir le texte visible du footer. */
+const poweredLabel = `Propulsé par Light Static Blog version ${projectVersion}`;
 ---
 
 <footer class="site-footer">
@@ -21,7 +28,14 @@ const projectUrl = 'https://github.com/Karlos-fr/light-static-blog';
       </li>
       <li class="footer-separator" aria-hidden="true">/</li>
       <li>
-        <a class="powered-link" href={projectUrl} target="_blank" rel="noopener noreferrer">
+        <a
+          class="powered-link"
+          href={projectUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={`Light Static Blog ${projectVersion}`}
+          aria-label={poweredLabel}
+        >
           <img
             class="powered-icon"
             src={getPath('images/light-static-blog-icon.png')}
