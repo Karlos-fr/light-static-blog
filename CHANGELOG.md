@@ -43,7 +43,7 @@ Le format suit l'esprit de [Keep a Changelog](https://keepachangelog.com/fr/1.1.
 - Validation stricte des tags déclarés dans `src/config/tags.ts`.
 - Refus des slugs d'articles réservés pour éviter les collisions de routes.
 - Script SFTP générique optionnel pour déployer le contenu de `dist/`, avec mode différentiel, vérification SHA-256 et contrôles publics.
-- Documentation complète du README en français et traduction anglaise dans `docs/README.en.md`.
+- Documentation complète du README en français et traduction anglaise dans `doc/README.en.md`.
 - Documentation interne des fichiers TypeScript, Astro et CSS.
 - Articles de démonstration basés sur des locutions latines avec images d'illustration.
 

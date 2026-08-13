@@ -5,7 +5,7 @@
 <p align="center">
   <a href="README.md"><img src="doc/flag-fr.svg" alt="" width="18" height="12" /> Français</a>
   /
-  <a href="docs/README.en.md"><img src="doc/flag-gb.svg" alt="" width="18" height="12" /> English</a>
+  <a href="doc/README.en.md"><img src="doc/flag-gb.svg" alt="" width="18" height="12" /> English</a>
 </p>
 
 # Light Static Blog
