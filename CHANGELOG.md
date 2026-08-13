@@ -4,6 +4,14 @@ Toutes les évolutions notables de Light Static Blog sont documentées dans ce f
 
 Le format suit l'esprit de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le projet utilise une version sémantique.
 
+## [Unreleased]
+
+### Modifié
+
+- Le mode `Diff` du script SFTP utilise désormais un manifeste distant `.light-static-blog-deploy-manifest.json` pour éviter de relire tous les fichiers distants à chaque déploiement.
+- Ajout de `-VerifyRemoteHashes` pour forcer une vérification SHA-256 complète du serveur distant lorsque nécessaire.
+- Ajout de `-ManifestRemotePath` pour personnaliser le chemin du manifeste distant.
+
 ## [1.0.0] - 2026-08-12
 
 ### Ajouté

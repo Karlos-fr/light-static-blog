@@ -20,8 +20,13 @@
 
   SyncMode controle la strategie de transfert :
   - Full : transfere tous les fichiers generes ;
-  - Diff : compare les empreintes SHA-256 et transfere uniquement les fichiers
-    absents ou modifies.
+  - Diff : compare les empreintes SHA-256 locales avec un manifeste distant et
+    transfere uniquement les fichiers absents ou modifies.
+
+  Par defaut, le mode Diff ne relit pas tous les fichiers distants : il utilise
+  le manifeste publie au deploiement precedent pour rester rapide. Ajouter
+  -VerifyRemoteHashes pour relire les fichiers distants et faire une
+  verification SHA-256 complete.
 
 .EXAMPLE
   ./scripts/deploy-sftp.ps1 `
@@ -65,6 +70,8 @@ param(
   [string]$FileZillaConfig = (Join-Path $env:APPDATA 'FileZilla\sitemanager.xml'),
   [string]$FileZillaHost = '',
   [ValidateSet('Full', 'Diff')][string]$SyncMode = 'Full',
+  [switch]$VerifyRemoteHashes,
+  [string]$ManifestRemotePath = '.light-static-blog-deploy-manifest.json',
   [string[]]$CheckUrls = @()
 )
 
@@ -190,6 +197,8 @@ function Write-DeployHeader {
   Write-BoxLine 'Deployment target' White -BorderColor DarkCyan -Center
   Write-BoxLine "SFTP host     $SftpHost" Gray -BorderColor DarkCyan
   Write-BoxLine "Sync mode     $SyncMode" Gray -BorderColor DarkCyan
+  Write-BoxLine "Verify remote $VerifyRemoteHashes" Gray -BorderColor DarkCyan
+  Write-BoxLine "Manifest      $ManifestRemotePath" Gray -BorderColor DarkCyan
   Write-BoxLine "FileZilla     $ResolvedFileZillaHost" Gray -BorderColor DarkCyan
   Write-BoxLine "Remote root   $RemoteRoot" Gray -BorderColor DarkCyan
   Write-BoxLine "Robots root   $RootRobotsRemotePath" Gray -BorderColor DarkCyan
@@ -313,6 +322,8 @@ function Clear-DeployEnvironment {
     'DEPLOY_ROOT_ROBOTS_REMOTE_PATH',
     'DEPLOY_EXPECTED_HOST_KEY',
     'DEPLOY_SYNC_MODE',
+    'DEPLOY_VERIFY_REMOTE_HASHES',
+    'DEPLOY_MANIFEST_REMOTE_PATH',
     'SITE_NAME',
     'SITE_HOME_META_TITLE',
     'SITE_TAGLINE',
@@ -465,13 +476,17 @@ try {
   $env:DEPLOY_ROOT_ROBOTS_REMOTE_PATH = $RootRobotsRemotePath
   $env:DEPLOY_EXPECTED_HOST_KEY = $ExpectedHostKeySha256
   $env:DEPLOY_SYNC_MODE = $SyncMode
+  $env:DEPLOY_VERIFY_REMOTE_HASHES = if ($VerifyRemoteHashes) { '1' } else { '0' }
+  $env:DEPLOY_MANIFEST_REMOTE_PATH = $ManifestRemotePath
 
   @'
 import base64
 import hashlib
+import json
 import os
 import posixpath
 import stat
+import time
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -495,6 +510,16 @@ root_robots_remote_path = (
 )
 expected_host_key = os.environ['DEPLOY_EXPECTED_HOST_KEY'].replace('SHA256:', '')
 sync_mode = os.environ.get('DEPLOY_SYNC_MODE', 'Full')
+verify_remote_hashes = os.environ.get('DEPLOY_VERIFY_REMOTE_HASHES') == '1'
+manifest_remote_path_raw = os.environ.get(
+    'DEPLOY_MANIFEST_REMOTE_PATH',
+    '.light-static-blog-deploy-manifest.json',
+)
+manifest_remote_path = (
+    posixpath.normpath(manifest_remote_path_raw)
+    if manifest_remote_path_raw.startswith('/')
+    else posixpath.normpath(posixpath.join(remote_root, manifest_remote_path_raw))
+)
 
 server = next(
     (
@@ -585,6 +610,54 @@ try:
         except FileNotFoundError:
             return None
 
+    def read_remote_text(remote_path):
+        try:
+            with sftp.open(remote_path, 'rb') as remote_file:
+                return remote_file.read().decode('utf-8')
+        except FileNotFoundError:
+            return ''
+
+    def upload_text(remote_path, content):
+        ensure_directory(posixpath.dirname(remote_path))
+        with sftp.open(remote_path, 'wb') as remote_file:
+            remote_file.write(content.encode('utf-8'))
+
+    def load_manifest():
+        raw_manifest = read_remote_text(manifest_remote_path)
+        if not raw_manifest.strip():
+            return {}
+
+        try:
+            manifest = json.loads(raw_manifest)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f'Manifeste distant illisible : {manifest_remote_path} ({exc})'
+            )
+
+        if manifest.get('version') != 1 or not isinstance(manifest.get('files'), dict):
+            raise RuntimeError(f'Manifeste distant incompatible : {manifest_remote_path}')
+
+        return manifest
+
+    def build_manifest(items):
+        files = {}
+        for item in items:
+            stat_result = item['local_path'].stat()
+            files[item['relative_path']] = {
+                'sha256': item['local_hash_hex'],
+                'bytes': stat_result.st_size,
+                'remotePath': item['remote_path'],
+            }
+
+        return {
+            'version': 1,
+            'generator': 'light-static-blog deploy-sftp.ps1',
+            'syncMode': sync_mode,
+            'generatedAt': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            'remoteRoot': remote_root,
+            'files': files,
+        }
+
     def assert_remote_path_allowed(item):
         remote_path = item['remote_path']
         if item['is_root_robots']:
@@ -592,23 +665,34 @@ try:
         if remote_path != remote_root and not remote_path.startswith(remote_root + '/'):
             raise RuntimeError(f'Chemin distant refuse : {remote_path}')
 
+    manifest = load_manifest() if sync_mode == 'Diff' else {}
+    manifest_files = manifest.get('files', {}) if manifest else {}
+
     # Preparation du plan de synchronisation. En mode Full, tous les fichiers
-    # sont transferes ; en mode Diff, seules les empreintes distantes manquantes
-    # ou differentes sont ajoutees au plan.
+    # sont transferes ; en mode Diff, le manifeste distant evite de relire tous
+    # les fichiers du serveur et rend la comparaison quasi locale.
     plan = []
     scan_bytes = 0
     for index, item in enumerate(deploy_items, start=1):
         local_path = item['local_path']
-        remote_path = item['remote_path']
         assert_remote_path_allowed(item)
-        local_hash = hashlib.sha256(local_path.read_bytes()).digest()
-        item['local_hash'] = local_hash
+        local_hash_hex = hashlib.sha256(local_path.read_bytes()).hexdigest()
+        item['local_hash_hex'] = local_hash_hex
         scan_bytes += local_path.stat().st_size
 
         should_upload = sync_mode == 'Full'
         if sync_mode == 'Diff':
-            remote_hash = read_remote_hash(remote_path)
-            should_upload = remote_hash != local_hash
+            manifest_entry = manifest_files.get(item['relative_path'])
+            should_upload = (
+                not isinstance(manifest_entry, dict)
+                or manifest_entry.get('sha256') != local_hash_hex
+                or manifest_entry.get('remotePath') != item['remote_path']
+            )
+            if verify_remote_hashes:
+                remote_hash = read_remote_hash(item['remote_path'])
+                should_upload = should_upload or (
+                    local_hash_hex != (remote_hash.hex() if remote_hash else None)
+                )
 
         if should_upload:
             plan.append(item)
@@ -634,11 +718,12 @@ try:
                 flush=True,
             )
 
-    # Relecture des fichiers distants pour comparer les empreintes SHA-256 : le
-    # transfert n'est considere reussi que si les octets publies correspondent.
+    # Relecture des fichiers distants pour comparer les empreintes SHA-256. En
+    # Diff rapide, seuls les fichiers transferes sont relus ; -VerifyRemoteHashes
+    # force l'ancien controle complet de tous les fichiers publies.
     verified_count = 0
     verified_bytes = 0
-    verify_items = plan if sync_mode == 'Diff' else deploy_items
+    verify_items = deploy_items if (sync_mode == 'Full' or verify_remote_hashes) else plan
     verify_total_files = len(verify_items)
     verify_total_bytes = sum(item['local_path'].stat().st_size for item in verify_items)
     if verify_total_files == 0:
@@ -648,7 +733,7 @@ try:
             local_path = item['local_path']
             remote_path = item['remote_path']
             remote_hash = read_remote_hash(remote_path)
-            if item['local_hash'] != remote_hash:
+            if item['local_hash_hex'] != (remote_hash.hex() if remote_hash else None):
                 raise RuntimeError(f"Controle SHA-256 echoue : {item['relative_path']}")
             verified_count += 1
             verified_bytes += local_path.stat().st_size
@@ -656,6 +741,17 @@ try:
                 f'VERIFY_PROGRESS={verified_count}|{verify_total_files}|{verified_bytes}|{verify_total_bytes}',
                 flush=True,
             )
+
+    # Le manifeste est publie seulement apres transfert et controles reussis :
+    # il devient la reference rapide du prochain deploiement Diff.
+    manifest_content = json.dumps(
+        build_manifest(deploy_items),
+        ensure_ascii=False,
+        indent=2,
+        sort_keys=True,
+    ) + '\n'
+    upload_text(manifest_remote_path, manifest_content)
+    print(f'MANIFEST_UPDATED={manifest_remote_path}')
 
     print(f'SSH_FINGERPRINT=SHA256:{fingerprint}')
     print(f'UPLOADED_FILES={uploaded_count}')
@@ -667,6 +763,9 @@ finally:
     if ($_ -like 'SSH_FINGERPRINT=*') {
       Complete-ProgressLine
       Write-Ok ($_.Replace('SSH_FINGERPRINT=', 'Cle SSH verifiee : '))
+    } elseif ($_ -like 'MANIFEST_UPDATED=*') {
+      Complete-ProgressLine
+      Write-Ok ($_.Replace('MANIFEST_UPDATED=', 'Manifeste mis a jour : '))
     } elseif ($_ -like 'UPLOADED_FILES=*') {
       Write-Ok ($_.Replace('UPLOADED_FILES=', 'Fichiers transferes et verifies : '))
     } elseif ($_ -like 'UPLOADED_BYTES=*') {
@@ -676,7 +775,7 @@ finally:
       Write-Info ($_.Replace('SKIPPED_FILES=', 'Fichiers inchanges ignores : '))
     } elseif ($_ -like 'SCAN_PROGRESS=*') {
       $Parts = $_.Replace('SCAN_PROGRESS=', '').Split('|')
-      $ScanLabel = if ($SyncMode -eq 'Diff') { 'Analyse diff' } else { 'Preparation' }
+      $ScanLabel = if ($SyncMode -eq 'Diff') { 'Analyse manifeste' } else { 'Preparation' }
       Write-ProgressLine `
         -Label $ScanLabel `
         -Current ([int]$Parts[0]) `
